@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using UnityEditor;
 using UnityEngine;
 
 public class CréationLabyrinte : MonoBehaviour
@@ -29,14 +30,26 @@ public class CréationLabyrinte : MonoBehaviour
       
         
         coin1.transform.position = new Vector2(CoordonneDepartX, CoordonneDepartY);
-        coin2.transform.position = new Vector2(coin1.transform.position.x + (longueur * tailleGrille), coin1.transform.position.y);
-        coin3.transform.position = new Vector2(coin1.transform.position.x, coin1.transform.position.y + (largeur * tailleGrille));
-        coin4.transform.position = new Vector2(coin1.transform.position.x + (longueur * tailleGrille), coin1.transform.position.y + (largeur * tailleGrille));
+        coin2.transform.position = new Vector2(coin1.transform.position.x + longueur, coin1.transform.position.y);
+        coin3.transform.position = new Vector2(coin1.transform.position.x, coin1.transform.position.y + largeur);
+        coin4.transform.position = new Vector2(coin1.transform.position.x + longueur, coin1.transform.position.y + largeur);
 
-        for (int i = 0; i <= tailleGrille; i++) {
-            Vector3 position = new Vector3(((longueur * tailleGrille)/tailleGrille) * i, 0,0);
-            Instantiate(mur,position, transform.rotation);
+
+        UniteDeDistance[0] = longueur / tailleGrille;
+        UniteDeDistance[1] = largeur / tailleGrille;
+
+
+
+        for (int y = 0; y <= tailleGrille; y++)
+        {
+            
+            for (int i = 0; i <= tailleGrille; i++) {
+                    Vector3 position = new Vector3(UniteDeDistance[0]*i, UniteDeDistance[1]*y,0);
+                    Instantiate(mur,position, transform.rotation);
+                
+            }
         }
+       
 
     }
 
