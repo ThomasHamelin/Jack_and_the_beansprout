@@ -4,57 +4,63 @@ using UnityEngine;
 
 public class Mouvement : MonoBehaviour
 {
-    [SerializeField] private float _speed = 15f;
 
-    void Start()
+    
+    public float _moveSpeed = 3.25f;
+    public float _jumpSpeed;
+    public GameObject _character;
+    public Rigidbody2D _rb;
+
+    private Vector2 playerInput;
+    private bool wantJump;
+    private int canJump = 0;
+
+
+    private void Start()
     {
-
+        _rb = _character.GetComponent<Rigidbody2D>();
     }
 
-    void Update()
+   
+    private void Update()
     {
-        Move();
+        playerInput = new Vector2(Input.GetAxis("Horizontal"), 0f);
+
+        if (canJump > 0 && Input.GetKeyDown(KeyCode.Space))
+        {
+            canJump--;
+            wantJump = true;
+        }
     }
 
-
-    // Déplacements et limitation des mouvements du joueur
-    private void Move()
+    //même vitesse que toute la physique
+    private void FixedUpdate()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
-        Vector3 direction = new Vector3(horizontalInput, verticalInput, 0f);
-        transform.Translate(direction * Time.deltaTime * _speed);
-        /*
-        if (horizontalInput < 0)
+        // move
+        if (playerInput != Vector2.zero)
         {
-            _anim.SetBool("Turn_Left", true);
-            _anim.SetBool("Turn_Right", false);
+            _rb.AddForce(playerInput * _moveSpeed * Time.fixedDeltaTime, ForceMode2D.Impulse);
         }
-        else if (horizontalInput > 0)
+
+        // jump
+        if (wantJump)
         {
-            _anim.SetBool("Turn_Left", false);
-            _anim.SetBool("Turn_Right", true);
+            _rb.AddForce(Vector2.up * _jumpSpeed, ForceMode2D.Impulse);
+            wantJump = false;
         }
-        else
-        {
-            _anim.SetBool("Turn_Left", false);
-            _anim.SetBool("Turn_Right", false);
-        }*/
+    }
 
-        //Gérer la zone verticale
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -11f, 11f),
-        transform.position.y);
-        
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        //peut sauter après contact
+        canJump = 2;
+        _character.transform.tag = "onFloor";
+    }
 
-        //Gérer dépassement horizontaux
-        //if (transform.position.x >= 11.3)
-        //{
-        //    transform.position = new Vector3(-11.3f, transform.position.y, 0f);
-        //}
-        //else if (transform.position.x <= -11.3)
-        //{
-        //    transform.position = new Vector3(11.3f, transform.position.y, 0f);
-        //}
-
+    private void OnCollisionExit2D(Collision2D col)
+    {
+        canJump = 1;
+        _character.transform.tag = "Jumping";
     }
 }
+
