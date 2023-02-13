@@ -24,6 +24,7 @@ public class CréationLabyrinte : MonoBehaviour
     [SerializeField] float tailleGrille;
 
     private float[] UniteDeDistance = new float[2];
+    private int x;
 
     private void Start()
     {
