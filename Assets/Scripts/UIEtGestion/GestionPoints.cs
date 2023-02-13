@@ -1,10 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-//////////////
-using TMPro;
-//////////////
 using UnityEngine;
-
+using UnityEngine.UI;
+using TMPro;
 
 
 public class GestionPoints : MonoBehaviour
@@ -35,12 +33,12 @@ public class GestionPoints : MonoBehaviour
         if (p_numJoueur == 1)
         {
             _scoreJ1 += p_points;
-            //_txtScoreJ1 = "Points : " + _scoreJ1;
+            _txtScoreJ1.text = "Points : " + _scoreJ1.ToString();
         }
         else if (p_numJoueur == 2)
         {
             _scoreJ2 += p_points;
-           // _txtScoreJ2 = "Points : " + _scoreJ1;
+            _txtScoreJ2.text = "Points : " + _scoreJ1.ToString();
         }
 
     }
