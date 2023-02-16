@@ -8,6 +8,8 @@ using UnityEngine;
 
 public class CréationLabyrinte : MonoBehaviour
 {
+    [SerializeField] GameObject yeuxBalle;
+
     [SerializeField] GameObject coin1;
     [SerializeField] GameObject coin2;
     [SerializeField] GameObject coin3;
@@ -93,6 +95,7 @@ public class CréationLabyrinte : MonoBehaviour
     void Update()
     {
       
+       
        
         
     }
