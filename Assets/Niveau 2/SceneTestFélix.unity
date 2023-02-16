@@ -344,7 +344,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 20.812202
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -368,7 +368,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 852461545}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 21.5, y: 9.7, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -565,6 +565,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 987645408102153456, guid: af767696b3815954b93ba556e8d0bc28, type: 3}
+      propertyPath: Mur
+      value: 
+      objectReference: {fileID: 3995409639230093603, guid: ffd223749aba00c4faeb654837b1591c, type: 3}
+    - target: {fileID: 987645408102153456, guid: af767696b3815954b93ba556e8d0bc28, type: 3}
       propertyPath: mur
       value: 
       objectReference: {fileID: 468311940097508260, guid: 5c0940e480c8be24991409fe3de5ba7a, type: 3}
@@ -585,16 +589,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1980272287}
     - target: {fileID: 987645408102153456, guid: af767696b3815954b93ba556e8d0bc28, type: 3}
+      propertyPath: CoinMur
+      value: 
+      objectReference: {fileID: 468311940097508260, guid: 5c0940e480c8be24991409fe3de5ba7a, type: 3}
+    - target: {fileID: 987645408102153456, guid: af767696b3815954b93ba556e8d0bc28, type: 3}
       propertyPath: largeur
-      value: 20
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 987645408102153456, guid: af767696b3815954b93ba556e8d0bc28, type: 3}
       propertyPath: longueur
-      value: 20
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 987645408102153456, guid: af767696b3815954b93ba556e8d0bc28, type: 3}
       propertyPath: tailleGrille
-      value: 4
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 987645408102153457, guid: af767696b3815954b93ba556e8d0bc28, type: 3}
       propertyPath: m_Name
