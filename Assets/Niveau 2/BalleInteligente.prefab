@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 987645408102153458}
   - component: {fileID: 987645408102153459}
-  - component: {fileID: 987645408102153456}
+  - component: {fileID: 126830440}
   m_Layer: 0
   m_Name: BalleInteligente
   m_TagString: Untagged
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &987645408102153456
+--- !u!114 &126830440
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,13 +97,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d03a04120511ce54d9b9e27f28bf9d37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  YeuxBalle: {fileID: 6794728650371021518, guid: c7d7c54e2eacbdc4d86a1507279fb82f, type: 3}
   coin1: {fileID: 0}
   coin2: {fileID: 0}
   coin3: {fileID: 0}
   coin4: {fileID: 0}
-  mur: {fileID: 0}
-  longueur: 10
-  largeur: 10
+  CoinMur: {fileID: 468311940097508260, guid: 5c0940e480c8be24991409fe3de5ba7a, type: 3}
+  Mur: {fileID: 3995409639230093603, guid: ffd223749aba00c4faeb654837b1591c, type: 3}
+  longueur: 40
+  largeur: 40
   CoordonneDepartX: 0
   CoordonneDepartY: 0
-  tailleGrille: 3
+  tailleGrille: 10
