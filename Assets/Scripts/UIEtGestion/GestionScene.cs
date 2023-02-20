@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
 public class GestionScene : MonoBehaviour
 {
-    //[SerializeField] private TextMeshProUGUI _txtReadyJ1 = default;
-    //[SerializeField] private TextMeshProUGUI _txtReadyJ2 = default;
-    [SerializeField] private GameObject _uiInstruct = default;
+    [SerializeField] private GameObject _imageReadyJ1 = default;
+    [SerializeField] private GameObject _imageReadyJ2 = default;
+    //[SerializeField] private GameObject _uiInstruct = default;
+
 
     /*
      * Rôle : Charger la scene suivante
@@ -19,14 +21,16 @@ public class GestionScene : MonoBehaviour
     {
         int indexSceneCourante = SceneManager.GetActiveScene().buildIndex;
         
-        switch(indexSceneCourante)
+        if(indexSceneCourante < 3)
         {
-            case 0:
-                _uiInstruct.SetActive(true);
-                break;
+            coroutineInstruct(indexSceneCourante);
+        }
+        else
+        {
+            //SceneManager.LoadScene(indexSceneCourante + 1);
         }
 
-        SceneManager.LoadScene(indexSceneCourante + 1);
+        
     }
 
     /*
@@ -48,4 +52,29 @@ public class GestionScene : MonoBehaviour
     {
         Application.Quit();
     }
+
+    private void coroutineInstruct(int p_indexSceneCourante)
+    {
+        bool joueur1Pret = false;
+        bool joueur2Pret = false;
+        _imageReadyJ1.GetComponent<Image>().color = Color.red;
+        _imageReadyJ2.GetComponent<Image>().color = Color.red;
+        _imageReadyJ1.SetActive(true);
+        _imageReadyJ2.SetActive(true);
+
+        
+            if (Input.GetKeyDown("space"))
+            {
+                joueur1Pret = true;
+                _imageReadyJ1.GetComponent<Image>().color = Color.green;
+            }
+            if(Input.GetKeyDown("escape"))
+            {
+                joueur2Pret = true;
+                _imageReadyJ2.GetComponent<Image>().color = Color.green;
+            }
+
+
+    }
+    
 }
