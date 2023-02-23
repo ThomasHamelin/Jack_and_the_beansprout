@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Coin
   - mur
+  - Plateforme
+  - HighestPlateforme
+  - Jumping
+  - OnFloor
   layers:
   - Default
   - TransparentFX
