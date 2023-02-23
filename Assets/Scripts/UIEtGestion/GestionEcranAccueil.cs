@@ -6,6 +6,7 @@ using TMPro;
 public class GestionEcranAccueil : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _txtDebuter = default;
+    [SerializeField] private GameObject _gestionScene = default;
    
     void Start()
     {
@@ -16,7 +17,9 @@ public class GestionEcranAccueil : MonoBehaviour
     {
         if (Input.anyKeyDown)
         {
-            FindObjectOfType<GestionScene>().GetComponent<GestionScene>().ChargerSceneDepart();
+            _gestionScene.SetActive(false);
+            _gestionScene.GetComponent<GestionScene>().ChangerScene();
+            Destroy(this);
         }
     }
 
