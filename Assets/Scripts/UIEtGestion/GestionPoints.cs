@@ -14,6 +14,10 @@ public class GestionPoints : MonoBehaviour
 
     void Start()
     {
+        _scoreJ1 = 1;
+        _scoreJ2 = 0;
+        AjouterScore(1, 1);
+        AjouterScore(0, 2);
         DontDestroyOnLoad(this.gameObject); //Fait en sorte que les points s'accumulent d'une scène à l'autre
     }
 
@@ -38,8 +42,24 @@ public class GestionPoints : MonoBehaviour
         else if (p_numJoueur == 2)
         {
             _scoreJ2 += p_points;
-            _txtScoreJ2.text = "Points : " + _scoreJ1.ToString();
+            _txtScoreJ2.text = "Points : " + _scoreJ2.ToString();
         }
 
+    }
+
+    public int ComparerScores()
+    {
+        if (_scoreJ1 < _scoreJ2)
+        {
+            return 2;
+        }
+        else if (_scoreJ2 < _scoreJ1)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
     }
 }
