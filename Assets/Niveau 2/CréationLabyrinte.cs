@@ -6,9 +6,13 @@ using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 
+
+
+using Random = UnityEngine.Random;
+
 public class CréationLabyrinte : MonoBehaviour
 {
-    [SerializeField] GameObject yeuxBalle;
+    [SerializeField] GameObject YeuxBalle; 
 
     [SerializeField] GameObject coin1;
     [SerializeField] GameObject coin2;
@@ -27,9 +31,13 @@ public class CréationLabyrinte : MonoBehaviour
     [SerializeField] float tailleGrille;
 
     private float[] UniteDeDistance = new float[4];
-    private int x;
+    
+    
+    private float direction;
+ 
+    private bool haut = true, bas = true, gauche = true, droite = true;
 
-    private void Start()
+    void Start()
     {
       
         //placement des coins selon la taille voulue
@@ -44,6 +52,8 @@ public class CréationLabyrinte : MonoBehaviour
 
         UniteDeDistance[2] = (longueur / tailleGrille)/2;
         UniteDeDistance[3] = (largeur / tailleGrille)/2;
+
+       
 
         //coins de murs
         for (int y = 0; y <= tailleGrille; y++)
@@ -90,13 +100,61 @@ public class CréationLabyrinte : MonoBehaviour
 
 
         transform.position = new Vector3(UniteDeDistance[2], UniteDeDistance[3], 0);
+       
+ 
+   
+       
+
     }
 
     void Update()
     {
-      
-       
-       
+        
+        YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+        direction = Random.Range(1, 5);
+
+        switch (direction)
+        {
+            case 1:
+                if (haut == true)
+                {
+                    YeuxBalle.transform.position = new Vector3(transform.position.x,transform.position.y + UniteDeDistance[1],0);
+                    if(YeuxBalle.transform.position.y < coin3.transform.position.y)
+                    {
+                        RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up);
+                        RaycastHit2D hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down);
+                        RaycastHit2D hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left);
+                        RaycastHit2D hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right);
+                    }
+
+                }
+            break;
+
+
+            case 2:
+                if (bas == true)
+                {
+                    YeuxBalle.transform.position = new Vector3(transform.position.x,transform.position.y - UniteDeDistance[1],  0);
+                }
+                break;
+
+
+            case 3:
+                if (gauche == true)
+                {
+                    YeuxBalle.transform.position = new Vector3(transform.position.x - UniteDeDistance[0], transform.position.y, 0);
+                }
+                break;
+
+
+            case 4:
+                if (droite == true)
+                {
+                    YeuxBalle.transform.position = new Vector3(transform.position.x + UniteDeDistance[0], transform.position.y, 0);
+                }
+                break;
+
+        }
         
     }
 
