@@ -139,6 +139,16 @@ public class CréationLabyrinte : MonoBehaviour
 
                             if (hitup == true && hitdown == true && hitleft == true && hitright == true)
                             {
+                                var ray = new Ray(this.transform.position, this.transform.up);
+                                RaycastHit hit;
+                                if (Physics.Raycast(ray, out hit))
+                                {
+                                    GameObject objecctHit = hit.transform.gameObject;
+                                    Destroy(objecctHit);
+                                }
+                                
+
+
                                 while (this.gameObject.transform.position != YeuxBalle.transform.position)
                                 {
                                     transform.position = Vector3.MoveTowards(transform.position, YeuxBalle.transform.position, (0.1f * Time.deltaTime));
