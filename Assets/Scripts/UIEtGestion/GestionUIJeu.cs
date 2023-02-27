@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 
 
-public class GestionPoints : MonoBehaviour
+public class GestionUIJeu : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _txtScoreJ1 = default;
     [SerializeField] private TextMeshProUGUI _txtScoreJ2 = default;
@@ -63,3 +63,4 @@ public class GestionPoints : MonoBehaviour
         }
     }
 }
+
