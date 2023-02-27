@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Coin
   - mur
+  - Plateforme
+  - HighestPlateforme
+  - Jumping
+  - OnFloor
   layers:
   - Default
   - TransparentFX
@@ -40,6 +44,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: ' -2'
+    uniqueID: 3582394251
+    locked: 0
+  - name: -1
+    uniqueID: 1779549983
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

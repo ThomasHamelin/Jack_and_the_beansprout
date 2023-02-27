@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Xml;
 using Unity.Mathematics;
 using UnityEditor;
+using UnityEditor.TextCore.Text;
 using UnityEngine;
 
 
@@ -36,7 +37,7 @@ public class CréationLabyrinte : MonoBehaviour
     private float direction;
  
     private bool haut = true, bas = true, gauche = true, droite = true;
-
+    private bool confirmationDirection = false;
     void Start()
     {
       
@@ -109,53 +110,167 @@ public class CréationLabyrinte : MonoBehaviour
 
     void Update()
     {
-        
+        haut = true;
+        bas = true;
+        droite = true;
+        gauche = true;
+
+        confirmationDirection = false;
+
         YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
-        direction = Random.Range(1, 5);
 
-        switch (direction)
+
+        do
         {
-            case 1:
-                if (haut == true)
-                {
-                    YeuxBalle.transform.position = new Vector3(transform.position.x,transform.position.y + UniteDeDistance[1],0);
-                    if(YeuxBalle.transform.position.y < coin3.transform.position.y)
+            direction = Random.Range(1, 5);
+
+            switch (direction)
+            {
+                case 1:
+                    if (haut == true)
                     {
-                        RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up);
-                        RaycastHit2D hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down);
-                        RaycastHit2D hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left);
-                        RaycastHit2D hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right);
+                        YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y + UniteDeDistance[1], 0);
+                        if (YeuxBalle.transform.position.y < coin3.transform.position.y)
+                        {
+                            RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up);
+                            RaycastHit2D hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down);
+                            RaycastHit2D hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left);
+                            RaycastHit2D hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right);
+
+                            if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                            {
+                                var ray = new Ray(this.transform.position, this.transform.up);
+                                RaycastHit hit;
+                                if (Physics.Raycast(ray, out hit))
+                                {
+                                    GameObject objecctHit = hit.transform.gameObject;
+                                    Destroy(objecctHit);
+                                }
+                                
+
+
+                                while (this.gameObject.transform.position != YeuxBalle.transform.position)
+                                {
+                                    transform.position = Vector3.MoveTowards(transform.position, YeuxBalle.transform.position, (0.1f * Time.deltaTime));
+                                    
+                                }
+                                confirmationDirection = true;
+
+                            }
+                            else
+                            {
+                                haut = false;
+                            }
+                        }
+                        else
+                        {
+                            haut = false;
+                        }
                     }
-
-                }
-            break;
+                    break;
 
 
-            case 2:
-                if (bas == true)
-                {
-                    YeuxBalle.transform.position = new Vector3(transform.position.x,transform.position.y - UniteDeDistance[1],  0);
-                }
-                break;
+                case 2:
+                    if (bas == true)
+                    {
+                        YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y - UniteDeDistance[1], 0);
+                        if (YeuxBalle.transform.position.y > coin1.transform.position.y)
+                        {
+                            RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up);
+                            RaycastHit2D hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down);
+                            RaycastHit2D hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left);
+                            RaycastHit2D hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right);
+
+                            if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                            {
+                                while (transform.position != YeuxBalle.transform.position)
+                                {
+                                    transform.position = Vector3.MoveTowards(transform.position, YeuxBalle.transform.position, (0.1f * Time.deltaTime));
+                                    
+                                }
+                                confirmationDirection = true;
+                            }
+                            else
+                            {
+                                bas = false;
+                            }
+                        }
+                        else
+                        {
+                            bas = false;
+                        }
+
+                    }
+                    break;
 
 
-            case 3:
-                if (gauche == true)
-                {
-                    YeuxBalle.transform.position = new Vector3(transform.position.x - UniteDeDistance[0], transform.position.y, 0);
-                }
-                break;
+                case 3:
+                    if (gauche == true)
+                    {
+                        YeuxBalle.transform.position = new Vector3(transform.position.x - UniteDeDistance[0], transform.position.y, 0);
+                        if (YeuxBalle.transform.position.x > coin1.transform.position.x)
+                        {
+                            RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up);
+                            RaycastHit2D hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down);
+                            RaycastHit2D hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left);
+                            RaycastHit2D hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right);
+
+                            if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                            {
+                                while (transform.position != YeuxBalle.transform.position)
+                                {
+                                    transform.position = Vector3.MoveTowards(transform.position, YeuxBalle.transform.position, (0.1f * Time.deltaTime));
+                                    
+                                }
+                                confirmationDirection = true;
+                            }
+                            else {
+
+                                gauche = false;
+                            }
+                        }
+                        else
+                        {
+                            gauche = false;
+                        }
+                    }
+                    break;
 
 
-            case 4:
-                if (droite == true)
-                {
-                    YeuxBalle.transform.position = new Vector3(transform.position.x + UniteDeDistance[0], transform.position.y, 0);
-                }
-                break;
+                case 4:
+                    if (droite == true)
+                    {
+                        YeuxBalle.transform.position = new Vector3(transform.position.x + UniteDeDistance[0], transform.position.y, 0);
+                        if (YeuxBalle.transform.position.x < coin2.transform.position.x)
+                        {
+                            RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up);
+                            RaycastHit2D hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down);
+                            RaycastHit2D hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left);
+                            RaycastHit2D hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right);
 
-        }
-        
+                            if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                            {
+                                while (transform.position != YeuxBalle.transform.position)
+                                {
+                                    transform.position = Vector3.MoveTowards(transform.position, YeuxBalle.transform.position, (0.1f * Time.deltaTime));
+                                   
+                                }
+                                confirmationDirection = true;
+                            }
+                            else
+                            {
+                                droite = false;
+                            }
+                        }
+                        else
+                        {
+                            droite= false;  
+                        }
+                    }
+                    break;
+
+            }
+
+        } while (confirmationDirection != true);
     }
-
 }
