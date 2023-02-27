@@ -16,9 +16,12 @@ public class Mouvement : MonoBehaviour
     private int canJump = 0;
     Vector2 lasttouchPosition;
 
+
     private void Start()
     {
         //_rb = _character.GetComponent<Rigidbody2D>();
+        lasttouchPosition = this.GetComponent<Transform>().position;
+        StartCoroutine(wait2sec());
     }
 
 
@@ -48,17 +51,29 @@ public class Mouvement : MonoBehaviour
             _rb.AddForce(Vector2.up * _jumpSpeed, ForceMode2D.Impulse);
             wantJump = false;
         }
+
+        if(this.GetComponent<Transform>().position.y < lasttouchPosition.y - 3f)
+        {
+            wait2sec();
+            this.GetComponent<Transform>().position = new Vector2 (lasttouchPosition.x, lasttouchPosition.y+0.5f);
+        }
+
+    }
+    IEnumerator wait2sec()
+    {
+        yield return new WaitForSecondsRealtime(2);
     }
 
-    /*
-   * Rôle : actions quand touche plateforme
-   * Entrée : aucune 
-   * Sortie : aucune 
-   */
-    void OnTriggerEnter2D(Collider2D other)
+
+        /*
+       * Rôle : actions quand touche plateforme
+       * Entrée : aucune 
+       * Sortie : aucune 
+       */
+        void OnTriggerEnter2D(Collider2D other)
     {
 
-        if (other.gameObject.tag.Equals("Plateforme"))
+        if (other.gameObject.tag.Equals("Plateforme")&& other.gameObject.GetComponent<Transform>().position.y >= lasttouchPosition.y - 3f)
         {
             lasttouchPosition = other.gameObject.GetComponent<Transform>().position;
             //peut sauter après contact
