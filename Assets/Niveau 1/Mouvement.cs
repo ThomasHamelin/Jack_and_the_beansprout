@@ -11,12 +11,12 @@ public class Mouvement : MonoBehaviour
     public GameObject _character;
     public Rigidbody2D _rb;
     public float respawn_interval;
+    public GameObject _camera;
 
     private Vector2 playerInput;
     private bool wantJump = false;
     private int canJump = 0;
     private Vector2 lasttouchPosition;
-    
     private bool waiting = false;
 
     private void Start()
@@ -90,7 +90,11 @@ public class Mouvement : MonoBehaviour
             //peut sauter après contact
             canJump = 2;
             _character.transform.tag = "onFloor";
-            GameObject.Find("Main Camera").GetComponent<FollowPlayer>().minHeight = lasttouchPosition.y;
+
+
+
+            // ne fonctionne pas ??!
+            _camera.GetComponent<FollowPlayer>().minHeight = lasttouchPosition.y;
         }
     }
 
