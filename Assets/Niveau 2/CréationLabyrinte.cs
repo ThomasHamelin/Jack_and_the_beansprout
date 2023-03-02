@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
+using Unity.Burst.CompilerServices;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEditor.TextCore.Text;
@@ -13,7 +14,7 @@ using Random = UnityEngine.Random;
 
 public class CréationLabyrinte : MonoBehaviour
 {
-    [SerializeField] GameObject YeuxBalle; 
+    [SerializeField] GameObject YeuxBalle;
 
     [SerializeField] GameObject coin1;
     [SerializeField] GameObject coin2;
@@ -32,15 +33,19 @@ public class CréationLabyrinte : MonoBehaviour
     [SerializeField] float tailleGrille;
 
     private float[] UniteDeDistance = new float[4];
-    
-    
+
+
     private float direction;
- 
+
     private bool haut = true, bas = true, gauche = true, droite = true;
     private bool confirmationDirection = false;
+
+
+
+    RaycastHit2D touche;
     void Start()
     {
-      
+
         //placement des coins selon la taille voulue
         coin1.transform.position = new Vector2(CoordonneDepartX, CoordonneDepartY);
         coin2.transform.position = new Vector2(coin1.transform.position.x + longueur, coin1.transform.position.y);
@@ -51,21 +56,22 @@ public class CréationLabyrinte : MonoBehaviour
         UniteDeDistance[0] = longueur / tailleGrille;
         UniteDeDistance[1] = largeur / tailleGrille;
 
-        UniteDeDistance[2] = (longueur / tailleGrille)/2;
-        UniteDeDistance[3] = (largeur / tailleGrille)/2;
+        UniteDeDistance[2] = (longueur / tailleGrille) / 2;
+        UniteDeDistance[3] = (largeur / tailleGrille) / 2;
 
-       
+
 
         //coins de murs
         for (int y = 0; y <= tailleGrille; y++)
         {
-            
-            for (int i = 0; i <= tailleGrille; i++) {
-                    Vector3 position = new Vector3(UniteDeDistance[0]*i, UniteDeDistance[1]*y,0);
-                    Instantiate(CoinMur,position, transform.rotation);
+
+            for (int i = 0; i <= tailleGrille; i++)
+            {
+                Vector3 position = new Vector3(UniteDeDistance[0] * i, UniteDeDistance[1] * y, 0);
+                Instantiate(CoinMur, position, transform.rotation);
 
 
-                    
+
             }
         }
         //murs horizautaux
@@ -74,7 +80,7 @@ public class CréationLabyrinte : MonoBehaviour
 
             for (int i = 0; i < tailleGrille; i++)
             {
-              
+
 
 
                 Vector3 position2 = new Vector3((UniteDeDistance[0] * (i + 1) - UniteDeDistance[2]), UniteDeDistance[1] * y, 0);
@@ -87,12 +93,12 @@ public class CréationLabyrinte : MonoBehaviour
         for (int y = 0; y <= tailleGrille; y++)
         {
 
-            for (int i = 0; i < (tailleGrille) ; i++)
+            for (int i = 0; i < (tailleGrille); i++)
             {
 
 
 
-                Vector3 position3 = new Vector3(UniteDeDistance[0] * y,(UniteDeDistance[1] * (i+1)  - UniteDeDistance[3]),  0);
+                Vector3 position3 = new Vector3(UniteDeDistance[0] * y, (UniteDeDistance[1] * (i + 1) - UniteDeDistance[3]), 0);
                 GameObject MurVerticaux = Instantiate(Mur, position3, transform.rotation);
                 MurVerticaux.transform.localScale = new Vector3(1, UniteDeDistance[1], 0);
             }
@@ -101,10 +107,10 @@ public class CréationLabyrinte : MonoBehaviour
 
 
         transform.position = new Vector3(UniteDeDistance[2], UniteDeDistance[3], 0);
-       
- 
-   
-       
+
+
+
+
 
     }
 
@@ -139,16 +145,8 @@ public class CréationLabyrinte : MonoBehaviour
 
                             if (hitup == true && hitdown == true && hitleft == true && hitright == true)
                             {
-                                var ray = new Ray(this.transform.position, this.transform.up);
-                                RaycastHit hit;
-                                if (Physics.Raycast(ray, out hit))
-                                {
-                                    GameObject objecctHit = hit.transform.gameObject;
-                                    Destroy(objecctHit);
-                                }
-                                
-
-
+                            
+                         
                                 while (this.gameObject.transform.position != YeuxBalle.transform.position)
                                 {
                                     transform.position = Vector3.MoveTowards(transform.position, YeuxBalle.transform.position, (0.1f * Time.deltaTime));
@@ -183,10 +181,12 @@ public class CréationLabyrinte : MonoBehaviour
 
                             if (hitup == true && hitdown == true && hitleft == true && hitright == true)
                             {
+                              
+
                                 while (transform.position != YeuxBalle.transform.position)
                                 {
                                     transform.position = Vector3.MoveTowards(transform.position, YeuxBalle.transform.position, (0.1f * Time.deltaTime));
-                                    
+
                                 }
                                 confirmationDirection = true;
                             }
@@ -217,14 +217,17 @@ public class CréationLabyrinte : MonoBehaviour
 
                             if (hitup == true && hitdown == true && hitleft == true && hitright == true)
                             {
+
+
                                 while (transform.position != YeuxBalle.transform.position)
                                 {
                                     transform.position = Vector3.MoveTowards(transform.position, YeuxBalle.transform.position, (0.1f * Time.deltaTime));
-                                    
+
                                 }
                                 confirmationDirection = true;
                             }
-                            else {
+                            else
+                            {
 
                                 gauche = false;
                             }
@@ -250,10 +253,12 @@ public class CréationLabyrinte : MonoBehaviour
 
                             if (hitup == true && hitdown == true && hitleft == true && hitright == true)
                             {
+                            
+
                                 while (transform.position != YeuxBalle.transform.position)
                                 {
                                     transform.position = Vector3.MoveTowards(transform.position, YeuxBalle.transform.position, (0.1f * Time.deltaTime));
-                                   
+
                                 }
                                 confirmationDirection = true;
                             }
@@ -264,7 +269,7 @@ public class CréationLabyrinte : MonoBehaviour
                         }
                         else
                         {
-                            droite= false;  
+                            droite = false;
                         }
                     }
                     break;
@@ -273,4 +278,8 @@ public class CréationLabyrinte : MonoBehaviour
 
         } while (confirmationDirection != true);
     }
+
+
+
+
 }
