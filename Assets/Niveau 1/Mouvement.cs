@@ -14,6 +14,7 @@ public class Mouvement : MonoBehaviour
     public GameObject _camera;
 
     private Vector2 playerInput;
+    private bool jumpPressed = false;
     private bool wantJump = false;
     private int canJump = 0;
     private Vector2 lasttouchPosition;
@@ -27,10 +28,24 @@ public class Mouvement : MonoBehaviour
 
     private void Update()
     {
-        playerInput = new Vector2(Input.GetAxis("Horizontal"), 0f);
 
-        if (canJump > 0 && Input.GetKeyDown(KeyCode.Space))
+        if(this.CompareTag("Player1"))
         {
+            playerInput = new Vector2(Input.GetAxis("Horizontal_P1"), 0f);
+            jumpPressed = Input.GetKeyDown(KeyCode.W);
+        }
+
+        if (this.CompareTag("Player2"))
+        {
+            playerInput = new Vector2(Input.GetAxis("Horizontal_P2"), 0f);
+            jumpPressed = Input.GetKeyDown(KeyCode.UpArrow);
+        }
+
+
+
+        if (canJump > 0 && jumpPressed)
+        {
+            jumpPressed = false;
             canJump--;
             wantJump = true;
         }
@@ -87,11 +102,9 @@ public class Mouvement : MonoBehaviour
         if (other.gameObject.tag.Equals("Plateforme")&& other.gameObject.GetComponent<Transform>().position.y >= lasttouchPosition.y - 3f)
         {
             lasttouchPosition = other.gameObject.GetComponent<Transform>().position;
+            
             //peut sauter après contact
             canJump = 2;
-            _character.transform.tag = "onFloor";
-
-
 
             // ne fonctionne pas ??!
             _camera.GetComponent<FollowPlayer>().minHeight = lasttouchPosition.y;
@@ -99,7 +112,7 @@ public class Mouvement : MonoBehaviour
     }
 
     /*
-     * Rôle : enlever l'ennemi une fois détruit 
+     * Rôle : un double jump uniquement
      * Entrée : aucune 
      * Sortie : aucune 
      */
@@ -108,7 +121,6 @@ public class Mouvement : MonoBehaviour
         if (other.gameObject.tag.Equals("Plateforme") || other.gameObject.tag.Equals("HighestPlateforme"))
         {
             canJump = 1;
-            _character.transform.tag = "Jumping";
         }
     } 
 
