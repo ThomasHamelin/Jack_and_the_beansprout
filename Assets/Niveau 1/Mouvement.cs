@@ -10,15 +10,18 @@ public class Mouvement : MonoBehaviour
     public float _jumpSpeed;
     public GameObject _character;
     public Rigidbody2D _rb;
+    public float respawn_interval;
+    public GameObject _camera;
 
     private Vector2 playerInput;
-    private bool wantJump;
+    private bool wantJump = false;
     private int canJump = 0;
-    Vector2 lasttouchPosition;
+    private Vector2 lasttouchPosition;
+    private bool waiting = false;
 
     private void Start()
     {
-        //_rb = _character.GetComponent<Rigidbody2D>();
+        lasttouchPosition = this.GetComponent<Transform>().position;
     }
 
 
@@ -36,35 +39,62 @@ public class Mouvement : MonoBehaviour
     //même vitesse que toute la physique
     private void FixedUpdate()
     {
-        // move
-        if (playerInput != Vector2.zero)
+        if (!waiting)
         {
-            _rb.AddForce(playerInput * _moveSpeed * Time.fixedDeltaTime, ForceMode2D.Impulse);
-        }
+            // move
+            if (playerInput != Vector2.zero)
+            {
+                _rb.AddForce(playerInput * _moveSpeed * Time.fixedDeltaTime, ForceMode2D.Impulse);
+            }
 
-        // jump
-        if (wantJump)
-        {
-            _rb.AddForce(Vector2.up * _jumpSpeed, ForceMode2D.Impulse);
-            wantJump = false;
+            // jump
+            if (wantJump)
+            {
+                _rb.AddForce(Vector2.up * _jumpSpeed, ForceMode2D.Impulse);
+                wantJump = false;
+            }
+
+            if(this.GetComponent<Transform>().position.y < lasttouchPosition.y - 3f)
+            {
+                StartCoroutine(respawn());
+                
+            }
         }
+        
+
+    }
+
+    IEnumerator respawn()
+    {
+        waiting = true;
+
+        
+
+        //add animation respawn 
+        yield return new WaitForSecondsRealtime(respawn_interval);
+        this.GetComponent<Transform>().position = new Vector2(lasttouchPosition.x, lasttouchPosition.y + 0.5f);
+        waiting = false;
     }
 
     /*
-   * Rôle : actions quand touche plateforme
-   * Entrée : aucune 
-   * Sortie : aucune 
-   */
+    * Rôle : actions quand touche plateforme
+    * Entrée : aucune 
+    * Sortie : aucune 
+    */
     void OnTriggerEnter2D(Collider2D other)
     {
 
-        if (other.gameObject.tag.Equals("Plateforme"))
+        if (other.gameObject.tag.Equals("Plateforme")&& other.gameObject.GetComponent<Transform>().position.y >= lasttouchPosition.y - 3f)
         {
             lasttouchPosition = other.gameObject.GetComponent<Transform>().position;
             //peut sauter après contact
             canJump = 2;
             _character.transform.tag = "onFloor";
-            GameObject.Find("Main Camera").GetComponent<FollowPlayer>().minHeight = lasttouchPosition.y;
+
+
+
+            // ne fonctionne pas ??!
+            _camera.GetComponent<FollowPlayer>().minHeight = lasttouchPosition.y;
         }
     }
 
@@ -80,20 +110,7 @@ public class Mouvement : MonoBehaviour
             canJump = 1;
             _character.transform.tag = "Jumping";
         }
-    }
+    } 
 
-
-    //private void OnCollisionEnter2D(Collision2D col)
-    //{
-    //    //peut sauter après contact
-    //    canJump = 2;
-    //    _character.transform.tag = "onFloor";
-    //}
-
-    //private void OnCollisionExit2D(Collision2D col)
-    //{
-    //    canJump = 1;
-    //    _character.transform.tag = "Jumping";
-    //}
 }
 
