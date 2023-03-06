@@ -138,6 +138,14 @@ public class CréationLabyrinte : MonoBehaviour
 
     void Update()
     {
+
+
+
+
+    
+     
+    
+        
         //rénitialisaton des booléen qui affirme la validité de la direction
         haut = true;
         bas = true;
@@ -159,16 +167,16 @@ public class CréationLabyrinte : MonoBehaviour
             direction = Random.Range(1, 5);
 
 
-            /*
-             * TODO:
-             *
-             *  rajouter le bloc de mémoire et de backtracking après que Daphnée aura réussi
-             * 
-             */
+            
+             //TODO: rajouter le bloc de mémoire et de backtracking après que Daphnée aura réussi
+            
+             
+             
+             
 
             //BLOC TEMPORAIRE QUI ARRÊTE LA BALLE ROUGE POUR ÉVITER UNE BOUCLE INFINIE (UNITY PLANTE SINON)
 
-            if (haut = true && bas == true && droite == true && gauche == true)
+            if (haut = true || bas == true || droite == true || gauche == true)
             {
                 //Switch qui performe l'action nécéssaire selon la direction
                 switch (direction)
@@ -196,7 +204,8 @@ public class CréationLabyrinte : MonoBehaviour
 
                                     //la destruction du mur du haut pourrait se faire ici
 
-
+                                    RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                    Destroy(hit.collider.gameObject);
 
 
 
@@ -237,8 +246,8 @@ public class CréationLabyrinte : MonoBehaviour
 
                                 if (hitup == true && hitdown == true && hitleft == true && hitright == true)
                                 {
-                                    //la destruction du mur du bas pourrait se faire ici
-
+                                    RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                    Destroy(hit.collider.gameObject);
                                     while (transform.position != YeuxBalle.transform.position)
                                     {
                                         transform.position = Vector3.MoveTowards(transform.position, YeuxBalle.transform.position, (0.1f * Time.deltaTime));
@@ -274,8 +283,8 @@ public class CréationLabyrinte : MonoBehaviour
                                 if (hitup == true && hitdown == true && hitleft == true && hitright == true)
                                 {
 
-                                    //la destruction du mur de gauche pourrait se faire ici
-
+                                    RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                                    Destroy(hit.collider.gameObject);
 
                                     while (transform.position != YeuxBalle.transform.position)
                                     {
@@ -311,7 +320,8 @@ public class CréationLabyrinte : MonoBehaviour
 
                                 if (hitup == true && hitdown == true && hitleft == true && hitright == true)
                                 {
-                                    //la destruction du mur de droite pourrait se faire ici
+                                    RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                                    Destroy(hit.collider.gameObject);
 
                                     while (transform.position != YeuxBalle.transform.position)
                                     {
@@ -335,18 +345,21 @@ public class CréationLabyrinte : MonoBehaviour
                 }
 
             }
+            else if (haut = false && bas == false && droite == false && gauche == false) {
 
-
-
-            else
-            {
-                confirmationDirection = true;
                 Destroy(this.gameObject);
-            }
+                Debug.Log("Fin");
+                confirmationDirection = true;
+             }
+
+
+        
 
         } while (confirmationDirection != true);
+        
+        
     }
-
+    
     
 
 

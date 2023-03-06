@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4977653537084104994}
   - component: {fileID: 1981919822229203394}
+  - component: {fileID: 7961768231859879966}
   m_Layer: 0
   m_Name: GestionScenes
   m_TagString: Untagged
@@ -44,5 +45,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c31fe5ec6458e3f41b9c1dc4fcbff910, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _imageReadyJ1: {fileID: 0}
-  _imageReadyJ2: {fileID: 0}
+  Transition: {fileID: 7961768231859879966}
+--- !u!95 &7961768231859879966
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4546672222375235159}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 16c07b3d745a9904da4859ac74e244fe, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
