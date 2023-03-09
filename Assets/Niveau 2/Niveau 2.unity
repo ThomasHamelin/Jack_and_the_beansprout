@@ -597,11 +597,11 @@ MonoBehaviour:
   coin4: {fileID: 1980272287}
   CoinMur: {fileID: 468311940097508260, guid: 5c0940e480c8be24991409fe3de5ba7a, type: 3}
   Mur: {fileID: 3995409639230093603, guid: ffd223749aba00c4faeb654837b1591c, type: 3}
-  longueur: 30
-  largeur: 30
+  longueur: 50
+  largeur: 50
   CoordonneDepartX: 0
   CoordonneDepartY: 0
-  tailleGrille: 5
+  tailleGrille: 9
 --- !u!1 &2137826734
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Xml;
 using Unity.Burst.CompilerServices;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.TextCore.Text;
 using UnityEngine;
@@ -13,14 +14,6 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 
-
-/*
- * Allo ma belle,
- * j'ai commenté tout mon code pour que tu puisse 
- * travailler dessus.
- * ça se pourrait que il y a des bout moins clairs faque
- * hésite pas à me poser des question si t'en à
- */
 
 
 
@@ -55,10 +48,12 @@ public class CréationLabyrinte : MonoBehaviour
     private bool haut = true, bas = true, gauche = true, droite = true;
     private bool confirmationDirection = false;
 
-
-
+    private bool confirmationRecul;
     
-
+    private List<int> MemoireDirection = new List<int>();
+    private float nbCasestotales;
+    private float nbCasesExplorés;
+    private int CurseurMemoire, i;
 
     void Start()
     {
@@ -80,7 +75,7 @@ public class CréationLabyrinte : MonoBehaviour
         UniteDeDistance[2] = (longueur / tailleGrille) / 2;
         UniteDeDistance[3] = (largeur / tailleGrille) / 2;
 
-
+        nbCasestotales = (tailleGrille * tailleGrille);
 
         //génération des coins des murs
         for (int y = 0; y <= tailleGrille; y++)
@@ -132,9 +127,11 @@ public class CréationLabyrinte : MonoBehaviour
 
 
 
-
+       
 
     }
+    
+   
 
     void Update()
     {
@@ -176,7 +173,7 @@ public class CréationLabyrinte : MonoBehaviour
 
             //BLOC TEMPORAIRE QUI ARRÊTE LA BALLE ROUGE POUR ÉVITER UNE BOUCLE INFINIE (UNITY PLANTE SINON)
 
-            if (haut = true || bas == true || droite == true || gauche == true)
+            if (haut == true || bas == true || droite == true || gauche == true)
             {
                 //Switch qui performe l'action nécéssaire selon la direction
                 switch (direction)
@@ -211,12 +208,17 @@ public class CréationLabyrinte : MonoBehaviour
 
 
                                     //instruction qui indique que la balle rouge avance vers la balle verte jusqu'à ce qu'elle atteigne sa position
-                                    while (this.gameObject.transform.position != YeuxBalle.transform.position)
-                                    {
-                                        transform.position = Vector3.MoveTowards(transform.position, YeuxBalle.transform.position, (0.1f * Time.deltaTime));
+                                    
+                                    
+                                    transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
 
-                                    }
+                                    
                                     //on confirme que le mouvement à été fait
+
+                                    //1 = haut, 2 = bas, 3 = gauche, 4 = droite
+                                    MemoireDirection.Add(1);
+                                    
+                                    nbCasesExplorés++;
                                     confirmationDirection = true;
 
                                 }
@@ -248,11 +250,9 @@ public class CréationLabyrinte : MonoBehaviour
                                 {
                                     RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
                                     Destroy(hit.collider.gameObject);
-                                    while (transform.position != YeuxBalle.transform.position)
-                                    {
-                                        transform.position = Vector3.MoveTowards(transform.position, YeuxBalle.transform.position, (0.1f * Time.deltaTime));
-
-                                    }
+                                    transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
+                                    MemoireDirection.Add(2);
+                                    nbCasesExplorés++;
                                     confirmationDirection = true;
                                 }
                                 else
@@ -286,11 +286,9 @@ public class CréationLabyrinte : MonoBehaviour
                                     RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
                                     Destroy(hit.collider.gameObject);
 
-                                    while (transform.position != YeuxBalle.transform.position)
-                                    {
-                                        transform.position = Vector3.MoveTowards(transform.position, YeuxBalle.transform.position, (0.1f * Time.deltaTime));
-
-                                    }
+                                    transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
+                                    MemoireDirection.Add(3);
+                                    nbCasesExplorés++;
                                     confirmationDirection = true;
                                 }
                                 else
@@ -323,11 +321,9 @@ public class CréationLabyrinte : MonoBehaviour
                                     RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
                                     Destroy(hit.collider.gameObject);
 
-                                    while (transform.position != YeuxBalle.transform.position)
-                                    {
-                                        transform.position = Vector3.MoveTowards(transform.position, YeuxBalle.transform.position, (0.1f * Time.deltaTime));
-
-                                    }
+                                    transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
+                                    MemoireDirection.Add(4);
+                                    nbCasesExplorés++;
                                     confirmationDirection = true;
                                 }
                                 else
@@ -345,12 +341,279 @@ public class CréationLabyrinte : MonoBehaviour
                 }
 
             }
-            else if (haut = false && bas == false && droite == false && gauche == false) {
+            else if (haut == false && bas == false && droite == false && gauche == false) {
 
-                Destroy(this.gameObject);
-                Debug.Log("Fin");
-                confirmationDirection = true;
-             }
+                i = (MemoireDirection.Count)-1;
+                do
+                {
+                    
+                    
+                    switch(MemoireDirection[i])
+                    {
+                        case 1:
+                            transform.position = new Vector3(transform.position.x, transform.position.y - UniteDeDistance[1], 0);
+
+                            //bas
+                            YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y - UniteDeDistance[1], 0);
+
+                            RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
+                            RaycastHit2D hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
+                            RaycastHit2D hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
+                            RaycastHit2D hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+
+                            //si les raycasts confirment la présence des murs, alors continue
+                            if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                            {
+                                MemoireDirection[i] = 2;
+                                bas = true;
+                                confirmationRecul = true;
+                            }
+                            else
+                            {
+                                //gauche
+                                YeuxBalle.transform.position = new Vector3(transform.position.x - UniteDeDistance[0], transform.position.y, 0);
+
+                                hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
+                                hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
+                                hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
+                                hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+
+                                //si les raycasts confirment la présence des murs, alors continue
+                                if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                                {
+                                    MemoireDirection[i] = 3;
+                                    gauche = true;
+                                    confirmationRecul = true;
+                                }
+                                else
+                                {
+                                    //droite
+                                    YeuxBalle.transform.position = new Vector3(transform.position.x + UniteDeDistance[0], transform.position.y, 0);
+
+                                    hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
+                                    hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
+                                    hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
+                                    hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+
+                                    //si les raycasts confirment la présence des murs, alors continue
+                                    if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                                    {
+                                        MemoireDirection[i] = 4;
+                                        droite = true;
+                                        confirmationRecul = true;
+                                    }
+                                    else
+                                    {
+                                        MemoireDirection.RemoveAt(i);
+                                        i--;
+                                    }
+
+                                }
+                            }
+                            break;
+
+                        case 2:
+                            transform.position = new Vector3(transform.position.x, transform.position.y + UniteDeDistance[1], 0);
+
+                            //haut
+                            YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y + UniteDeDistance[1], 0);
+                            hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
+                            hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
+                            hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
+                            hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+
+                            //si les raycasts confirment la présence des murs, alors continue
+                            if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                            {
+
+                                MemoireDirection[i] = 1;
+                                haut = true;
+                                confirmationRecul = true;
+
+                            }
+                            else
+                            {
+                                //gauche
+                                YeuxBalle.transform.position = new Vector3(transform.position.x - UniteDeDistance[0], transform.position.y, 0);
+
+                                hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
+                                hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
+                                hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
+                                hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+
+                                //si les raycasts confirment la présence des murs, alors continue
+                                if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                                {
+                                    MemoireDirection[i] = 3;
+                                    gauche = true;
+                                    confirmationRecul = true;
+                                }
+                                else
+                                {
+                                    //droite
+                                    YeuxBalle.transform.position = new Vector3(transform.position.x + UniteDeDistance[0], transform.position.y, 0);
+
+                                    hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
+                                    hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
+                                    hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
+                                    hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+
+                                    //si les raycasts confirment la présence des murs, alors continue
+                                    if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                                    {
+                                        MemoireDirection[i] = 4;
+                                        droite = true;
+                                        confirmationRecul = true;
+                                    }
+                                    else
+                                    {
+                                        MemoireDirection.RemoveAt(i);
+                                        i--;
+                                    }
+
+                                }
+                            }
+                            
+
+
+                            break;
+
+                        case 3:
+                            
+                            
+                            transform.position = new Vector3(transform.position.x + UniteDeDistance[0], transform.position.y, 0);
+                            //haut
+
+                            YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y + UniteDeDistance[1], 0);
+                            hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
+                            hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
+                            hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
+                            hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+
+                            //si les raycasts confirment la présence des murs, alors continue
+                            if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                            {
+
+                                MemoireDirection[i] = 1;
+                                haut = true;
+                                confirmationRecul = true;
+
+                            }
+                            else
+                            {
+                                //bas
+                                YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y - UniteDeDistance[1], 0);
+
+                                hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
+                                hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
+                                hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
+                                hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+
+                                //si les raycasts confirment la présence des murs, alors continue
+                                if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                                {
+                                    MemoireDirection[i] = 2;
+                                    bas = true;
+                                    confirmationRecul = true;
+                                }
+                                else
+                                {
+                                    //droite
+                                    YeuxBalle.transform.position = new Vector3(transform.position.x + UniteDeDistance[0], transform.position.y, 0);
+
+                                    hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
+                                    hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
+                                    hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
+                                    hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+
+                                    //si les raycasts confirment la présence des murs, alors continue
+                                    if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                                    {
+                                        MemoireDirection[i] = 4;
+                                        droite = true;
+                                        confirmationRecul = true;
+                                    }
+                                    else
+                                    {
+                                        MemoireDirection.RemoveAt(i);
+                                        i--;
+                                    }
+
+                                }
+                            }
+                            break;  
+
+                        case 4:
+                            
+                            transform.position = new Vector3(transform.position.x - UniteDeDistance[0], transform.position.y, 0);
+                            //haut
+
+                            YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y + UniteDeDistance[1], 0);
+                            hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
+                            hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
+                            hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
+                            hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+
+                            //si les raycasts confirment la présence des murs, alors continue
+                            if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                            {
+
+                                MemoireDirection[i] = 1;
+                                haut = true;
+                                confirmationRecul = true;
+
+                            }
+                            else
+                            {
+                                //bas
+                                YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y - UniteDeDistance[1], 0);
+
+                                hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
+                                hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
+                                hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
+                                hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+
+                                //si les raycasts confirment la présence des murs, alors continue
+                                if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                                {
+                                    MemoireDirection[i] = 2;
+                                    bas = true;
+                                    confirmationRecul = true;
+                                }
+                                else
+                                {
+                                    //gauche
+                                    YeuxBalle.transform.position = new Vector3(transform.position.x - UniteDeDistance[0], transform.position.y, 0);
+
+                                    hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
+                                    hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
+                                    hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
+                                    hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+
+                                    //si les raycasts confirment la présence des murs, alors continue
+                                    if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                                    {
+                                        MemoireDirection[i] = 3;
+                                        gauche = true;
+                                        confirmationRecul = true;
+                                    }
+                                    else
+                                    {
+                                        MemoireDirection.RemoveAt(i);
+                                        i--;
+                                    }
+                                }
+                                
+
+                                
+                            }
+                            break;
+                           
+                    }
+                    
+                } while (confirmationRecul != true);
+                               
+            }
 
 
         
