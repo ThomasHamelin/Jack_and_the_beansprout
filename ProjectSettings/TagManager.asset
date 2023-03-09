@@ -11,6 +11,8 @@ TagManager:
   - Jumping
   - OnFloor
   - Transition
+  - Player2
+  - Player1
   layers:
   - Default
   - TransparentFX
@@ -53,4 +55,7 @@ TagManager:
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: background
+    uniqueID: 719217985
     locked: 0

@@ -69,7 +69,7 @@ public class Mouvement : MonoBehaviour
                 wantJump = false;
             }
 
-            if(this.GetComponent<Transform>().position.y < lasttouchPosition.y - 3f)
+            if(this.GetComponent<Transform>().position.y < lasttouchPosition.y - 2f)
             {
                 StartCoroutine(respawn());
                 
@@ -81,12 +81,15 @@ public class Mouvement : MonoBehaviour
 
     IEnumerator respawn()
     {
-        waiting = true;
+        waiting = true;//stoper le mouvement durant le respawn
 
-        
+        this.GetComponent<CapsuleCollider2D>().isTrigger = true;//deactiver collider
 
         //add animation respawn 
         yield return new WaitForSecondsRealtime(respawn_interval);
+        
+        this.GetComponent<CapsuleCollider2D>().isTrigger = false;//activer collider
+
         this.GetComponent<Transform>().position = new Vector2(lasttouchPosition.x, lasttouchPosition.y + 0.5f);
         waiting = false;
     }
@@ -99,14 +102,14 @@ public class Mouvement : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
 
-        if (other.gameObject.tag.Equals("Plateforme")&& other.gameObject.GetComponent<Transform>().position.y >= lasttouchPosition.y - 3f)
+        if (other.gameObject.tag.Equals("Plateforme") && other.gameObject.GetComponent<Transform>().position.y >= lasttouchPosition.y - 2f)
         {
             lasttouchPosition = other.gameObject.GetComponent<Transform>().position;
             
             //peut sauter après contact
             canJump = 2;
 
-            // ne fonctionne pas ??!
+
             _camera.GetComponent<FollowPlayer>().minHeight = lasttouchPosition.y;
         }
     }
