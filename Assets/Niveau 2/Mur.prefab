@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3995409639230093600}
   - component: {fileID: 6181173554727896641}
   - component: {fileID: 3232848419979223162}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Mur
   m_TagString: mur
   m_Icon: {fileID: 0}

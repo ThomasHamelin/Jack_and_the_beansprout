@@ -17,8 +17,7 @@ public class GestionScenes : MonoBehaviour
 
     private void Start()
     {
-        Transition = GameObject.Find("transition").GetComponent<Animator>();
-        
+        Transition = GameObject.FindGameObjectWithTag("Transition").GetComponent<Animator>();
     }
     /*
      * Rôle : Charger la scene suivante
@@ -27,10 +26,16 @@ public class GestionScenes : MonoBehaviour
      */
     public void ChangerScene()
     {
-        Transition.Play("Transition_out");
+        
+        Debug.Log("Decharge");
         int indexSceneCourante = SceneManager.GetActiveScene().buildIndex;
+        Transition.ResetTrigger("DechargeNiveau");
         SceneManager.LoadScene(indexSceneCourante + 1);
-       
+        Debug.Log("charge");
+        Transition.SetTrigger("ChargerNouvNiveau");
+
+        Transition.ResetTrigger("ChargerNouvNiveau");
+        Transition.ResetTrigger("DechargeNiveau");
     }
 
     /*
@@ -58,9 +63,6 @@ public class GestionScenes : MonoBehaviour
    * Entrée : Aucune
    * Sortie : Aucune
    */
-    public void TransitionEntreChargementEtNiveau()
-    {
-        Transition.SetTrigger("ChargerNouvNiveau");
-    }
+ 
 
 }

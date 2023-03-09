@@ -10,13 +10,12 @@ TagManager:
   - HighestPlateforme
   - Jumping
   - OnFloor
-  - Player1
-  - Player2
+  - Transition
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - DetectionMur
   - Water
   - UI
   - 
