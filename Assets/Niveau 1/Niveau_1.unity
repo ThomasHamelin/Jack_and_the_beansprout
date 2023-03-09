@@ -1355,7 +1355,7 @@ MonoBehaviour:
   _character: {fileID: 1741313700}
   _rb: {fileID: 1741313704}
   respawn_interval: 1
-  _camera: {fileID: 0}
+  _camera: {fileID: 1792300218}
 --- !u!61 &1741313706
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -69,7 +69,7 @@ public class Mouvement : MonoBehaviour
                 wantJump = false;
             }
 
-            if(this.GetComponent<Transform>().position.y < lasttouchPosition.y - 3f)
+            if(this.GetComponent<Transform>().position.y < lasttouchPosition.y - 2f)
             {
                 StartCoroutine(respawn());
                 
@@ -102,7 +102,7 @@ public class Mouvement : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
 
-        if (other.gameObject.tag.Equals("Plateforme") && other.gameObject.GetComponent<Transform>().position.y >= lasttouchPosition.y - 3f)
+        if (other.gameObject.tag.Equals("Plateforme") && other.gameObject.GetComponent<Transform>().position.y >= lasttouchPosition.y - 2f)
         {
             lasttouchPosition = other.gameObject.GetComponent<Transform>().position;
             
