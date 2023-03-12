@@ -601,7 +601,7 @@ MonoBehaviour:
   largeur: 50
   CoordonneDepartX: 0
   CoordonneDepartY: 0
-  tailleGrille: 9
+  tailleGrille: 20
 --- !u!1 &2137826734
 GameObject:
   m_ObjectHideFlags: 0

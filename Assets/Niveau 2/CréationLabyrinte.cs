@@ -344,6 +344,11 @@ public class CréationLabyrinte : MonoBehaviour
             else if (haut == false && bas == false && droite == false && gauche == false) {
 
                 i = (MemoireDirection.Count)-1;
+
+                if(i < 0)
+                {
+                    i = 0;
+                }
                 do
                 {
                     
@@ -356,10 +361,10 @@ public class CréationLabyrinte : MonoBehaviour
                             //bas
                             YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y - UniteDeDistance[1], 0);
 
-                            RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
-                            RaycastHit2D hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
-                            RaycastHit2D hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
-                            RaycastHit2D hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+                            RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                            RaycastHit2D hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                            RaycastHit2D hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                            RaycastHit2D hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
                             //si les raycasts confirment la présence des murs, alors continue
                             if (hitup == true && hitdown == true && hitleft == true && hitright == true)
@@ -373,10 +378,10 @@ public class CréationLabyrinte : MonoBehaviour
                                 //gauche
                                 YeuxBalle.transform.position = new Vector3(transform.position.x - UniteDeDistance[0], transform.position.y, 0);
 
-                                hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
-                                hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
-                                hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
-                                hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+                                hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                                hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
                                 //si les raycasts confirment la présence des murs, alors continue
                                 if (hitup == true && hitdown == true && hitleft == true && hitright == true)
@@ -390,10 +395,10 @@ public class CréationLabyrinte : MonoBehaviour
                                     //droite
                                     YeuxBalle.transform.position = new Vector3(transform.position.x + UniteDeDistance[0], transform.position.y, 0);
 
-                                    hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
-                                    hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
-                                    hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
-                                    hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+                                    hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                    hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                    hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                                    hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
                                     //si les raycasts confirment la présence des murs, alors continue
                                     if (hitup == true && hitdown == true && hitleft == true && hitright == true)
@@ -417,10 +422,10 @@ public class CréationLabyrinte : MonoBehaviour
 
                             //haut
                             YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y + UniteDeDistance[1], 0);
-                            hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
-                            hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
-                            hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
-                            hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+                            hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                            hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                            hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                            hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
                             //si les raycasts confirment la présence des murs, alors continue
                             if (hitup == true && hitdown == true && hitleft == true && hitright == true)
@@ -436,10 +441,10 @@ public class CréationLabyrinte : MonoBehaviour
                                 //gauche
                                 YeuxBalle.transform.position = new Vector3(transform.position.x - UniteDeDistance[0], transform.position.y, 0);
 
-                                hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
-                                hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
-                                hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
-                                hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+                                hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                                hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
                                 //si les raycasts confirment la présence des murs, alors continue
                                 if (hitup == true && hitdown == true && hitleft == true && hitright == true)
@@ -453,10 +458,10 @@ public class CréationLabyrinte : MonoBehaviour
                                     //droite
                                     YeuxBalle.transform.position = new Vector3(transform.position.x + UniteDeDistance[0], transform.position.y, 0);
 
-                                    hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
-                                    hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
-                                    hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
-                                    hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+                                    hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                    hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                    hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                                    hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
                                     //si les raycasts confirment la présence des murs, alors continue
                                     if (hitup == true && hitdown == true && hitleft == true && hitright == true)
@@ -485,10 +490,10 @@ public class CréationLabyrinte : MonoBehaviour
                             //haut
 
                             YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y + UniteDeDistance[1], 0);
-                            hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
-                            hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
-                            hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
-                            hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+                            hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                            hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                            hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                            hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
                             //si les raycasts confirment la présence des murs, alors continue
                             if (hitup == true && hitdown == true && hitleft == true && hitright == true)
@@ -504,10 +509,10 @@ public class CréationLabyrinte : MonoBehaviour
                                 //bas
                                 YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y - UniteDeDistance[1], 0);
 
-                                hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
-                                hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
-                                hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
-                                hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+                                hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                                hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
                                 //si les raycasts confirment la présence des murs, alors continue
                                 if (hitup == true && hitdown == true && hitleft == true && hitright == true)
@@ -521,10 +526,10 @@ public class CréationLabyrinte : MonoBehaviour
                                     //droite
                                     YeuxBalle.transform.position = new Vector3(transform.position.x + UniteDeDistance[0], transform.position.y, 0);
 
-                                    hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
-                                    hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
-                                    hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
-                                    hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+                                    hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                    hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                    hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                                    hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
                                     //si les raycasts confirment la présence des murs, alors continue
                                     if (hitup == true && hitdown == true && hitleft == true && hitright == true)
@@ -549,10 +554,10 @@ public class CréationLabyrinte : MonoBehaviour
                             //haut
 
                             YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y + UniteDeDistance[1], 0);
-                            hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
-                            hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
-                            hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
-                            hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+                            hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                            hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                            hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                            hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
                             //si les raycasts confirment la présence des murs, alors continue
                             if (hitup == true && hitdown == true && hitleft == true && hitright == true)
@@ -568,10 +573,10 @@ public class CréationLabyrinte : MonoBehaviour
                                 //bas
                                 YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y - UniteDeDistance[1], 0);
 
-                                hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
-                                hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
-                                hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
-                                hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+                                hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                                hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
                                 //si les raycasts confirment la présence des murs, alors continue
                                 if (hitup == true && hitdown == true && hitleft == true && hitright == true)
@@ -585,10 +590,10 @@ public class CréationLabyrinte : MonoBehaviour
                                     //gauche
                                     YeuxBalle.transform.position = new Vector3(transform.position.x - UniteDeDistance[0], transform.position.y, 0);
 
-                                    hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
-                                    hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
-                                    hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
-                                    hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+                                    hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                    hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                    hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                                    hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
                                     //si les raycasts confirment la présence des murs, alors continue
                                     if (hitup == true && hitdown == true && hitleft == true && hitright == true)
