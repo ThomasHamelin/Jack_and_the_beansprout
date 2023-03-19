@@ -1,16 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using Unity.Burst.CompilerServices;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.TextCore.Text;
+using UnityEditor.UIElements;
 using UnityEngine;
-
-
-
 using Random = UnityEngine.Random;
 
 
@@ -40,24 +39,41 @@ public class CréationLabyrinte : MonoBehaviour
 
     [SerializeField] float tailleGrille;
 
-    private float[] UniteDeDistance = new float[4];
 
+
+    private float[] UniteDeDistance = new float[4];
+    
 
     private float direction;
 
     private bool haut = true, bas = true, gauche = true, droite = true;
+
+
     private bool confirmationDirection = false;
 
     private bool confirmationRecul;
-    
-    private List<int> MemoireDirection = new List<int>();
+    private bool confirmationNEWdir;
+
+    private bool[] verifBackHaut = new bool[4];
+    private bool[] verifBackBas = new bool[4];
+    private bool[] verifBackGauche = new bool[4];
+    private bool[] verifBackDroite = new bool[4];
+
+
+    private List<int> MemoireACourtTerme = new List<int>();
+    private List<int> MemoireALongTerme = new List<int>();
+
     private float nbCasestotales;
     private float nbCasesExplorés;
-    private int CurseurMemoire, i;
+    private int CurseurMemoire;
 
+
+    private int xn, MAX;
+
+    private int rand;
     void Start()
     {
-
+        MemoireALongTerme.Add(0);
         //placement des coins principaux selon la taille voulue
         coin1.transform.position = new Vector2(CoordonneDepartX, CoordonneDepartY);
         coin2.transform.position = new Vector2(coin1.transform.position.x + longueur, coin1.transform.position.y);
@@ -204,20 +220,9 @@ public class CréationLabyrinte : MonoBehaviour
                                     RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
                                     Destroy(hit.collider.gameObject);
 
-
-
-
-                                    //instruction qui indique que la balle rouge avance vers la balle verte jusqu'à ce qu'elle atteigne sa position
-                                    
-                                    
-                                    transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
-
-                                    
-                                    //on confirme que le mouvement à été fait
-
-                                    //1 = haut, 2 = bas, 3 = gauche, 4 = droite
-                                    MemoireDirection.Add(1);
-                                    
+                                     
+                                    transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);                             
+                                    MemoireALongTerme.Add(1);                                    
                                     nbCasesExplorés++;
                                     confirmationDirection = true;
 
@@ -250,8 +255,9 @@ public class CréationLabyrinte : MonoBehaviour
                                 {
                                     RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
                                     Destroy(hit.collider.gameObject);
+                                     
                                     transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
-                                    MemoireDirection.Add(2);
+                                    MemoireALongTerme.Add(2);
                                     nbCasesExplorés++;
                                     confirmationDirection = true;
                                 }
@@ -286,8 +292,9 @@ public class CréationLabyrinte : MonoBehaviour
                                     RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
                                     Destroy(hit.collider.gameObject);
 
-                                    transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
-                                    MemoireDirection.Add(3);
+                                    
+                                    transform.position  = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
+                                    MemoireALongTerme.Add(3);
                                     nbCasesExplorés++;
                                     confirmationDirection = true;
                                 }
@@ -321,8 +328,9 @@ public class CréationLabyrinte : MonoBehaviour
                                     RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
                                     Destroy(hit.collider.gameObject);
 
-                                    transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
-                                    MemoireDirection.Add(4);
+                                  
+                                    transform.position  = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
+                                    MemoireALongTerme.Add(4);
                                     nbCasesExplorés++;
                                     confirmationDirection = true;
                                 }
@@ -341,281 +349,145 @@ public class CréationLabyrinte : MonoBehaviour
                 }
 
             }
+
+
+
+
+            //recul
             else if (haut == false && bas == false && droite == false && gauche == false) {
 
-                i = (MemoireDirection.Count)-1;
+                do { 
+                    CurseurMemoire = (MemoireALongTerme.Count) - 1;
 
-                if(i < 0)
-                {
-                    i = 0;
-                }
-                do
-                {
-                    
-                    
-                    switch(MemoireDirection[i])
+                    switch (MemoireALongTerme[CurseurMemoire])
                     {
                         case 1:
-                            transform.position = new Vector3(transform.position.x, transform.position.y - UniteDeDistance[1], 0);
+                            this.gameObject.transform.position = new Vector3(transform.position.x, transform.position.y - UniteDeDistance[1], 0);
 
-                            //bas
-                            YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y - UniteDeDistance[1], 0);
-
-                            RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                            RaycastHit2D hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                            RaycastHit2D hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-                            RaycastHit2D hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-
-                            //si les raycasts confirment la présence des murs, alors continue
-                            if (hitup == true && hitdown == true && hitleft == true && hitright == true)
-                            {
-                                MemoireDirection[i] = 2;
-                                bas = true;
-                                confirmationRecul = true;
-                            }
-                            else
-                            {
-                                //gauche
-                                YeuxBalle.transform.position = new Vector3(transform.position.x - UniteDeDistance[0], transform.position.y, 0);
-
-                                hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                                hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                                hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-                                hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-
-                                //si les raycasts confirment la présence des murs, alors continue
-                                if (hitup == true && hitdown == true && hitleft == true && hitright == true)
-                                {
-                                    MemoireDirection[i] = 3;
-                                    gauche = true;
-                                    confirmationRecul = true;
-                                }
-                                else
-                                {
-                                    //droite
-                                    YeuxBalle.transform.position = new Vector3(transform.position.x + UniteDeDistance[0], transform.position.y, 0);
-
-                                    hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                                    hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                                    hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-                                    hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-
-                                    //si les raycasts confirment la présence des murs, alors continue
-                                    if (hitup == true && hitdown == true && hitleft == true && hitright == true)
-                                    {
-                                        MemoireDirection[i] = 4;
-                                        droite = true;
-                                        confirmationRecul = true;
-                                    }
-                                    else
-                                    {
-                                        MemoireDirection.RemoveAt(i);
-                                        i--;
-                                    }
-
-                                }
-                            }
+                            MemoireALongTerme.RemoveAt(CurseurMemoire);
                             break;
 
                         case 2:
-                            transform.position = new Vector3(transform.position.x, transform.position.y + UniteDeDistance[1], 0);
+                            this.gameObject.transform.position = new Vector3(transform.position.x, transform.position.y + UniteDeDistance[1], 0);
 
-                            //haut
-                            YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y + UniteDeDistance[1], 0);
-                            hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                            hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                            hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-                            hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-
-                            //si les raycasts confirment la présence des murs, alors continue
-                            if (hitup == true && hitdown == true && hitleft == true && hitright == true)
-                            {
-
-                                MemoireDirection[i] = 1;
-                                haut = true;
-                                confirmationRecul = true;
-
-                            }
-                            else
-                            {
-                                //gauche
-                                YeuxBalle.transform.position = new Vector3(transform.position.x - UniteDeDistance[0], transform.position.y, 0);
-
-                                hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                                hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                                hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-                                hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-
-                                //si les raycasts confirment la présence des murs, alors continue
-                                if (hitup == true && hitdown == true && hitleft == true && hitright == true)
-                                {
-                                    MemoireDirection[i] = 3;
-                                    gauche = true;
-                                    confirmationRecul = true;
-                                }
-                                else
-                                {
-                                    //droite
-                                    YeuxBalle.transform.position = new Vector3(transform.position.x + UniteDeDistance[0], transform.position.y, 0);
-
-                                    hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                                    hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                                    hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-                                    hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-
-                                    //si les raycasts confirment la présence des murs, alors continue
-                                    if (hitup == true && hitdown == true && hitleft == true && hitright == true)
-                                    {
-                                        MemoireDirection[i] = 4;
-                                        droite = true;
-                                        confirmationRecul = true;
-                                    }
-                                    else
-                                    {
-                                        MemoireDirection.RemoveAt(i);
-                                        i--;
-                                    }
-
-                                }
-                            }
-                            
-
-
+                            MemoireALongTerme.RemoveAt(CurseurMemoire);
                             break;
 
                         case 3:
-                            
-                            
-                            transform.position = new Vector3(transform.position.x + UniteDeDistance[0], transform.position.y, 0);
-                            //haut
+                            this.gameObject.transform.position = new Vector3(transform.position.x + UniteDeDistance[0], transform.position.y, 0);
 
-                            YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y + UniteDeDistance[1], 0);
-                            hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                            hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                            hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-                            hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-
-                            //si les raycasts confirment la présence des murs, alors continue
-                            if (hitup == true && hitdown == true && hitleft == true && hitright == true)
-                            {
-
-                                MemoireDirection[i] = 1;
-                                haut = true;
-                                confirmationRecul = true;
-
-                            }
-                            else
-                            {
-                                //bas
-                                YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y - UniteDeDistance[1], 0);
-
-                                hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                                hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                                hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-                                hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-
-                                //si les raycasts confirment la présence des murs, alors continue
-                                if (hitup == true && hitdown == true && hitleft == true && hitright == true)
-                                {
-                                    MemoireDirection[i] = 2;
-                                    bas = true;
-                                    confirmationRecul = true;
-                                }
-                                else
-                                {
-                                    //droite
-                                    YeuxBalle.transform.position = new Vector3(transform.position.x + UniteDeDistance[0], transform.position.y, 0);
-
-                                    hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                                    hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                                    hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-                                    hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-
-                                    //si les raycasts confirment la présence des murs, alors continue
-                                    if (hitup == true && hitdown == true && hitleft == true && hitright == true)
-                                    {
-                                        MemoireDirection[i] = 4;
-                                        droite = true;
-                                        confirmationRecul = true;
-                                    }
-                                    else
-                                    {
-                                        MemoireDirection.RemoveAt(i);
-                                        i--;
-                                    }
-
-                                }
-                            }
-                            break;  
+                            MemoireALongTerme.RemoveAt(CurseurMemoire);
+                            break;
 
                         case 4:
-                            
-                            transform.position = new Vector3(transform.position.x - UniteDeDistance[0], transform.position.y, 0);
-                            //haut
+                            this.gameObject.transform.position = new Vector3(transform.position.x - UniteDeDistance[0], transform.position.y, 0);
 
-                            YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y + UniteDeDistance[1], 0);
-                            hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                            hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                            hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-                            hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                            MemoireALongTerme.RemoveAt(CurseurMemoire);
+                            break;
+                    }
 
-                            //si les raycasts confirment la présence des murs, alors continue
-                            if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                    YeuxBalle.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + UniteDeDistance[1], 0);
+                    verifBackHaut[0] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                    verifBackHaut[1] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                    verifBackHaut[2] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                    verifBackHaut[3] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+
+
+
+                    YeuxBalle.transform.position = new Vector3(this.transform.position.x, this.transform.position.y - UniteDeDistance[1], 0);
+                    verifBackBas[0] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                    verifBackBas[1] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                    verifBackBas[2] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                    verifBackBas[3] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+
+                    YeuxBalle.transform.position = new Vector3(this.transform.position.x - UniteDeDistance[0], this.transform.position.y, 0);
+                    verifBackGauche[0] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                    verifBackGauche[1] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                    verifBackGauche[2] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                    verifBackGauche[3] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+
+                    YeuxBalle.transform.position = new Vector3(this.transform.position.x + UniteDeDistance[0], this.transform.position.y, 0);
+                    verifBackDroite[0] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                    verifBackDroite[1] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                    verifBackDroite[2] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                    verifBackDroite[3] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+
+
+                    if (IsAllTrue(verifBackHaut) == true || IsAllTrue(verifBackBas) == true || IsAllTrue(verifBackGauche) == true || IsAllTrue(verifBackDroite) == true)
+                    {
+
+                        do { 
+
+                            rand = Random.Range(0, 4);
+
+                            switch (rand)
                             {
-
-                                MemoireDirection[i] = 1;
-                                haut = true;
-                                confirmationRecul = true;
-
-                            }
-                            else
-                            {
-                                //bas
-                                YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y - UniteDeDistance[1], 0);
-
-                                hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                                hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                                hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-                                hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-
-                                //si les raycasts confirment la présence des murs, alors continue
-                                if (hitup == true && hitdown == true && hitleft == true && hitright == true)
-                                {
-                                    MemoireDirection[i] = 2;
-                                    bas = true;
-                                    confirmationRecul = true;
-                                }
-                                else
-                                {
-                                    //gauche
-                                    YeuxBalle.transform.position = new Vector3(transform.position.x - UniteDeDistance[0], transform.position.y, 0);
-
-                                    hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                                    hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                                    hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-                                    hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-
-                                    //si les raycasts confirment la présence des murs, alors continue
-                                    if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                                case 0:
+                                    if (IsAllTrue(verifBackHaut) == true)
                                     {
-                                        MemoireDirection[i] = 3;
-                                        gauche = true;
+                                        haut = true;
                                         confirmationRecul = true;
+                                        confirmationNEWdir= true;
                                     }
                                     else
                                     {
-                                        MemoireDirection.RemoveAt(i);
-                                        i--;
+                                        confirmationNEWdir= false;
                                     }
-                                }
-                                
+                                    break;
 
-                                
+                                case 1:
+
+                                    if (IsAllTrue(verifBackBas) == true)
+                                    {
+                                        bas = true;
+                                        confirmationRecul = true;
+                                        confirmationNEWdir= true;
+                                    }
+                                    else
+                                    {
+                                        confirmationNEWdir= false;
+                                    }
+                                    break;
+
+                                case 2:
+                                    if (IsAllTrue(verifBackGauche) == true)
+                                    {
+                                        gauche = true;
+                                        confirmationRecul = true;
+                                        confirmationNEWdir = true;
+                                    }
+                                    else
+                                    {
+                                        confirmationNEWdir = false;
+                                    }
+                                    break;
+
+                                case 3:
+                                    if (IsAllTrue(verifBackDroite) == true)
+                                    {
+                                        droite = true;
+                                        confirmationRecul = true;
+                                        confirmationNEWdir = true;
+                                    }
+                                    else
+                                    {
+                                        confirmationNEWdir = false;
+                                    }
+                                    break;
                             }
-                            break;
-                           
+
+                         }while (confirmationNEWdir != true) ;
+
                     }
-                    
+
+                    else
+                    {
+                        confirmationRecul = false;
+                    }
+
+
+
+
                 } while (confirmationRecul != true);
                                
             }
@@ -627,8 +499,27 @@ public class CréationLabyrinte : MonoBehaviour
         
         
     }
+
+
+
+
+
+ 
     
     
+    
+
+    //vérifie  que l'array est true partout
+    //je l'ai copié de reddit. TOO BAD ! 
+    public bool IsAllTrue(bool[] collection)
+    {
+        for (int i = 0; i < collection.Length; i++)
+            if (!collection[i])
+            {
+                return false;
+            }
+        return true;
+    }
 
 
 }
