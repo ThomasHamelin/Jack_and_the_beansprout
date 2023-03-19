@@ -4,33 +4,54 @@ using UnityEngine;
 
 public class JoueurNiv2 : MonoBehaviour
 {
-    [SerializeField] private float _vitesse;
-    [SerializeField] private int _numJoueur;
-    private Rigidbody2D rb;
+    [SerializeField] float _moveSpeed = 600f;
+    [SerializeField] float _rotationSpeed = 700f;
+    private Rigidbody2D _rb;
+    private Vector2 _direction;
 
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        _rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        float deplacementX = Input.GetAxisRaw($"Horizontal_P{_numJoueur}");
-        float deplacementY = Input.GetAxisRaw($"Vertical_P{_numJoueur}");
-        
-        Vector2 deplacement = new Vector2(deplacementX, deplacementY);
-        rb.velocity = deplacement * _vitesse;
+        MouvementsJoueurs();
+        RotateInDirectionOfInput();
+    }
 
-        if (deplacement != Vector2.zero)
+    private void MouvementsJoueurs()
+    {
+        if (this.CompareTag("Joueur1"))
         {
-            Quaternion targetRotation = Quaternion.LookRotation(transform.forward, deplacement);
-            Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 0.1f*Time.deltaTime);
-            Debug.Log(deplacement);
-            rb.MoveRotation(rotation);
+            float posX = Input.GetAxisRaw("Horizontal_P1");
+            float posY = Input.GetAxisRaw("Vertical_P1");
+            _direction = new Vector2(posX, posY) * _moveSpeed * Time.deltaTime;
+        }
+        else if (this.CompareTag("Joueur2"))
+        {
+            float posX = Input.GetAxis("Horizontal_P2");
+            float posY = Input.GetAxis("Vertical_P2");
+            _direction = new Vector2(posX, posY) * _moveSpeed * Time.deltaTime;
         }
 
+        _rb.velocity = _direction;
+    }
 
+    private void RotateInDirectionOfInput()
+    {
+        if (_direction != Vector2.zero)
+        {
+            _rb.freezeRotation = false;
+            Quaternion targetRotation = Quaternion.LookRotation(transform.forward, _direction);
+            Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+
+            _rb.MoveRotation(rotation);
+        }
+        else
+        {
+            _rb.freezeRotation = true;
+        }
     }
 
 }

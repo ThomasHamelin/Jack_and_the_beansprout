@@ -647,8 +647,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2d7ba6633d7b4743816f70ab88c4632, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _vitesse: 2
-  _numJoueur: 2
+  _moveSpeed: 150
+  _rotationSpeed: 500
 --- !u!212 &1048259751
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -969,8 +969,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2d7ba6633d7b4743816f70ab88c4632, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _vitesse: 6
-  _numJoueur: 1
+  _moveSpeed: 150
+  _rotationSpeed: 500
 --- !u!212 &2130916311
 SpriteRenderer:
   m_ObjectHideFlags: 0
