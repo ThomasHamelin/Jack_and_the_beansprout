@@ -7,17 +7,11 @@ using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class GestionScenes : MonoBehaviour
 {
-    
-
-
-
-    public GameObject Transition;
-
-
+    //public GameObject Transition;
 
     private void Start()
     {
-        Transition = GameObject.FindGameObjectWithTag("Transition").GetComponent<Animator>();
+       // Transition = GameObject.FindGameObjectWithTag("Transition").GetComponent<Animator>();
     }
     /*
      * Rôle : Charger la scene suivante
@@ -27,15 +21,15 @@ public class GestionScenes : MonoBehaviour
     public void ChangerScene()
     {
         
-        Debug.Log("Decharge");
+        //Debug.Log("Decharge");
         int indexSceneCourante = SceneManager.GetActiveScene().buildIndex;
-        Transition.SetTrigger("DechargeNiveau");
+        //Transition.SetTrigger("DechargeNiveau");
         SceneManager.LoadScene(indexSceneCourante + 1);
-        Debug.Log("charge");
-        Transition.SetTrigger("ChargerNouvNiveau");
+        //Debug.Log("charge");
+        //Transition.SetTrigger("ChargerNouvNiveau");
 
-        Transition.ResetTrigger("ChargerNouvNiveau");
-        Transition.ResetTrigger("DechargeNiveau");
+        //Transition.ResetTrigger("ChargerNouvNiveau");
+        //Transition.ResetTrigger("DechargeNiveau");
     }
 
     /*
