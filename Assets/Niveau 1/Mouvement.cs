@@ -20,8 +20,11 @@ public class Mouvement : MonoBehaviour
     private Vector2 lasttouchPosition;
     private bool waiting = false;
 
+    private Animator anim;
+
     private void Start()
     {
+        anim = GetComponent<Animator>();
         lasttouchPosition = this.GetComponent<Transform>().position;
     }
 
