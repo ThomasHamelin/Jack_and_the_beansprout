@@ -59,6 +59,8 @@ public class Mouvement : MonoBehaviour
     {
         if (!waiting)
         {
+            anim.SetBool("IsWalking", false);
+
             // move
             if (playerInput != Vector2.zero)
             {
@@ -78,7 +80,10 @@ public class Mouvement : MonoBehaviour
                 
             }
         }
-        
+        else
+        {
+            anim.SetBool("IsWalking", true);
+        }
 
     }
 
