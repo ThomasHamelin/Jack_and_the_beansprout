@@ -6,6 +6,7 @@ using TMPro;
 public class GestionFinDeJeu : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _txtGagnant = default;
+    [SerializeField] private GameObject _txtRejouer = default;
     [SerializeField] private TextMeshProUGUI _txtTimer = default;
     [SerializeField] private GameObject[] _imagesJoueurs = default;
 
@@ -21,7 +22,7 @@ public class GestionFinDeJeu : MonoBehaviour
         _imagesJoueurs[0].SetActive(false);
         _imagesJoueurs[1].SetActive(false);
         _imagesJoueurs[2].SetActive(false);
-        _txtTimer.gameObject.SetActive(false);
+        _txtRejouer.SetActive(false);
 
         StartCoroutine(RevelationGagnant());
 
@@ -69,6 +70,7 @@ public class GestionFinDeJeu : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         tempsRestant = 30;
+        _txtRejouer.SetActive(true);
         _resultAffiches = true;
 
         while(tempsRestant >= 0)

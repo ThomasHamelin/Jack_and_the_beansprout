@@ -20,8 +20,11 @@ public class Mouvement : MonoBehaviour
     private Vector2 lasttouchPosition;
     private bool waiting = false;
 
+    private Animator anim;
+
     private void Start()
     {
+        anim = GetComponent<Animator>();
         lasttouchPosition = this.GetComponent<Transform>().position;
     }
 
@@ -56,6 +59,8 @@ public class Mouvement : MonoBehaviour
     {
         if (!waiting)
         {
+            anim.SetBool("IsWalking", false);
+
             // move
             if (playerInput != Vector2.zero)
             {
@@ -75,7 +80,10 @@ public class Mouvement : MonoBehaviour
                 
             }
         }
-        
+        else
+        {
+            anim.SetBool("IsWalking", true);
+        }
 
     }
 
