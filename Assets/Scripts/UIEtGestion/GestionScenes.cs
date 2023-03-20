@@ -11,7 +11,7 @@ public class GestionScenes : MonoBehaviour
 
 
 
-    public Animator Transition;
+    public GameObject Transition;
 
 
 
@@ -29,7 +29,7 @@ public class GestionScenes : MonoBehaviour
         
         Debug.Log("Decharge");
         int indexSceneCourante = SceneManager.GetActiveScene().buildIndex;
-        Transition.ResetTrigger("DechargeNiveau");
+        Transition.SetTrigger("DechargeNiveau");
         SceneManager.LoadScene(indexSceneCourante + 1);
         Debug.Log("charge");
         Transition.SetTrigger("ChargerNouvNiveau");

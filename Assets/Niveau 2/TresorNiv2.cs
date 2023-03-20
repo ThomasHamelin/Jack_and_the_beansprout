@@ -11,8 +11,8 @@ public class TresorNiv2 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //determine
-        _gestionUIJeu = FindObjectOfType<GestionUIJeu>().GetComponent<GestionUIJeu>();
+        
+       // _gestionUIJeu = FindObjectOfType<GestionUIJeu>().GetComponent<GestionUIJeu>();
     }
 
     // Update is called once per frame

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GenerationTresors : MonoBehaviour
 {
-    //[SerializeField] private Tresor _tresors;
+    [SerializeField] private Object _tresors;
     //[SerializeField] private Harpe _harpe;
     //[SerializeField] private Geant _geant;
     [SerializeField] private int _frequenceTresors;

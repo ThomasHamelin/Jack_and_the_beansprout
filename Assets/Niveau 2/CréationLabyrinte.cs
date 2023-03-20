@@ -20,7 +20,10 @@ using Random = UnityEngine.Random;
 public class CréationLabyrinte : MonoBehaviour
 {
 
-    
+    [SerializeField] GameObject Tresor;
+    //[SerializeField] 
+
+    [SerializeField] GameObject IntelliBalle;
     [SerializeField] GameObject YeuxBalle;
 
     [SerializeField] GameObject coin1;
@@ -37,12 +40,15 @@ public class CréationLabyrinte : MonoBehaviour
     [SerializeField] float CoordonneDepartX;
     [SerializeField] float CoordonneDepartY;
 
+    [SerializeField] float CoordonneSalleSpecialeX;
+    [SerializeField] float CoordonneSalleSpecialeY;
+
     [SerializeField] float tailleGrille;
 
 
 
     private float[] UniteDeDistance = new float[4];
-    
+
 
     private float direction;
 
@@ -80,7 +86,7 @@ public class CréationLabyrinte : MonoBehaviour
         coin3.transform.position = new Vector2(coin1.transform.position.x, coin1.transform.position.y + largeur);
         coin4.transform.position = new Vector2(coin1.transform.position.x + longueur, coin1.transform.position.y + largeur);
 
-       
+
 
         //calcul de la distance verticale et horizontale entre les coins des murs
         UniteDeDistance[0] = longueur / tailleGrille;
@@ -139,7 +145,7 @@ public class CréationLabyrinte : MonoBehaviour
 
 
         //instruction pour que la balle rouge(la balle inteligente) soit dans le carré du bas à gauche du labyrinthe
-        transform.position = new Vector3(UniteDeDistance[2], UniteDeDistance[3], 0);
+        IntelliBalle.transform.position = new Vector3(UniteDeDistance[2], UniteDeDistance[3], 0);
 
         generationPrincipale();
 
@@ -149,7 +155,11 @@ public class CréationLabyrinte : MonoBehaviour
 
 
 
+    private void GenerationTresor()
+    {
 
+
+    }
     
 
 
@@ -175,7 +185,7 @@ public class CréationLabyrinte : MonoBehaviour
 
             //Yeux balle représente la balle verte(la balle visionaire) dans le code
             //ici, on s'assure que Yeux Balle est bel et bien à la même position que la balle rouge
-            YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+            YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y, 0);
 
 
             //boucle principale
@@ -204,7 +214,7 @@ public class CréationLabyrinte : MonoBehaviour
                             if (haut == true)
                             {
                                 //on demande à la balle verte de se placer dans la case en haut de la balle rouge
-                                YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y + UniteDeDistance[1], 0);
+                                YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y + UniteDeDistance[1], 0);
 
                                 //on vérifie si la balle verte est toujours dans le labyrinthe
                                 if (YeuxBalle.transform.position.y < coin3.transform.position.y)
@@ -222,11 +232,11 @@ public class CréationLabyrinte : MonoBehaviour
 
                                         //la destruction du mur du haut pourrait se faire ici
 
-                                        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                        RaycastHit2D hit = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
                                         Destroy(hit.collider.gameObject);
 
 
-                                        transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
+                                        IntelliBalle.transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
                                         MemoireALongTerme.Add(1);
                                         nbCasesExplorés++;
                                         confirmationDirection = true;
@@ -248,7 +258,7 @@ public class CréationLabyrinte : MonoBehaviour
                         case 2:
                             if (bas == true)
                             {
-                                YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y - UniteDeDistance[1], 0);
+                                YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y - UniteDeDistance[1], 0);
                                 if (YeuxBalle.transform.position.y > coin1.transform.position.y)
                                 {
                                     RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
@@ -258,10 +268,10 @@ public class CréationLabyrinte : MonoBehaviour
 
                                     if (hitup == true && hitdown == true && hitleft == true && hitright == true)
                                     {
-                                        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                        RaycastHit2D hit = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
                                         Destroy(hit.collider.gameObject);
 
-                                        transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
+                                        IntelliBalle.transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
                                         MemoireALongTerme.Add(2);
                                         nbCasesExplorés++;
                                         confirmationDirection = true;
@@ -283,7 +293,7 @@ public class CréationLabyrinte : MonoBehaviour
                         case 3:
                             if (gauche == true)
                             {
-                                YeuxBalle.transform.position = new Vector3(transform.position.x - UniteDeDistance[0], transform.position.y, 0);
+                                YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x - UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
                                 if (YeuxBalle.transform.position.x > coin1.transform.position.x)
                                 {
                                     RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
@@ -294,11 +304,11 @@ public class CréationLabyrinte : MonoBehaviour
                                     if (hitup == true && hitdown == true && hitleft == true && hitright == true)
                                     {
 
-                                        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                                        RaycastHit2D hit = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
                                         Destroy(hit.collider.gameObject);
 
 
-                                        transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
+                                        IntelliBalle.transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
                                         MemoireALongTerme.Add(3);
                                         nbCasesExplorés++;
                                         confirmationDirection = true;
@@ -320,7 +330,7 @@ public class CréationLabyrinte : MonoBehaviour
                         case 4:
                             if (droite == true)
                             {
-                                YeuxBalle.transform.position = new Vector3(transform.position.x + UniteDeDistance[0], transform.position.y, 0);
+                                YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x + UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
                                 if (YeuxBalle.transform.position.x < coin2.transform.position.x)
                                 {
                                     RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
@@ -330,11 +340,11 @@ public class CréationLabyrinte : MonoBehaviour
 
                                     if (hitup == true && hitdown == true && hitleft == true && hitright == true)
                                     {
-                                        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                                        RaycastHit2D hit = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
                                         Destroy(hit.collider.gameObject);
 
 
-                                        transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
+                                        IntelliBalle.transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
                                         MemoireALongTerme.Add(4);
                                         nbCasesExplorés++;
                                         confirmationDirection = true;
@@ -369,31 +379,31 @@ public class CréationLabyrinte : MonoBehaviour
                         switch (MemoireALongTerme[CurseurMemoire])
                         {
                             case 1:
-                                this.gameObject.transform.position = new Vector3(transform.position.x, transform.position.y - UniteDeDistance[1], 0);
+                                IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y - UniteDeDistance[1], 0);
 
                                 MemoireALongTerme.RemoveAt(CurseurMemoire);
                                 break;
 
                             case 2:
-                                this.gameObject.transform.position = new Vector3(transform.position.x, transform.position.y + UniteDeDistance[1], 0);
+                                IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y + UniteDeDistance[1], 0);
 
                                 MemoireALongTerme.RemoveAt(CurseurMemoire);
                                 break;
 
                             case 3:
-                                this.gameObject.transform.position = new Vector3(transform.position.x + UniteDeDistance[0], transform.position.y, 0);
+                                IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x + UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
 
                                 MemoireALongTerme.RemoveAt(CurseurMemoire);
                                 break;
 
                             case 4:
-                                this.gameObject.transform.position = new Vector3(transform.position.x - UniteDeDistance[0], transform.position.y, 0);
+                                IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x - UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
 
                                 MemoireALongTerme.RemoveAt(CurseurMemoire);
                                 break;
                         }
 
-                        YeuxBalle.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + UniteDeDistance[1], 0);
+                        YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y + UniteDeDistance[1], 0);
                         verifBackHaut[0] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
                         verifBackHaut[1] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
                         verifBackHaut[2] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
@@ -401,19 +411,19 @@ public class CréationLabyrinte : MonoBehaviour
 
 
 
-                        YeuxBalle.transform.position = new Vector3(this.transform.position.x, this.transform.position.y - UniteDeDistance[1], 0);
+                        YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y - UniteDeDistance[1], 0);
                         verifBackBas[0] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
                         verifBackBas[1] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
                         verifBackBas[2] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
                         verifBackBas[3] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
-                        YeuxBalle.transform.position = new Vector3(this.transform.position.x - UniteDeDistance[0], this.transform.position.y, 0);
+                        YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x - UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
                         verifBackGauche[0] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
                         verifBackGauche[1] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
                         verifBackGauche[2] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
                         verifBackGauche[3] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
-                        YeuxBalle.transform.position = new Vector3(this.transform.position.x + UniteDeDistance[0], this.transform.position.y, 0);
+                        YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x + UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
                         verifBackDroite[0] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
                         verifBackDroite[1] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
                         verifBackDroite[2] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
@@ -522,6 +532,9 @@ public class CréationLabyrinte : MonoBehaviour
             }
         return true;
     }
+
+
+
 
 
 }
