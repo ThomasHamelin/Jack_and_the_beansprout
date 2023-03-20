@@ -595,6 +595,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d03a04120511ce54d9b9e27f28bf9d37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Tresor: {fileID: 0}
+  probabiliteTresor: 0
   IntelliBalle: {fileID: 1997190869}
   YeuxBalle: {fileID: 1678620337}
   coin1: {fileID: 2137826734}
@@ -607,6 +609,9 @@ MonoBehaviour:
   largeur: 50
   CoordonneDepartX: 0
   CoordonneDepartY: 0
+  CoordonneSalleSpecialeX: 17
+  CoordonneSalleSpecialeY: 25
+  TailleSalleSpeciale: 3
   tailleGrille: 10
 --- !u!1 &2137826734
 GameObject:

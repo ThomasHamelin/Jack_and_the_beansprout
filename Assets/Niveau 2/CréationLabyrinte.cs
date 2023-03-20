@@ -21,7 +21,7 @@ public class CréationLabyrinte : MonoBehaviour
 {
 
     [SerializeField] GameObject Tresor;
-    //[SerializeField] 
+    [SerializeField] float probabiliteTresor;
 
     [SerializeField] GameObject IntelliBalle;
     [SerializeField] GameObject YeuxBalle;
@@ -42,6 +42,8 @@ public class CréationLabyrinte : MonoBehaviour
 
     [SerializeField] float CoordonneSalleSpecialeX;
     [SerializeField] float CoordonneSalleSpecialeY;
+
+    [SerializeField] float TailleSalleSpeciale;
 
     [SerializeField] float tailleGrille;
 
@@ -66,7 +68,7 @@ public class CréationLabyrinte : MonoBehaviour
     private bool[] verifBackDroite = new bool[4];
 
 
-    private List<int> MemoireACourtTerme = new List<int>();
+    private List<float> MemoireACourtTerme = new List<float>();
     private List<int> MemoireALongTerme = new List<int>();
 
     private float nbCasestotales;
@@ -145,15 +147,45 @@ public class CréationLabyrinte : MonoBehaviour
 
 
         //instruction pour que la balle rouge(la balle inteligente) soit dans le carré du bas à gauche du labyrinthe
-        IntelliBalle.transform.position = new Vector3(UniteDeDistance[2], UniteDeDistance[3], 0);
+        IntelliBalle.transform.position = new Vector3(CoordonneDepartX+UniteDeDistance[2], CoordonneDepartY+UniteDeDistance[3], 0);
 
-        generationPrincipale();
+        generationSalle();
 
+        //IntelliBalle.transform.position = new Vector3(0,0, 0);
+        //IntelliBalle.transform.position = new Vector3(UniteDeDistance[2], UniteDeDistance[3], 0);
 
+        //generationPrincipale();
+        
 
     }
 
+    private void generationSalle()
+    {
 
+        do
+        {
+            IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x + UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
+
+        } while (IntelliBalle.transform.position.x < CoordonneSalleSpecialeX);
+
+        MemoireACourtTerme.Add(longueur - IntelliBalle.transform.position.x);
+
+        do
+        {
+            IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y + UniteDeDistance[1], 0);
+
+        } while (IntelliBalle.transform.position.y < CoordonneSalleSpecialeY);
+
+
+        do
+        {
+
+            RaycastHit2D hit = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+            Destroy(hit.collider.gameObject);
+            IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x + UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
+        } while (IntelliBalle.transform.position.x != MemoireACourtTerme[0]);
+
+    }
 
     private void GenerationTresor()
     {
@@ -515,7 +547,9 @@ public class CréationLabyrinte : MonoBehaviour
 
             } while (confirmationDirection != true);
         } while (nbCasesExplorés != nbCasestotales);
-     
+        Destroy(YeuxBalle);
+        Destroy(IntelliBalle);
+        
     }
     
     
@@ -532,7 +566,7 @@ public class CréationLabyrinte : MonoBehaviour
             }
         return true;
     }
-
+    
 
 
 

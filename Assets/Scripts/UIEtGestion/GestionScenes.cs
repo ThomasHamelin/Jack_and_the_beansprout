@@ -11,7 +11,7 @@ public class GestionScenes : MonoBehaviour
 
 
 
-    public GameObject Transition;
+    public Animator Transition;
 
 
 
