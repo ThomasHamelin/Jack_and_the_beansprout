@@ -61,6 +61,6 @@ public class GestionInstruct : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         _cestParti.SetActive(true); //Affiche du texte pour indiquer que la partie va commencer
         yield return new WaitForSeconds(2f);
-        _gestionScene.ChangerScene(); //Passer à la scène du niveau
+        StartCoroutine(_gestionScene.ChangerScene()); //Passer à la scène du niveau
     }
 }

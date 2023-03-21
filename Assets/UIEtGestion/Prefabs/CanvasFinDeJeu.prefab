@@ -1135,6 +1135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _txtGagnant: {fileID: 4117683020805476889}
+  _txtRejouer: {fileID: 0}
   _txtTimer: {fileID: 6820742948102810465}
   _imagesJoueurs:
   - {fileID: 8011758301195560386}
