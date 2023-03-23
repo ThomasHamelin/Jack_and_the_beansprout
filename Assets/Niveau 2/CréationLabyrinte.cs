@@ -10,7 +10,6 @@ using UnityEditor;
 using UnityEditor.TextCore.Text;
 using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
 
@@ -77,7 +76,7 @@ public class CréationLabyrinte : MonoBehaviour
     private int CurseurMemoire;
 
 
-
+    private int xn, MAX;
 
     private int rand;
     void Start()
@@ -152,17 +151,17 @@ public class CréationLabyrinte : MonoBehaviour
 
         generationSalle();
 
-        IntelliBalle.transform.position = new Vector3(0,0, 0);
-        IntelliBalle.transform.position = new Vector3(CoordonneDepartX + UniteDeDistance[2], CoordonneDepartY + UniteDeDistance[3], 0);
+        //IntelliBalle.transform.position = new Vector3(0,0, 0);
+        //IntelliBalle.transform.position = new Vector3(UniteDeDistance[2], UniteDeDistance[3], 0);
 
-        generationPrincipale();
-        //GenerationTresor();
+        //generationPrincipale();
+        
 
     }
 
     private void generationSalle()
     {
-        Vector3 anciennePosition;
+
         do
         {
             IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x + UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
@@ -177,69 +176,21 @@ public class CréationLabyrinte : MonoBehaviour
 
         } while (IntelliBalle.transform.position.y < CoordonneSalleSpecialeY);
 
-        anciennePosition = IntelliBalle.transform.position;
 
-        for (int x = 1; x <= TailleSalleSpeciale; x++)
+        do
         {
-        
-            for (int i = 1; i <= TailleSalleSpeciale; i++)
-            {
-                if (x < TailleSalleSpeciale)
-                {
-                    RaycastHit2D hit2 = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.up, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
-                    Destroy(hit2.collider.gameObject);
-                }
+            RaycastHit2D hit = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+            Destroy(hit.collider.gameObject);
+            IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x + UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
+        } while (IntelliBalle.transform.position.x != MemoireACourtTerme[0]);
 
-                
-                if (IntelliBalle.transform.position.x < coin4.transform.position.x && i < TailleSalleSpeciale)
-                {
-                    RaycastHit2D hit1 = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-                   
-                    Destroy(hit1.collider.gameObject);
-                    IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x + UniteDeDistance[2], IntelliBalle.transform.position.y, 0);
-                    
-                    
-                    RaycastHit2D hit3 = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.up, UniteDeDistance[3]);
-                     Destroy(hit3.collider.gameObject);
-                    
-                    IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x + UniteDeDistance[2], IntelliBalle.transform.position.y, 0);
-
-                }
-                nbCasestotales--;
-
-            }
-            anciennePosition.y += UniteDeDistance[1];
-            IntelliBalle.transform.position = anciennePosition;
-            
-            
-
-        }
-           
     }
 
     private void GenerationTresor()
     {
-        float nbTresor;
-        float coXTresor;
-        float coYTresor;
-        int taille = (int)tailleGrille;
-        nbTresor = (probabiliteTresor * nbCasestotales) / 100;
-        if(nbTresor <= 0)
-        {
-            nbTresor = 1;
-        }
 
-        for (int i = 0; i <= nbTresor; i++)
-        {
-            coXTresor = Random.Range(1, taille);
-            coYTresor = Random.Range(1, taille);
 
-            Vector3 positionTresor = new Vector3((CoordonneDepartX + UniteDeDistance[2]) + (UniteDeDistance[0] * coXTresor), (CoordonneDepartY + UniteDeDistance[3]) + (UniteDeDistance[1] *coYTresor), 0);
-            Instantiate(Tresor, positionTresor, transform.rotation);
-        }
-
-     
     }
     
 
