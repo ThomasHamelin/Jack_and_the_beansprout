@@ -8,11 +8,12 @@ public class GestionEcranAccueil : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _txtDebuter = default;
 
     private GestionScenes _gestionScene;
+    private bool _continueClignoter = true;
    
     void Start()
     {
         StartCoroutine(ClignotementTextDepart());
-        _gestionScene = FindObjectOfType<GestionScenes>().GetComponent<GestionScenes>();
+        _gestionScene = FindObjectOfType<GestionScenes>().GetComponent<GestionScenes>(); //Trouve l'objet avec le script permettant de changer de niveau
     }
 
     void Update()
@@ -20,7 +21,8 @@ public class GestionEcranAccueil : MonoBehaviour
         //Attendre qu'un des joueurs appuie sur un bouton avant de passer à la prochaine scène
         if (Input.anyKeyDown)
         {
-            _gestionScene.ChangerScene();
+            StartCoroutine(_gestionScene.ChangerScene());
+            _continueClignoter = false;
         }
     }
 
@@ -30,7 +32,7 @@ public class GestionEcranAccueil : MonoBehaviour
      */
     IEnumerator ClignotementTextDepart()
     {
-        while (true)
+        while (_continueClignoter)
         {
             _txtDebuter.gameObject.SetActive(true);
             yield return new WaitForSeconds(0.6f);
