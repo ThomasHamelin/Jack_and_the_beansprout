@@ -1,26 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using Unity.Burst.CompilerServices;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.TextCore.Text;
+using UnityEditor.UIElements;
 using UnityEngine;
-
-
-
 using Random = UnityEngine.Random;
 
 
-
-/*
- * Allo ma belle,
- * j'ai commenté tout mon code pour que tu puisse 
- * travailler dessus.
- * ça se pourrait que il y a des bout moins clairs faque
- * hésite pas à me poser des question si t'en à
- */
 
 
 
@@ -28,7 +20,10 @@ using Random = UnityEngine.Random;
 public class CréationLabyrinte : MonoBehaviour
 {
 
-    
+    [SerializeField] GameObject Tresor;
+    [SerializeField] float probabiliteTresor;
+
+    [SerializeField] GameObject IntelliBalle;
     [SerializeField] GameObject YeuxBalle;
 
     [SerializeField] GameObject coin1;
@@ -45,7 +40,14 @@ public class CréationLabyrinte : MonoBehaviour
     [SerializeField] float CoordonneDepartX;
     [SerializeField] float CoordonneDepartY;
 
+    [SerializeField] float CoordonneSalleSpecialeX;
+    [SerializeField] float CoordonneSalleSpecialeY;
+
+    [SerializeField] float TailleSalleSpeciale;
+
     [SerializeField] float tailleGrille;
+
+
 
     private float[] UniteDeDistance = new float[4];
 
@@ -53,23 +55,40 @@ public class CréationLabyrinte : MonoBehaviour
     private float direction;
 
     private bool haut = true, bas = true, gauche = true, droite = true;
+
+
     private bool confirmationDirection = false;
 
+    private bool confirmationRecul;
+    private bool confirmationNEWdir;
+
+    private bool[] verifBackHaut = new bool[4];
+    private bool[] verifBackBas = new bool[4];
+    private bool[] verifBackGauche = new bool[4];
+    private bool[] verifBackDroite = new bool[4];
 
 
-    
+    private List<float> MemoireACourtTerme = new List<float>();
+    private List<int> MemoireALongTerme = new List<int>();
+
+    private float nbCasestotales;
+    private float nbCasesExplorés = 1;
+    private int CurseurMemoire;
 
 
+    private int xn, MAX;
+
+    private int rand;
     void Start()
     {
-
+        MemoireALongTerme.Add(0);
         //placement des coins principaux selon la taille voulue
         coin1.transform.position = new Vector2(CoordonneDepartX, CoordonneDepartY);
         coin2.transform.position = new Vector2(coin1.transform.position.x + longueur, coin1.transform.position.y);
         coin3.transform.position = new Vector2(coin1.transform.position.x, coin1.transform.position.y + largeur);
         coin4.transform.position = new Vector2(coin1.transform.position.x + longueur, coin1.transform.position.y + largeur);
 
-       
+
 
         //calcul de la distance verticale et horizontale entre les coins des murs
         UniteDeDistance[0] = longueur / tailleGrille;
@@ -80,7 +99,7 @@ public class CréationLabyrinte : MonoBehaviour
         UniteDeDistance[2] = (longueur / tailleGrille) / 2;
         UniteDeDistance[3] = (largeur / tailleGrille) / 2;
 
-
+        nbCasestotales = (tailleGrille * tailleGrille);
 
         //génération des coins des murs
         for (int y = 0; y <= tailleGrille; y++)
@@ -128,239 +147,428 @@ public class CréationLabyrinte : MonoBehaviour
 
 
         //instruction pour que la balle rouge(la balle inteligente) soit dans le carré du bas à gauche du labyrinthe
-        transform.position = new Vector3(UniteDeDistance[2], UniteDeDistance[3], 0);
+        IntelliBalle.transform.position = new Vector3(CoordonneDepartX+UniteDeDistance[2], CoordonneDepartY+UniteDeDistance[3], 0);
 
+        generationSalle();
 
+        //IntelliBalle.transform.position = new Vector3(0,0, 0);
+        //IntelliBalle.transform.position = new Vector3(UniteDeDistance[2], UniteDeDistance[3], 0);
 
-
+        //generationPrincipale();
+        
 
     }
 
-    void Update()
+    private void generationSalle()
+    {
+
+        do
+        {
+            IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x + UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
+
+        } while (IntelliBalle.transform.position.x < CoordonneSalleSpecialeX);
+
+        MemoireACourtTerme.Add(longueur - IntelliBalle.transform.position.x);
+
+        do
+        {
+            IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y + UniteDeDistance[1], 0);
+
+        } while (IntelliBalle.transform.position.y < CoordonneSalleSpecialeY);
+
+
+        do
+        {
+
+            RaycastHit2D hit = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+            Destroy(hit.collider.gameObject);
+            IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x + UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
+        } while (IntelliBalle.transform.position.x != MemoireACourtTerme[0]);
+
+    }
+
+    private void GenerationTresor()
     {
 
 
-
-
+    }
     
-     
-    
-        
-        //rénitialisaton des booléen qui affirme la validité de la direction
-        haut = true;
-        bas = true;
-        droite = true;
-        gauche = true;
-
-        //ce booléen permet de confirmer que la sphère intelligente à bel et bien bouger à la case où la balle verte(la balle visionnaire) est
-        confirmationDirection = false;
-
-        //Yeux balle représente la balle verte(la balle visionaire) dans le code
-        //ici, on s'assure que Yeux Balle est bel et bien à la même position que la balle rouge
-        YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
 
 
-        //boucle principale
+    private void generationPrincipale()
+    {
         do
         {
-            //on détermine la prochaine direcion
-            direction = Random.Range(1, 5);
 
 
-            
-             //TODO: rajouter le bloc de mémoire et de backtracking après que Daphnée aura réussi
-            
-             
-             
-             
 
-            //BLOC TEMPORAIRE QUI ARRÊTE LA BALLE ROUGE POUR ÉVITER UNE BOUCLE INFINIE (UNITY PLANTE SINON)
 
-            if (haut = true || bas == true || droite == true || gauche == true)
+
+
+
+            //rénitialisaton des booléen qui affirme la validité de la direction
+            haut = true;
+            bas = true;
+            droite = true;
+            gauche = true;
+
+            //ce booléen permet de confirmer que la sphère intelligente à bel et bien bouger à la case où la balle verte(la balle visionnaire) est
+            confirmationDirection = false;
+
+            //Yeux balle représente la balle verte(la balle visionaire) dans le code
+            //ici, on s'assure que Yeux Balle est bel et bien à la même position que la balle rouge
+            YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y, 0);
+
+
+            //boucle principale
+            do
             {
-                //Switch qui performe l'action nécéssaire selon la direction
-                switch (direction)
+                //on détermine la prochaine direcion
+                direction = Random.Range(1, 5);
+
+
+
+                //TODO: rajouter le bloc de mémoire et de backtracking après que Daphnée aura réussi
+
+
+
+
+
+                //BLOC TEMPORAIRE QUI ARRÊTE LA BALLE ROUGE POUR ÉVITER UNE BOUCLE INFINIE (UNITY PLANTE SINON)
+
+                if (haut == true || bas == true || droite == true || gauche == true)
                 {
-                    case 1:
-                        //si la direction du haut est valide; fait ceci
-                        if (haut == true)
-                        {
-                            //on demande à la balle verte de se placer dans la case en haut de la balle rouge
-                            YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y + UniteDeDistance[1], 0);
-
-                            //on vérifie si la balle verte est toujours dans le labyrinthe
-                            if (YeuxBalle.transform.position.y < coin3.transform.position.y)
+                    //Switch qui performe l'action nécéssaire selon la direction
+                    switch (direction)
+                    {
+                        case 1:
+                            //si la direction du haut est valide; fait ceci
+                            if (haut == true)
                             {
-                                //on déploie un raycast dans toute les direction pour voir si la case ne fait pas partie du chemin
-                                RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
-                                RaycastHit2D hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
-                                RaycastHit2D hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
-                                RaycastHit2D hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+                                //on demande à la balle verte de se placer dans la case en haut de la balle rouge
+                                YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y + UniteDeDistance[1], 0);
 
-                                //si les raycasts confirment la présence des murs, alors continue
-                                if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                                //on vérifie si la balle verte est toujours dans le labyrinthe
+                                if (YeuxBalle.transform.position.y < coin3.transform.position.y)
                                 {
+                                    //on déploie un raycast dans toute les direction pour voir si la case ne fait pas partie du chemin
+                                    RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
+                                    RaycastHit2D hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
+                                    RaycastHit2D hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
+                                    RaycastHit2D hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
 
-
-                                    //la destruction du mur du haut pourrait se faire ici
-
-                                    RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                                    Destroy(hit.collider.gameObject);
-
-
-
-
-                                    //instruction qui indique que la balle rouge avance vers la balle verte jusqu'à ce qu'elle atteigne sa position
-                                    while (this.gameObject.transform.position != YeuxBalle.transform.position)
+                                    //si les raycasts confirment la présence des murs, alors continue
+                                    if (hitup == true && hitdown == true && hitleft == true && hitright == true)
                                     {
-                                        transform.position = Vector3.MoveTowards(transform.position, YeuxBalle.transform.position, (0.1f * Time.deltaTime));
+
+
+                                        //la destruction du mur du haut pourrait se faire ici
+
+                                        RaycastHit2D hit = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                        Destroy(hit.collider.gameObject);
+
+
+                                        IntelliBalle.transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
+                                        MemoireALongTerme.Add(1);
+                                        nbCasesExplorés++;
+                                        confirmationDirection = true;
 
                                     }
-                                    //on confirme que le mouvement à été fait
-                                    confirmationDirection = true;
-
+                                    else
+                                    {
+                                        haut = false;
+                                    }
                                 }
                                 else
                                 {
                                     haut = false;
                                 }
                             }
-                            else
+                            break;
+
+
+                        case 2:
+                            if (bas == true)
                             {
-                                haut = false;
-                            }
-                        }
-                        break;
-
-
-                    case 2:
-                        if (bas == true)
-                        {
-                            YeuxBalle.transform.position = new Vector3(transform.position.x, transform.position.y - UniteDeDistance[1], 0);
-                            if (YeuxBalle.transform.position.y > coin1.transform.position.y)
-                            {
-                                RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
-                                RaycastHit2D hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
-                                RaycastHit2D hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
-                                RaycastHit2D hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
-
-                                if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                                YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y - UniteDeDistance[1], 0);
+                                if (YeuxBalle.transform.position.y > coin1.transform.position.y)
                                 {
-                                    RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                                    Destroy(hit.collider.gameObject);
-                                    while (transform.position != YeuxBalle.transform.position)
-                                    {
-                                        transform.position = Vector3.MoveTowards(transform.position, YeuxBalle.transform.position, (0.1f * Time.deltaTime));
+                                    RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
+                                    RaycastHit2D hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
+                                    RaycastHit2D hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
+                                    RaycastHit2D hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
 
+                                    if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                                    {
+                                        RaycastHit2D hit = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                        Destroy(hit.collider.gameObject);
+
+                                        IntelliBalle.transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
+                                        MemoireALongTerme.Add(2);
+                                        nbCasesExplorés++;
+                                        confirmationDirection = true;
                                     }
-                                    confirmationDirection = true;
+                                    else
+                                    {
+                                        bas = false;
+                                    }
                                 }
                                 else
                                 {
                                     bas = false;
                                 }
+
                             }
-                            else
+                            break;
+
+
+                        case 3:
+                            if (gauche == true)
                             {
-                                bas = false;
-                            }
-
-                        }
-                        break;
-
-
-                    case 3:
-                        if (gauche == true)
-                        {
-                            YeuxBalle.transform.position = new Vector3(transform.position.x - UniteDeDistance[0], transform.position.y, 0);
-                            if (YeuxBalle.transform.position.x > coin1.transform.position.x)
-                            {
-                                RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
-                                RaycastHit2D hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
-                                RaycastHit2D hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
-                                RaycastHit2D hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
-
-                                if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                                YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x - UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
+                                if (YeuxBalle.transform.position.x > coin1.transform.position.x)
                                 {
+                                    RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
+                                    RaycastHit2D hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
+                                    RaycastHit2D hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
+                                    RaycastHit2D hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
 
-                                    RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-                                    Destroy(hit.collider.gameObject);
-
-                                    while (transform.position != YeuxBalle.transform.position)
+                                    if (hitup == true && hitdown == true && hitleft == true && hitright == true)
                                     {
-                                        transform.position = Vector3.MoveTowards(transform.position, YeuxBalle.transform.position, (0.1f * Time.deltaTime));
 
+                                        RaycastHit2D hit = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                                        Destroy(hit.collider.gameObject);
+
+
+                                        IntelliBalle.transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
+                                        MemoireALongTerme.Add(3);
+                                        nbCasesExplorés++;
+                                        confirmationDirection = true;
                                     }
-                                    confirmationDirection = true;
+                                    else
+                                    {
+
+                                        gauche = false;
+                                    }
                                 }
                                 else
                                 {
-
                                     gauche = false;
                                 }
                             }
-                            else
+                            break;
+
+
+                        case 4:
+                            if (droite == true)
                             {
-                                gauche = false;
-                            }
-                        }
-                        break;
-
-
-                    case 4:
-                        if (droite == true)
-                        {
-                            YeuxBalle.transform.position = new Vector3(transform.position.x + UniteDeDistance[0], transform.position.y, 0);
-                            if (YeuxBalle.transform.position.x < coin2.transform.position.x)
-                            {
-                                RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
-                                RaycastHit2D hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
-                                RaycastHit2D hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
-                                RaycastHit2D hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
-
-                                if (hitup == true && hitdown == true && hitleft == true && hitright == true)
+                                YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x + UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
+                                if (YeuxBalle.transform.position.x < coin2.transform.position.x)
                                 {
-                                    RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-                                    Destroy(hit.collider.gameObject);
+                                    RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
+                                    RaycastHit2D hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
+                                    RaycastHit2D hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
+                                    RaycastHit2D hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
 
-                                    while (transform.position != YeuxBalle.transform.position)
+                                    if (hitup == true && hitdown == true && hitleft == true && hitright == true)
                                     {
-                                        transform.position = Vector3.MoveTowards(transform.position, YeuxBalle.transform.position, (0.1f * Time.deltaTime));
+                                        RaycastHit2D hit = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                                        Destroy(hit.collider.gameObject);
 
+
+                                        IntelliBalle.transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
+                                        MemoireALongTerme.Add(4);
+                                        nbCasesExplorés++;
+                                        confirmationDirection = true;
                                     }
-                                    confirmationDirection = true;
+                                    else
+                                    {
+                                        droite = false;
+                                    }
                                 }
                                 else
                                 {
                                     droite = false;
                                 }
                             }
-                            else
-                            {
-                                droite = false;
-                            }
-                        }
-                        break;
+                            break;
+
+                    }
 
                 }
 
-            }
-            else if (haut = false && bas == false && droite == false && gauche == false) {
-
-                Destroy(this.gameObject);
-                Debug.Log("Fin");
-                confirmationDirection = true;
-             }
 
 
-        
 
-        } while (confirmationDirection != true);
-        
+                //recul
+                else if (haut == false && bas == false && droite == false && gauche == false)
+                {
+
+                    do
+                    {
+                        CurseurMemoire = (MemoireALongTerme.Count) - 1;
+
+                        switch (MemoireALongTerme[CurseurMemoire])
+                        {
+                            case 1:
+                                IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y - UniteDeDistance[1], 0);
+
+                                MemoireALongTerme.RemoveAt(CurseurMemoire);
+                                break;
+
+                            case 2:
+                                IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y + UniteDeDistance[1], 0);
+
+                                MemoireALongTerme.RemoveAt(CurseurMemoire);
+                                break;
+
+                            case 3:
+                                IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x + UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
+
+                                MemoireALongTerme.RemoveAt(CurseurMemoire);
+                                break;
+
+                            case 4:
+                                IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x - UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
+
+                                MemoireALongTerme.RemoveAt(CurseurMemoire);
+                                break;
+                        }
+
+                        YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y + UniteDeDistance[1], 0);
+                        verifBackHaut[0] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                        verifBackHaut[1] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                        verifBackHaut[2] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                        verifBackHaut[3] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+
+
+
+                        YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y - UniteDeDistance[1], 0);
+                        verifBackBas[0] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                        verifBackBas[1] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                        verifBackBas[2] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                        verifBackBas[3] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+
+                        YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x - UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
+                        verifBackGauche[0] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                        verifBackGauche[1] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                        verifBackGauche[2] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                        verifBackGauche[3] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+
+                        YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x + UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
+                        verifBackDroite[0] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                        verifBackDroite[1] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                        verifBackDroite[2] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                        verifBackDroite[3] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+
+
+                        if (IsAllTrue(verifBackHaut) == true || IsAllTrue(verifBackBas) == true || IsAllTrue(verifBackGauche) == true || IsAllTrue(verifBackDroite) == true)
+                        {
+
+                            do
+                            {
+
+                                rand = Random.Range(0, 4);
+
+                                switch (rand)
+                                {
+                                    case 0:
+                                        if (IsAllTrue(verifBackHaut) == true)
+                                        {
+                                            haut = true;
+                                            confirmationRecul = true;
+                                            confirmationNEWdir = true;
+                                        }
+                                        else
+                                        {
+                                            confirmationNEWdir = false;
+                                        }
+                                        break;
+
+                                    case 1:
+
+                                        if (IsAllTrue(verifBackBas) == true)
+                                        {
+                                            bas = true;
+                                            confirmationRecul = true;
+                                            confirmationNEWdir = true;
+                                        }
+                                        else
+                                        {
+                                            confirmationNEWdir = false;
+                                        }
+                                        break;
+
+                                    case 2:
+                                        if (IsAllTrue(verifBackGauche) == true)
+                                        {
+                                            gauche = true;
+                                            confirmationRecul = true;
+                                            confirmationNEWdir = true;
+                                        }
+                                        else
+                                        {
+                                            confirmationNEWdir = false;
+                                        }
+                                        break;
+
+                                    case 3:
+                                        if (IsAllTrue(verifBackDroite) == true)
+                                        {
+                                            droite = true;
+                                            confirmationRecul = true;
+                                            confirmationNEWdir = true;
+                                        }
+                                        else
+                                        {
+                                            confirmationNEWdir = false;
+                                        }
+                                        break;
+                                }
+
+                            } while (confirmationNEWdir != true);
+
+                        }
+
+                        else
+                        {
+                            confirmationRecul = false;
+                        }
+
+
+
+
+                    } while (confirmationRecul != true);
+
+                }
+
+
+
+
+            } while (confirmationDirection != true);
+        } while (nbCasesExplorés != nbCasestotales);
+        Destroy(YeuxBalle);
+        Destroy(IntelliBalle);
         
     }
     
     
+    
+
+    //vérifie  que l'array est true partout
+    //je l'ai copié de reddit. TOO BAD ! 
+    public bool IsAllTrue(bool[] collection)
+    {
+        for (int i = 0; i < collection.Length; i++)
+            if (!collection[i])
+            {
+                return false;
+            }
+        return true;
+    }
+    
+
+
 
 
 }
