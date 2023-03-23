@@ -595,8 +595,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d03a04120511ce54d9b9e27f28bf9d37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Tresor: {fileID: 0}
-  probabiliteTresor: 0
+  Tresor: {fileID: 6280954013187001740, guid: 6e485c80557479e429301413ef4b92d7, type: 3}
+  probabiliteTresor: 20
   IntelliBalle: {fileID: 1997190869}
   YeuxBalle: {fileID: 1678620337}
   coin1: {fileID: 2137826734}
