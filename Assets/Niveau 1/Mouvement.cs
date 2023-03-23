@@ -59,12 +59,11 @@ public class Mouvement : MonoBehaviour
     {
         if (!waiting)
         {
-            
+            anim.SetBool("IsWalking", false);
 
             // move
             if (playerInput != Vector2.zero)
             {
-                anim.SetBool("IsWalking", false);
                 _rb.AddForce(playerInput * _moveSpeed * Time.fixedDeltaTime, ForceMode2D.Impulse);
             }
 

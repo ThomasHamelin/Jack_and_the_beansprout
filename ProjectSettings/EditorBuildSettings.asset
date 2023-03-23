@@ -18,9 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/InstructNiv1.unity
     guid: 1683ac4c9c632a746a720eccfc949aaa
   - enabled: 1
-    path: Assets/Scenes/InstructNiv2.unity
-    guid: f173850ac58f86b47a8f7548a3690730
-  - enabled: 1
     path: Assets/Scenes/FinDuJeu.unity
     guid: 2d730c296951db645872bd933c95d947
+  - enabled: 1
+    path: Assets/Scenes/InstructNiv2.unity
+    guid: f173850ac58f86b47a8f7548a3690730
   m_configObjects: {}

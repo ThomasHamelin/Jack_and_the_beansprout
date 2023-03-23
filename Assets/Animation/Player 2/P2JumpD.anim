@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: P2WalkG
+  m_Name: P2JumpD
   serializedVersion: 6
   m_Legacy: 1
   m_Compressed: 0
@@ -20,9 +20,11 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300000, guid: d5cbb42cd91181249a32dfc78b79038a, type: 3}
+      value: {fileID: 21300000, guid: 310c23eb188495440bd7bfe0e143a625, type: 3}
     - time: 0.16666667
-      value: {fileID: 21300000, guid: 2df9b5d5fd455bc429e2e5440e95d593, type: 3}
+      value: {fileID: 21300000, guid: 9d2e072227e0aef44bacc88c01b3cdc9, type: 3}
+    - time: 0.33333334
+      value: {fileID: 21300000, guid: 4a8bfca627a1ee241ab1aa5a850b8198, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -40,7 +42,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.18333334
+    m_StopTime: 0.35000002
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0

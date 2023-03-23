@@ -2,23 +2,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 
 public class GestionScenes : MonoBehaviour
 {
+    
 
-    public Animator fonduAuNoir;
 
+
+    public Animator Transition;
+
+
+
+    private void Start()
+    {
+        Transition = GameObject.FindGameObjectWithTag("Transition").GetComponent<Animator>();
+    }
     /*
      * Rôle : Charger la scene suivante
      * Entrée : Aucune
+     * Sortie : Aucune
      */
-    public IEnumerator ChangerScene()
+    public void ChangerScene()
     {
-        fonduAuNoir.SetTrigger("Start"); //Génère l'animation pour rendre les transitions plus smooth
-        yield return new WaitForSeconds(1.4f); //Attends la fin de l'animation
-        int indexSceneCourante = SceneManager.GetActiveScene().buildIndex; //Trouve le numéro de la scène en cours
-        SceneManager.LoadScene(indexSceneCourante + 1); //Charge la scène avec le numéro juste après celui de la scène en cours
+        
+        Debug.Log("Decharge");
+        int indexSceneCourante = SceneManager.GetActiveScene().buildIndex;
+        Transition.SetTrigger("DechargeNiveau");
+        SceneManager.LoadScene(indexSceneCourante + 1);
+        Debug.Log("charge");
+        Transition.SetTrigger("ChargerNouvNiveau");
+
+        Transition.ResetTrigger("ChargerNouvNiveau");
+        Transition.ResetTrigger("DechargeNiveau");
     }
 
     /*
@@ -26,11 +43,9 @@ public class GestionScenes : MonoBehaviour
      * Entrée : Aucune
      * Sortie : Aucune
      */
-    public IEnumerator ChargerSceneDepart()
+    public void ChargerSceneDepart()
     {
-        fonduAuNoir.SetTrigger("Start"); //Génère l'animation pour rendre les transitions plus smooth
-        yield return new WaitForSeconds(1f); //Attends la fin de l'animation
-        SceneManager.LoadScene(1); //Charge la scène #1 (Scène des instructions du niveau 1)
+        SceneManager.LoadScene(1);
     }
 
     /*
@@ -43,18 +58,11 @@ public class GestionScenes : MonoBehaviour
         Application.Quit();
     }
 
-    //public IEnumerator DonnerDepart()
-    //{
-    //    _jeuDebute = false;
-    //    _txtDonneDepart.gameObject.SetActive(true);
-    //    _txtDonneDepart.text = "À vos marques";
-    //    yield return new WaitForSeconds(.3f);
-    //    _txtDonneDepart.text = "Prêts?";
-    //    yield return new WaitForSeconds(.3f);
-    //    _txtDonneDepart.text = "Partez!";
-    //    _jeuDebute = true;
-    //    yield return new WaitForSeconds(.3f);
-    //}
-
+    /*
+   * Rôle : permet au niveau d'être visible une fois qu'il à fini de charger (plus utile pour le deuxième niveau; il va prendre quelques secondes à générer)
+   * Entrée : Aucune
+   * Sortie : Aucune
+   */
+ 
 
 }

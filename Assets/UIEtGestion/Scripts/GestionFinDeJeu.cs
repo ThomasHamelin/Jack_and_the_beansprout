@@ -6,9 +6,9 @@ using TMPro;
 public class GestionFinDeJeu : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _txtGagnant = default;
-    [SerializeField] private TextMeshProUGUI _txtRejouer = default;
+    [SerializeField] private GameObject _txtRejouer = default;
     [SerializeField] private TextMeshProUGUI _txtTimer = default;
-    [SerializeField] private GameObject _imagesGagnant = default;
+    [SerializeField] private GameObject[] _imagesJoueurs = default;
 
 
     private GestionUIJeu _gestionUIJeu;
@@ -19,9 +19,10 @@ public class GestionFinDeJeu : MonoBehaviour
     void Start()
     {
         _resultAffiches = false;
-        _imagesGagnant.SetActive(false);
-        _txtRejouer.gameObject.SetActive(false);
-        _txtTimer.gameObject.SetActive(false);
+        _imagesJoueurs[0].SetActive(false);
+        _imagesJoueurs[1].SetActive(false);
+        _imagesJoueurs[2].SetActive(false);
+        _txtRejouer.SetActive(false);
 
         StartCoroutine(RevelationGagnant());
 
@@ -35,58 +36,46 @@ public class GestionFinDeJeu : MonoBehaviour
         //Une fois les résultats affichés, on retourne à la scène de départ quand un joueur appuie sur un bouton
         if (Input.anyKeyDown && _resultAffiches)
         {
-            StartCoroutine(_gestionScene.ChargerSceneDepart());
+            _gestionScene.ChargerSceneDepart();
         }
     }
 
-    /*
-     * Rôle : Créer un délai avant d'afficher le résultat
-     * Entrée : Aucune
-     */
     IEnumerator RevelationGagnant()
     {
         _txtGagnant.text = "Et le gagnant est...";
         
-        //On compare les points en faisant appel au script gestionUIJeu
         _gestionUIJeu = FindObjectOfType<GestionUIJeu>().GetComponent<GestionUIJeu>();
         _gagnant = _gestionUIJeu.ComparerScores();
-        Destroy(_gestionUIJeu); //On détruit le UI pour ne pas qu'il soit en double si le jeu recommence
+        Destroy(_gestionUIJeu);
 
-        yield return new WaitForSeconds(3.5f); //Délai pour suspense
+        yield return new WaitForSeconds(3.5f);
 
-        if (_gagnant != 0) //Si ce n'est pas une égalité
+        if (_gagnant != 0)
         {
-            _txtGagnant.text = "Joueur " + _gagnant; //Affiche le numéro du gagnant
+            _txtGagnant.text = "Joueur " + _gagnant;
 
         }
-        else //Si égalité
+        else
         {
-            _txtGagnant.text = "Égalité"; //Indique qu'il y a égalité
+            _txtGagnant.text = "Égalité";
         }
         
-        _imagesGagnant.SetActive(true); //Générer l'image correspondant au bon gagnant
-                                                  
-        yield return new WaitForSeconds(3f); //On laisse les résultats affichés pendant quelques secondes
+        _imagesJoueurs[_gagnant].SetActive(true);
 
-        StartCoroutine(TimerAvantQuitter()); //Commencer le timer avant de quitter
+        StartCoroutine(TimerAvantQuitter());
 
     }
 
-    /*
-     * Rôle : Gérer et afficher le temps qu'il reste avant que le programme se ferme et faire clignoter le texte qui indique le temps restant
-     * Entrée : Aucune
-     */
     IEnumerator TimerAvantQuitter()
     {
+        yield return new WaitForSeconds(3f);
         tempsRestant = 30;
-        _txtRejouer.gameObject.SetActive(true); //On affiche le texte pour demander aux joueurs s'ils veulent rejouer
-        _resultAffiches = true; //On peut maintenant recommencer le jeu
+        _txtRejouer.SetActive(true);
+        _resultAffiches = true;
 
-        while(tempsRestant >= 0) //Tant qu'il reste du temps
+        while(tempsRestant >= 0)
         {
-            _txtTimer.text = tempsRestant.ToString(); //On affiche le temps qui reste
-
-            //On fait clignoter le texte
+            _txtTimer.text = tempsRestant.ToString();
             _txtTimer.gameObject.SetActive(true);
             yield return new WaitForSeconds(.6f);
             _txtTimer.gameObject.SetActive(false);
@@ -94,8 +83,7 @@ public class GestionFinDeJeu : MonoBehaviour
             tempsRestant--;
         }
 
-        //Si le temps est écoulé et qu'on n'a pas recommencer le jeu
-        _gestionScene.Quitter(); //On quitte le jeu
+        _gestionScene.Quitter();
 
     }
 

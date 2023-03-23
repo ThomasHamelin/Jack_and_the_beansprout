@@ -34,38 +34,32 @@ public class GestionUIJeu : MonoBehaviour
      */
     public void AjouterScore(int p_points, int p_numJoueur)
     {
-        //Si c'est le joueur 1
         if (p_numJoueur == 1)
         {
-            _scoreJ1 += p_points; //Modifie les points du joueur 1
-            _txtScoreJ1.text = "Points : " + _scoreJ1.ToString(); //Met à jour l'affichage des points du joueur 1
+            _scoreJ1 += p_points;
+            _txtScoreJ1.text = "Points : " + _scoreJ1.ToString();
         }
-        else if (p_numJoueur == 2) //Si c'est le joueur 2
+        else if (p_numJoueur == 2)
         {
-            _scoreJ2 += p_points; //Modifie les points du joueur 2
-            _txtScoreJ2.text = "Points : " + _scoreJ2.ToString(); //Met à jour l'affichage des points du joueur 2
+            _scoreJ2 += p_points;
+            _txtScoreJ2.text = "Points : " + _scoreJ2.ToString();
         }
 
     }
 
-    /*
-     * Role : Comparer les scores des joueurs pour déterminer le gagnant
-     * Entree : Aucune
-     * Sortie : Un int qui représente le numéro du joueur gagnant ou 0 en cas d'égalité
-     */
     public int ComparerScores()
     {
-        if (_scoreJ1 < _scoreJ2) //Si le joueur 2 a un pointage plus élevé
+        if (_scoreJ1 < _scoreJ2)
         {
-            return 2; //Indique que joueur #2 a gagné
+            return 2;
         }
-        else if (_scoreJ2 < _scoreJ1) //Si le joueur 1 a un pointage plus élevé
+        else if (_scoreJ2 < _scoreJ1)
         {
-            return 1; //Indique que joueur #1 a gagné
+            return 1;
         }
-        else //Si aucun joueur n'a un pointage plus élevé
+        else
         {
-            return 0; //Indique qu'il n'y a aucun gagnant
+            return 0;
         }
     }
 
