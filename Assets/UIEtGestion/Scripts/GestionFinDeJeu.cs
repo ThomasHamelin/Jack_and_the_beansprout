@@ -8,7 +8,7 @@ public class GestionFinDeJeu : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _txtGagnant = default;
     [SerializeField] private TextMeshProUGUI _txtRejouer = default;
     [SerializeField] private TextMeshProUGUI _txtTimer = default;
-    [SerializeField] private GameObject[] _imagesJoueurs = default;
+    [SerializeField] private GameObject _imagesGagnant = default;
 
 
     private GestionUIJeu _gestionUIJeu;
@@ -19,9 +19,7 @@ public class GestionFinDeJeu : MonoBehaviour
     void Start()
     {
         _resultAffiches = false;
-        _imagesJoueurs[0].SetActive(false);
-        _imagesJoueurs[1].SetActive(false);
-        _imagesJoueurs[2].SetActive(false);
+        _imagesGagnant.SetActive(false);
         _txtRejouer.gameObject.SetActive(false);
         _txtTimer.gameObject.SetActive(false);
 
@@ -37,7 +35,7 @@ public class GestionFinDeJeu : MonoBehaviour
         //Une fois les résultats affichés, on retourne à la scène de départ quand un joueur appuie sur un bouton
         if (Input.anyKeyDown && _resultAffiches)
         {
-            _gestionScene.ChargerSceneDepart();
+            StartCoroutine(_gestionScene.ChargerSceneDepart());
         }
     }
 
@@ -66,7 +64,7 @@ public class GestionFinDeJeu : MonoBehaviour
             _txtGagnant.text = "Égalité"; //Indique qu'il y a égalité
         }
         
-        _imagesJoueurs[_gagnant].SetActive(true); //Générer l'image correspondant au bon gagnant
+        _imagesGagnant.SetActive(true); //Générer l'image correspondant au bon gagnant
                                                   
         yield return new WaitForSeconds(3f); //On laisse les résultats affichés pendant quelques secondes
 
