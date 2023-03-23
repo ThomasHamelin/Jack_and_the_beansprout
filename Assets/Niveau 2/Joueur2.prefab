@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5893061854638520787}
   m_Layer: 0
   m_Name: Joueur2
-  m_TagString: Joueur1
+  m_TagString: Player2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2d7ba6633d7b4743816f70ab88c4632, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _txtDonneDepart: {fileID: 0}
   _moveSpeed: 500
   _rotationSpeed: 500
 --- !u!58 &5893061854638520786
