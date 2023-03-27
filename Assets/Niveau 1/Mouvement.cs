@@ -62,18 +62,53 @@ public class Mouvement : MonoBehaviour
             
 
             // move
-            if (playerInput != Vector2.zero)
+            if (playerInput.x != 0)
             {
-                anim.SetBool("IsWalking", false);
+                
                 _rb.AddForce(playerInput * _moveSpeed * Time.fixedDeltaTime, ForceMode2D.Impulse);
+                
+                if(playerInput.x > 0)
+                {
+                    //droite
+                    anim.SetBool("iswalkingD", true);
+                }
+                else
+                { 
+                    //gauche
+                    anim.SetBool("iswalkingG", true);
+                }
+
+            }
+            else
+            {
+                anim.SetBool("iswalkingD", false);
+                anim.SetBool("iswalkingG", false);
             }
 
             // jump
             if (wantJump)
             {
+                anim.SetBool("jumping", true);
                 _rb.AddForce(Vector2.up * _jumpSpeed, ForceMode2D.Impulse);
+
+                //anim jump
+                if (playerInput.x > 0)
+                {
+                    //droite
+                    anim.SetBool("isjumpingD", true);
+                }
+                else if (playerInput.x < 0)
+                {
+                    //gauche
+                    anim.SetBool("isjumpingG", true);
+                }
+
+
+
+
                 wantJump = false;
             }
+            
 
             if(this.GetComponent<Transform>().position.y < lasttouchPosition.y - 2f)
             {
@@ -81,10 +116,7 @@ public class Mouvement : MonoBehaviour
                 
             }
         }
-        else
-        {
-            anim.SetBool("IsWalking", true);
-        }
+        
 
     }
 
@@ -118,6 +150,11 @@ public class Mouvement : MonoBehaviour
             //peut sauter après contact
             canJump = 2;
 
+
+            //jump false
+            anim.SetBool("isjumpingG", false);
+            anim.SetBool("isjumpingD", false);
+            anim.SetBool("jumping",false);
 
             _camera.GetComponent<FollowPlayer>().minHeight = lasttouchPosition.y;
         }

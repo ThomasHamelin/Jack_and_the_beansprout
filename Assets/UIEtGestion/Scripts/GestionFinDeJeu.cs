@@ -52,7 +52,7 @@ public class GestionFinDeJeu : MonoBehaviour
         _gagnant = _gestionUIJeu.ComparerScores();
         Destroy(_gestionUIJeu); //On détruit le UI pour ne pas qu'il soit en double si le jeu recommence
 
-        yield return new WaitForSeconds(3.5f); //Délai pour suspense
+        yield return new WaitForSeconds(5.5f); //Délai pour suspense
 
         if (_gagnant != 0) //Si ce n'est pas une égalité
         {
