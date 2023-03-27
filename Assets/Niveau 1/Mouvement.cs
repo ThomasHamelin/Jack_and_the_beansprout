@@ -62,18 +62,54 @@ public class Mouvement : MonoBehaviour
             
 
             // move
-            if (playerInput != Vector2.zero)
+            if (playerInput.x != 0)
+            {
+                
+                _rb.AddForce(playerInput * _moveSpeed * Time.fixedDeltaTime, ForceMode2D.Impulse);
+                
+                if(playerInput.x > 0)
+                {
+                    //droite
+                    anim.SetBool("IsWalking", true);
+                }
+                else
+                { 
+                    //gauche
+                    anim.SetBool("IsWalking", true);
+                }
+
+            }
+            else
             {
                 anim.SetBool("IsWalking", false);
-                _rb.AddForce(playerInput * _moveSpeed * Time.fixedDeltaTime, ForceMode2D.Impulse);
             }
 
             // jump
             if (wantJump)
             {
                 _rb.AddForce(Vector2.up * _jumpSpeed, ForceMode2D.Impulse);
+
+                //anim jump
+                if (playerInput.x > 0)
+                {
+                    //droite
+                    anim.SetBool("IsWalking", true);
+                }
+                else if (playerInput.x < 0)
+                {
+                    //gauche
+                    anim.SetBool("IsWalking", true);
+                }
+                else
+                {
+                    //jump straight
+                }
+
+
+
                 wantJump = false;
             }
+            
 
             if(this.GetComponent<Transform>().position.y < lasttouchPosition.y - 2f)
             {
@@ -81,10 +117,7 @@ public class Mouvement : MonoBehaviour
                 
             }
         }
-        else
-        {
-            anim.SetBool("IsWalking", true);
-        }
+        
 
     }
 
@@ -117,6 +150,11 @@ public class Mouvement : MonoBehaviour
             
             //peut sauter après contact
             canJump = 2;
+
+
+            //jump false
+
+
 
 
             _camera.GetComponent<FollowPlayer>().minHeight = lasttouchPosition.y;
