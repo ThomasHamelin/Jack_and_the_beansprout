@@ -35,6 +35,10 @@ public class CréationLabyrinte : MonoBehaviour
     [SerializeField] GameObject CoinMur;
     [SerializeField] GameObject Mur;
 
+    [SerializeField] private GameObject _ContainerMur = default;
+    [SerializeField] private GameObject _ContainerCoins = default;
+    [SerializeField] private GameObject _ContainerTresors = default;
+
     [SerializeField] float longueur;
     [SerializeField] float largeur;
 
@@ -109,8 +113,8 @@ public class CréationLabyrinte : MonoBehaviour
             for (int i = 0; i <= tailleGrille; i++)
             {
                 Vector3 position = new Vector3(UniteDeDistance[0] * i, UniteDeDistance[1] * y, 0);
-                Instantiate(CoinMur, position, transform.rotation);
-
+                GameObject newCoin = Instantiate(CoinMur, position, transform.rotation);
+                newCoin.transform.parent = _ContainerCoins.transform;
 
 
             }
@@ -128,6 +132,7 @@ public class CréationLabyrinte : MonoBehaviour
                 Vector3 position2 = new Vector3((UniteDeDistance[0] * (i + 1) - UniteDeDistance[2]), UniteDeDistance[1] * y, 0);
                 GameObject MurHorizontaux = Instantiate(Mur, position2, transform.rotation);
                 MurHorizontaux.transform.localScale = new Vector3(UniteDeDistance[0], 1, 0);
+                MurHorizontaux.transform.parent = _ContainerMur.transform;
             }
         }
 
@@ -143,6 +148,7 @@ public class CréationLabyrinte : MonoBehaviour
                 Vector3 position3 = new Vector3(UniteDeDistance[0] * y, (UniteDeDistance[1] * (i + 1) - UniteDeDistance[3]), 0);
                 GameObject MurVerticaux = Instantiate(Mur, position3, transform.rotation);
                 MurVerticaux.transform.localScale = new Vector3(1, UniteDeDistance[1], 0);
+                MurVerticaux.transform.parent = _ContainerMur.transform;
             }
         }
 
@@ -201,10 +207,11 @@ public class CréationLabyrinte : MonoBehaviour
                     Destroy(hit1.collider.gameObject);
                     IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x + UniteDeDistance[2], IntelliBalle.transform.position.y, 0);
 
-
-                    RaycastHit2D hit3 = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.up, UniteDeDistance[3]);
-                    Destroy(hit3.collider.gameObject);
-
+                    if (x < TailleSalleSpeciale)
+                    {
+                        RaycastHit2D hit3 = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.up, UniteDeDistance[3]);
+                        Destroy(hit3.collider.gameObject);
+                    }
                     IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x + UniteDeDistance[2], IntelliBalle.transform.position.y, 0);
 
                 }
@@ -226,19 +233,35 @@ public class CréationLabyrinte : MonoBehaviour
         float coXTresor;
         float coYTresor;
         int taille = (int)tailleGrille;
+
         nbTresor = (probabiliteTresor * nbCasestotales) / 100;
         if (nbTresor <= 0)
         {
             nbTresor = 1;
         }
 
-        for (int i = 0; i <= nbTresor; i++)
+        for (int i = 1 ; i <= (nbTresor +1); i++)
         {
             coXTresor = Random.Range(1, taille);
             coYTresor = Random.Range(1, taille);
 
             Vector3 positionTresor = new Vector3((CoordonneDepartX + UniteDeDistance[2]) + (UniteDeDistance[0] * coXTresor), (CoordonneDepartY + UniteDeDistance[3]) + (UniteDeDistance[1] * coYTresor), 0);
-            Instantiate(Tresor, positionTresor, transform.rotation);
+
+            RaycastHit2D trUp= Physics2D.Raycast(positionTresor, Vector2.up, UniteDeDistance[3]);
+            RaycastHit2D trDown = Physics2D.Raycast(positionTresor, Vector2.down, UniteDeDistance[3]);
+            RaycastHit2D trLeft = Physics2D.Raycast(positionTresor, Vector2.left, UniteDeDistance[2]);
+            RaycastHit2D trRight = Physics2D.Raycast(positionTresor, Vector2.right, UniteDeDistance[2]);
+
+            if (trUp == true && trDown == true && trRight == true && trLeft == true)
+            {
+                GameObject newTresor = Instantiate(Tresor, positionTresor, transform.rotation);
+                newTresor.transform.parent = _ContainerTresors.transform;
+            }
+            else
+            {
+                i--;
+            }
+            
         }
 
 

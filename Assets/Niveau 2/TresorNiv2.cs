@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class TresorNiv2 : MonoBehaviour
 {
-    [SerializeField] private GameObject[] _imagesTresors;
+    [SerializeField] private Sprite[] _imagesTresors;
     [SerializeField] private int[] _pointsTresors;
 
+    int rand;
     private GestionUIJeu _gestionUIJeu;
+
+    private SpriteRenderer spriteRenderer;
     // Start is called before the first frame update
     void Start()
     {
-        
-       // _gestionUIJeu = FindObjectOfType<GestionUIJeu>().GetComponent<GestionUIJeu>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        rand= Random.Range(0,_imagesTresors.Length);
+        spriteRenderer.sprite = _imagesTresors[rand];
+
+
+        // _gestionUIJeu = FindObjectOfType<GestionUIJeu>().GetComponent<GestionUIJeu>();
     }
 
     // Update is called once per frame
