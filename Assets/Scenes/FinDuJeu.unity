@@ -358,25 +358,41 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3862128668606193140, guid: fa420fdfa9b7aad4d86583cfc1754e73, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 284.4699
+      objectReference: {fileID: 0}
+    - target: {fileID: 3862128668606193140, guid: fa420fdfa9b7aad4d86583cfc1754e73, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 227.98
+      objectReference: {fileID: 0}
+    - target: {fileID: 3862128668606193140, guid: fa420fdfa9b7aad4d86583cfc1754e73, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.000015259
+      objectReference: {fileID: 0}
+    - target: {fileID: 3862128668606193140, guid: fa420fdfa9b7aad4d86583cfc1754e73, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -20.492
+      objectReference: {fileID: 0}
     - target: {fileID: 4117683020805476889, guid: fa420fdfa9b7aad4d86583cfc1754e73, type: 3}
       propertyPath: m_text
       value: Et le gagnant est...
       objectReference: {fileID: 0}
     - target: {fileID: 4117683020805476889, guid: fa420fdfa9b7aad4d86583cfc1754e73, type: 3}
       propertyPath: m_fontColor.b
-      value: 0
+      value: 0.051886797
       objectReference: {fileID: 0}
     - target: {fileID: 4117683020805476889, guid: fa420fdfa9b7aad4d86583cfc1754e73, type: 3}
       propertyPath: m_fontColor.g
-      value: 0
+      value: 0.53594804
       objectReference: {fileID: 0}
     - target: {fileID: 4117683020805476889, guid: fa420fdfa9b7aad4d86583cfc1754e73, type: 3}
       propertyPath: m_fontColor.r
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4117683020805476889, guid: fa420fdfa9b7aad4d86583cfc1754e73, type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 4278190080
+      value: 4279077375
       objectReference: {fileID: 0}
     - target: {fileID: 4132126410002292351, guid: fa420fdfa9b7aad4d86583cfc1754e73, type: 3}
       propertyPath: m_SizeDelta.x
