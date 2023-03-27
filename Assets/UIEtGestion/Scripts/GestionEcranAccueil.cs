@@ -8,6 +8,7 @@ public class GestionEcranAccueil : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _txtDebuter = default;
 
     private GestionScenes _gestionScene;
+    private bool _continueClignoter = true;
    
     void Start()
     {
@@ -21,6 +22,7 @@ public class GestionEcranAccueil : MonoBehaviour
         if (Input.anyKeyDown)
         {
             StartCoroutine(_gestionScene.ChangerScene());
+            _continueClignoter = false;
         }
     }
 
@@ -30,7 +32,7 @@ public class GestionEcranAccueil : MonoBehaviour
      */
     IEnumerator ClignotementTextDepart()
     {
-        while (true)
+        while (_continueClignoter)
         {
             _txtDebuter.gameObject.SetActive(true);
             yield return new WaitForSeconds(0.6f);
