@@ -70,40 +70,39 @@ public class Mouvement : MonoBehaviour
                 if(playerInput.x > 0)
                 {
                     //droite
-                    anim.SetBool("IsWalking", true);
+                    anim.SetBool("iswalkingD", true);
                 }
                 else
                 { 
                     //gauche
-                    anim.SetBool("IsWalking", true);
+                    anim.SetBool("iswalkingG", true);
                 }
 
             }
             else
             {
-                anim.SetBool("IsWalking", false);
+                anim.SetBool("iswalkingD", false);
+                anim.SetBool("iswalkingG", false);
             }
 
             // jump
             if (wantJump)
             {
+                anim.SetBool("jumping", true);
                 _rb.AddForce(Vector2.up * _jumpSpeed, ForceMode2D.Impulse);
 
                 //anim jump
                 if (playerInput.x > 0)
                 {
                     //droite
-                    anim.SetBool("IsWalking", true);
+                    anim.SetBool("isjumpingD", true);
                 }
                 else if (playerInput.x < 0)
                 {
                     //gauche
-                    anim.SetBool("IsWalking", true);
+                    anim.SetBool("isjumpingG", true);
                 }
-                else
-                {
-                    //jump straight
-                }
+
 
 
 
@@ -153,9 +152,9 @@ public class Mouvement : MonoBehaviour
 
 
             //jump false
-
-
-
+            anim.SetBool("isjumpingG", false);
+            anim.SetBool("isjumpingD", false);
+            anim.SetBool("jumping",false);
 
             _camera.GetComponent<FollowPlayer>().minHeight = lasttouchPosition.y;
         }
