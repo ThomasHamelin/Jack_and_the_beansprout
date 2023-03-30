@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2505713615330505401}
   - component: {fileID: 6557089663716999088}
   - component: {fileID: 4808409089595151959}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Tresor
   m_TagString: Untagged
   m_Icon: {fileID: 0}

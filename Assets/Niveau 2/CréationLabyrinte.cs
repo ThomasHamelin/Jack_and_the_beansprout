@@ -10,6 +10,7 @@ using UnityEditor;
 using UnityEditor.TextCore.Text;
 using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 using Random = UnityEngine.Random;
 
@@ -20,100 +21,106 @@ using Random = UnityEngine.Random;
 
 public class CréationLabyrinte : MonoBehaviour
 {
+    [SerializeField] GameObject _Joueur1;
+    [SerializeField] GameObject _Joueur2;
+    [SerializeField] GameObject _Geant;
 
-    [SerializeField] GameObject Tresor;
-    [SerializeField] float probabiliteTresor;
+    [SerializeField] GameObject _Tresor;
+    [SerializeField] float _probabiliteTresor;
 
-    [SerializeField] GameObject IntelliBalle;
-    [SerializeField] GameObject YeuxBalle;
+    [SerializeField] GameObject _IntelliBalle;
+    [SerializeField] GameObject _YeuxBalle;
 
-    [SerializeField] GameObject coin1;
-    [SerializeField] GameObject coin2;
-    [SerializeField] GameObject coin3;
-    [SerializeField] GameObject coin4;
+    [SerializeField] GameObject _coin1;
+    [SerializeField] GameObject _coin2;
+    [SerializeField] GameObject _coin3;
+    [SerializeField] GameObject _coin4;
 
-    [SerializeField] GameObject CoinMur;
-    [SerializeField] GameObject Mur;
+    [SerializeField] GameObject _CoinMur;
+    [SerializeField] GameObject _Mur;
 
     [SerializeField] private GameObject _ContainerMur = default;
     [SerializeField] private GameObject _ContainerCoins = default;
     [SerializeField] private GameObject _ContainerTresors = default;
 
-    [SerializeField] float longueur;
-    [SerializeField] float largeur;
+    [SerializeField] float _longueur;
+    [SerializeField] float _largeur;
 
-    [SerializeField] float CoordonneDepartX;
-    [SerializeField] float CoordonneDepartY;
+    [SerializeField] float _CoordonneDepartX;
+    [SerializeField] float _CoordonneDepartY;
 
-    [SerializeField] float CoordonneSalleSpecialeX;
-    [SerializeField] float CoordonneSalleSpecialeY;
+    [SerializeField] float _CoordonneSalleSpecialeX;
+    [SerializeField] float _CoordonneSalleSpecialeY;
 
-    [SerializeField] float TailleSalleSpeciale;
+    [SerializeField] float _TailleSalleSpeciale;
 
-    [SerializeField] float tailleGrille;
-
-
-
-    private float[] UniteDeDistance = new float[4];
+    [SerializeField] float _tailleGrille;
 
 
-    private float direction;
 
-    private bool haut = true, bas = true, gauche = true, droite = true;
-
-
-    private bool confirmationDirection = false;
-
-    private bool confirmationRecul;
-    private bool confirmationNEWdir;
-
-    private bool[] verifBackHaut = new bool[4];
-    private bool[] verifBackBas = new bool[4];
-    private bool[] verifBackGauche = new bool[4];
-    private bool[] verifBackDroite = new bool[4];
+    private float[] _UniteDeDistance = new float[4];
 
 
-    private List<float> MemoireACourtTerme = new List<float>();
-    private List<int> MemoireALongTerme = new List<int>();
+    private float _direction;
 
-    private float nbCasestotales;
-    private float nbCasesExplorés = 1;
-    private int CurseurMemoire;
+    private bool _haut = true, _bas = true, _gauche = true, _droite = true;
+
+
+    private bool _confirmationDirection = false;
+
+    private bool _confirmationRecul;
+    private bool _confirmationNEWdir;
+
+    private bool[] _verifBackHaut = new bool[4];
+    private bool[] _verifBackBas = new bool[4];
+    private bool[] _verifBackGauche = new bool[4];
+    private bool[] _verifBackDroite = new bool[4];
+
+
+    private List<float> _MemoireACourtTerme = new List<float>();
+    private List<int> _MemoireALongTerme = new List<int>();
+
+    private float _nbCasestotales;
+    private float _nbCasesExplorés = 1;
+    private int _CurseurMemoire;
 
 
     
 
-    private int rand;
+    private int _rand;
     void Start()
     {
-        MemoireALongTerme.Add(0);
+        _MemoireALongTerme.Add(0);
         //placement des coins principaux selon la taille voulue
-        coin1.transform.position = new Vector2(CoordonneDepartX, CoordonneDepartY);
-        coin2.transform.position = new Vector2(coin1.transform.position.x + longueur, coin1.transform.position.y);
-        coin3.transform.position = new Vector2(coin1.transform.position.x, coin1.transform.position.y + largeur);
-        coin4.transform.position = new Vector2(coin1.transform.position.x + longueur, coin1.transform.position.y + largeur);
+        _coin1.transform.position = new Vector2(_CoordonneDepartX, _CoordonneDepartY);
+        _coin2.transform.position = new Vector2(_coin1.transform.position.x + _longueur, _coin1.transform.position.y);
+        _coin3.transform.position = new Vector2(_coin1.transform.position.x, _coin1.transform.position.y + _largeur);
+        _coin4.transform.position = new Vector2(_coin1.transform.position.x + _longueur, _coin1.transform.position.y + _largeur);
 
 
 
         //calcul de la distance verticale et horizontale entre les coins des murs
-        UniteDeDistance[0] = longueur / tailleGrille;
-        UniteDeDistance[1] = largeur / tailleGrille;
+        _UniteDeDistance[0] = _longueur / _tailleGrille;
+        _UniteDeDistance[1] = _largeur / _tailleGrille;
 
 
         //calcul de la distance verticale et horizontale des murs pour qu'il soient entre les coins des murs
-        UniteDeDistance[2] = (longueur / tailleGrille) / 2;
-        UniteDeDistance[3] = (largeur / tailleGrille) / 2;
+        _UniteDeDistance[2] = (_longueur / _tailleGrille) / 2;
+        _UniteDeDistance[3] = (_largeur / _tailleGrille) / 2;
 
-        nbCasestotales = (tailleGrille * tailleGrille);
+        _nbCasestotales = (_tailleGrille * _tailleGrille);
 
         //génération des coins des murs
-        for (int y = 0; y <= tailleGrille; y++)
+
+      
+
+        for (int y = 0; y <= _tailleGrille; y++)
         {
 
-            for (int i = 0; i <= tailleGrille; i++)
+            for (int i = 0; i <= _tailleGrille; i++)
             {
-                Vector3 position = new Vector3(UniteDeDistance[0] * i, UniteDeDistance[1] * y, 0);
-                GameObject newCoin = Instantiate(CoinMur, position, transform.rotation);
+                Vector3 position = new Vector3(_UniteDeDistance[0] * i, _UniteDeDistance[1] * y, 0);
+                GameObject newCoin = Instantiate(_CoinMur, position, transform.rotation);
                 newCoin.transform.parent = _ContainerCoins.transform;
 
 
@@ -121,48 +128,82 @@ public class CréationLabyrinte : MonoBehaviour
         }
 
         //génération des murs horizontaux
-        for (int y = 0; y <= (tailleGrille + 0.5f); y++)
+        for (int y = 0; y <= (_tailleGrille + 0.5f); y++)
         {
 
-            for (int i = 0; i < tailleGrille; i++)
+            for (int i = 0; i < _tailleGrille; i++)
             {
 
 
 
-                Vector3 position2 = new Vector3((UniteDeDistance[0] * (i + 1) - UniteDeDistance[2]), UniteDeDistance[1] * y, 0);
-                GameObject MurHorizontaux = Instantiate(Mur, position2, transform.rotation);
-                MurHorizontaux.transform.localScale = new Vector3(UniteDeDistance[0], 1, 0);
+                Vector3 position2 = new Vector3((_UniteDeDistance[0] * (i + 1) - _UniteDeDistance[2]), _UniteDeDistance[1] * y, 0);
+                GameObject MurHorizontaux = Instantiate(_Mur, position2, transform.rotation);
+                MurHorizontaux.transform.localScale = new Vector3(_UniteDeDistance[0], 1, 0);
                 MurHorizontaux.transform.parent = _ContainerMur.transform;
             }
         }
 
         // génération des murs Verticaux
-        for (int y = 0; y <= tailleGrille; y++)
+        for (int y = 0; y <= _tailleGrille; y++)
         {
 
-            for (int i = 0; i < (tailleGrille); i++)
+            for (int i = 0; i < (_tailleGrille); i++)
             {
 
 
 
-                Vector3 position3 = new Vector3(UniteDeDistance[0] * y, (UniteDeDistance[1] * (i + 1) - UniteDeDistance[3]), 0);
-                GameObject MurVerticaux = Instantiate(Mur, position3, transform.rotation);
-                MurVerticaux.transform.localScale = new Vector3(1, UniteDeDistance[1], 0);
+                Vector3 position3 = new Vector3(_UniteDeDistance[0] * y, (_UniteDeDistance[1] * (i + 1) - _UniteDeDistance[3]), 0);
+                GameObject MurVerticaux = Instantiate(_Mur, position3, transform.rotation);
+                MurVerticaux.transform.localScale = new Vector3(1, _UniteDeDistance[1], 0);
                 MurVerticaux.transform.parent = _ContainerMur.transform;
             }
         }
 
 
         //instruction pour que la balle rouge(la balle inteligente) soit dans le carré du bas à gauche du labyrinthe
-        IntelliBalle.transform.position = new Vector3(CoordonneDepartX+UniteDeDistance[2], CoordonneDepartY+UniteDeDistance[3], 0);
+        _IntelliBalle.transform.position = new Vector3(_CoordonneDepartX + _UniteDeDistance[2], _CoordonneDepartY + _UniteDeDistance[3], 0);
 
         generationSalle();
         GenerationTresor();
-        IntelliBalle.transform.position = new Vector3(0,0, 0);
-        IntelliBalle.transform.position = new Vector3(CoordonneDepartX + UniteDeDistance[2], CoordonneDepartY + UniteDeDistance[3], 0);
+        _IntelliBalle.transform.position = new Vector3(0,0, 0);
+        _IntelliBalle.transform.position = new Vector3(_CoordonneDepartX + _UniteDeDistance[2], _CoordonneDepartY + _UniteDeDistance[3], 0);
 
         generationPrincipale();
+
+        porteSalleSpeciale();
+
+        Destroy(_IntelliBalle);
+        Destroy(_YeuxBalle);
+
         
+        Vector3 positionJ1 = new Vector3((_CoordonneDepartX + _UniteDeDistance[2]) - (_UniteDeDistance[2] / 2), _CoordonneDepartY + _UniteDeDistance[3], 0);
+        Vector3 positionJ2 = new Vector3((_CoordonneDepartX + _UniteDeDistance[2]) + (_UniteDeDistance[2] / 2), _CoordonneDepartY + _UniteDeDistance[3], 0);
+
+        GameObject Joueur1 = Instantiate(_Joueur1, positionJ1, transform.rotation);
+        GameObject Joueur2 = Instantiate(_Joueur2, positionJ2, transform.rotation);
+
+        GameObject Geant = Instantiate(_Geant, _coin4.transform.position, transform.rotation);
+
+        Geant.transform.position = new Vector3(_coin4.transform.position.x- _UniteDeDistance[2],_coin4.transform.position.y- _UniteDeDistance[3], 0);
+    }
+
+    private void porteSalleSpeciale()
+    {
+        int centreSalleSP = (int)_TailleSalleSpeciale / 2;
+
+        _IntelliBalle.transform.position = new Vector3(_MemoireACourtTerme[0], _MemoireACourtTerme[1], 0);
+
+        for(int i = 1; i< _TailleSalleSpeciale; i++)
+        {
+            _IntelliBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x, _IntelliBalle.transform.position.y + _UniteDeDistance[1], 0);
+        }
+
+        for (int i = 0; i < centreSalleSP ; i++)
+        {
+            _IntelliBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x + _UniteDeDistance[0], _IntelliBalle.transform.position.y , 0);
+        }
+        RaycastHit2D porte = Physics2D.Raycast(_IntelliBalle.transform.position, Vector2.up, _UniteDeDistance[3]);
+        Destroy(porte.collider.gameObject);
 
     }
 
@@ -172,27 +213,30 @@ public class CréationLabyrinte : MonoBehaviour
         Vector3 anciennePosition;
         do
         {
-            IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x + UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
+            _IntelliBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x + _UniteDeDistance[0], _IntelliBalle.transform.position.y, 0);
 
-        } while (IntelliBalle.transform.position.x < CoordonneSalleSpecialeX);
+        } while (_IntelliBalle.transform.position.x < _CoordonneSalleSpecialeX);
 
-        MemoireACourtTerme.Add(longueur - IntelliBalle.transform.position.x);
+        
 
         do
         {
-            IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y + UniteDeDistance[1], 0);
+            _IntelliBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x, _IntelliBalle.transform.position.y + _UniteDeDistance[1], 0);
 
-        } while (IntelliBalle.transform.position.y < CoordonneSalleSpecialeY);
+        } while (_IntelliBalle.transform.position.y < _CoordonneSalleSpecialeY);
 
-        anciennePosition = IntelliBalle.transform.position;
-        for (int x = 1; x <= TailleSalleSpeciale; x++)
+        _MemoireACourtTerme.Add(_IntelliBalle.transform.position.x);
+        _MemoireACourtTerme.Add(_IntelliBalle.transform.position.y);
+
+        anciennePosition = _IntelliBalle.transform.position;
+        for (int x = 1; x <= _TailleSalleSpeciale; x++)
         {
 
-            for (int i = 1; i <= TailleSalleSpeciale; i++)
+            for (int i = 1; i <= _TailleSalleSpeciale; i++)
             {
-                if (x < TailleSalleSpeciale)
+                if (x < _TailleSalleSpeciale)
                 {
-                    RaycastHit2D hit2 = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.up, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                    RaycastHit2D hit2 = Physics2D.Raycast(_IntelliBalle.transform.position, Vector2.up, _UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
 
                     Destroy(hit2.collider.gameObject);
@@ -200,29 +244,29 @@ public class CréationLabyrinte : MonoBehaviour
 
 
 
-                if (IntelliBalle.transform.position.x < coin4.transform.position.x && i < TailleSalleSpeciale)
+                if (_IntelliBalle.transform.position.x < _coin4.transform.position.x && i < _TailleSalleSpeciale)
                 {
-                    RaycastHit2D hit1 = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                    RaycastHit2D hit1 = Physics2D.Raycast(_IntelliBalle.transform.position, Vector2.right, _UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
                     Destroy(hit1.collider.gameObject);
-                    IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x + UniteDeDistance[2], IntelliBalle.transform.position.y, 0);
+                    _IntelliBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x + _UniteDeDistance[2], _IntelliBalle.transform.position.y, 0);
 
-                    if (x < TailleSalleSpeciale)
+                    if (x < _TailleSalleSpeciale)
                     {
-                        RaycastHit2D hit3 = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.up, UniteDeDistance[3]);
+                        RaycastHit2D hit3 = Physics2D.Raycast(_IntelliBalle.transform.position, Vector2.up, _UniteDeDistance[3]);
                         Destroy(hit3.collider.gameObject);
                     }
-                    IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x + UniteDeDistance[2], IntelliBalle.transform.position.y, 0);
+                    _IntelliBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x + _UniteDeDistance[2], _IntelliBalle.transform.position.y, 0);
 
                 }
-                nbCasestotales--;
+                _nbCasestotales--;
 
             }
-            anciennePosition.y += UniteDeDistance[1];
-            IntelliBalle.transform.position = anciennePosition;
+            anciennePosition.y += _UniteDeDistance[1];
+            _IntelliBalle.transform.position = anciennePosition;
         }
-
-
+      
+        
     }
 
 
@@ -232,9 +276,9 @@ public class CréationLabyrinte : MonoBehaviour
         float nbTresor;
         float coXTresor;
         float coYTresor;
-        int taille = (int)tailleGrille;
+        int taille = (int)_tailleGrille;
 
-        nbTresor = (probabiliteTresor * nbCasestotales) / 100;
+        nbTresor = (_probabiliteTresor * _nbCasestotales) / 100;
         if (nbTresor <= 0)
         {
             nbTresor = 1;
@@ -245,16 +289,16 @@ public class CréationLabyrinte : MonoBehaviour
             coXTresor = Random.Range(1, taille);
             coYTresor = Random.Range(1, taille);
 
-            Vector3 positionTresor = new Vector3((CoordonneDepartX + UniteDeDistance[2]) + (UniteDeDistance[0] * coXTresor), (CoordonneDepartY + UniteDeDistance[3]) + (UniteDeDistance[1] * coYTresor), 0);
+            Vector3 positionTresor = new Vector3((_CoordonneDepartX + _UniteDeDistance[2]) + (_UniteDeDistance[0] * coXTresor), (_CoordonneDepartY + _UniteDeDistance[3]) + (_UniteDeDistance[1] * coYTresor), 0);
 
-            RaycastHit2D trUp= Physics2D.Raycast(positionTresor, Vector2.up, UniteDeDistance[3]);
-            RaycastHit2D trDown = Physics2D.Raycast(positionTresor, Vector2.down, UniteDeDistance[3]);
-            RaycastHit2D trLeft = Physics2D.Raycast(positionTresor, Vector2.left, UniteDeDistance[2]);
-            RaycastHit2D trRight = Physics2D.Raycast(positionTresor, Vector2.right, UniteDeDistance[2]);
+            RaycastHit2D trUp= Physics2D.Raycast(positionTresor, Vector2.up, _UniteDeDistance[3]);
+            RaycastHit2D trDown = Physics2D.Raycast(positionTresor, Vector2.down, _UniteDeDistance[3]);
+            RaycastHit2D trLeft = Physics2D.Raycast(positionTresor, Vector2.left, _UniteDeDistance[2]);
+            RaycastHit2D trRight = Physics2D.Raycast(positionTresor, Vector2.right, _UniteDeDistance[2]);
 
             if (trUp == true && trDown == true && trRight == true && trLeft == true)
             {
-                GameObject newTresor = Instantiate(Tresor, positionTresor, transform.rotation);
+                GameObject newTresor = Instantiate(_Tresor, positionTresor, transform.rotation);
                 newTresor.transform.parent = _ContainerTresors.transform;
             }
             else
@@ -284,24 +328,24 @@ public class CréationLabyrinte : MonoBehaviour
 
 
                 //rénitialisaton des booléen qui affirme la validité de la direction
-                haut = true;
-                bas = true;
-                droite = true;
-                gauche = true;
+                _haut = true;
+                _bas = true;
+                _droite = true;
+                _gauche = true;
 
                 //ce booléen permet de confirmer que la sphère intelligente à bel et bien bouger à la case où la balle verte(la balle visionnaire) est
-                confirmationDirection = false;
+                _confirmationDirection = false;
 
-                //Yeux balle représente la balle verte(la balle visionaire) dans le code
+                 //Yeux balle représente la balle verte(la balle visionaire) dans le code
                 //ici, on s'assure que Yeux Balle est bel et bien à la même position que la balle rouge
-                YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y, 0);
+                _YeuxBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x, _IntelliBalle.transform.position.y, 0);
 
 
                 //boucle principale
                 do
                 {
                     //on détermine la prochaine direcion
-                    direction = Random.Range(1, 5);
+                    _direction = Random.Range(1, 5);
 
 
 
@@ -313,26 +357,26 @@ public class CréationLabyrinte : MonoBehaviour
 
                     //BLOC TEMPORAIRE QUI ARRÊTE LA BALLE ROUGE POUR ÉVITER UNE BOUCLE INFINIE (UNITY PLANTE SINON)
 
-                    if (haut == true || bas == true || droite == true || gauche == true)
+                    if (_haut == true || _bas == true || _droite == true || _gauche == true)
                     {
                         //Switch qui performe l'action nécéssaire selon la direction
-                        switch (direction)
+                        switch (_direction)
                         {
                             case 1:
                                 //si la direction du haut est valide; fait ceci
-                                if (haut == true)
+                                if (_haut == true)
                                 {
                                     //on demande à la balle verte de se placer dans la case en haut de la balle rouge
-                                    YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y + UniteDeDistance[1], 0);
+                                    _YeuxBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x, _IntelliBalle.transform.position.y + _UniteDeDistance[1], 0);
 
                                     //on vérifie si la balle verte est toujours dans le labyrinthe
-                                    if (YeuxBalle.transform.position.y < coin3.transform.position.y)
+                                    if (_YeuxBalle.transform.position.y < _coin3.transform.position.y)
                                     {
                                         //on déploie un raycast dans toute les direction pour voir si la case ne fait pas partie du chemin
-                                        RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
-                                        RaycastHit2D hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
-                                        RaycastHit2D hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
-                                        RaycastHit2D hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+                                        RaycastHit2D hitup = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.up, _UniteDeDistance[3]);
+                                        RaycastHit2D hitdown = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.down, _UniteDeDistance[3]);
+                                        RaycastHit2D hitleft = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.left, _UniteDeDistance[2]);
+                                        RaycastHit2D hitright = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.right, _UniteDeDistance[2]);
 
                                         //si les raycasts confirment la présence des murs, alors continue
                                         if (hitup == true && hitdown == true && hitleft == true && hitright == true)
@@ -341,58 +385,58 @@ public class CréationLabyrinte : MonoBehaviour
 
                                             //la destruction du mur du haut pourrait se faire ici
 
-                                            RaycastHit2D hit = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                            RaycastHit2D hit = Physics2D.Raycast(_IntelliBalle.transform.position, Vector2.up, _UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
                                             Destroy(hit.collider.gameObject);
 
 
-                                            IntelliBalle.transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
-                                            MemoireALongTerme.Add(1);
-                                            nbCasesExplorés++;
-                                            confirmationDirection = true;
+                                            _IntelliBalle.transform.position = new Vector3(_YeuxBalle.transform.position.x, _YeuxBalle.transform.position.y, 0);
+                                            _MemoireALongTerme.Add(1);
+                                            _nbCasesExplorés++;
+                                            _confirmationDirection = true;
 
                                         }
                                         else
                                         {
-                                            haut = false;
+                                           _haut = false;
                                         }
                                     }
                                     else
                                     {
-                                        haut = false;
+                                        _haut = false;
                                     }
                                 }
                                 break;
 
 
                             case 2:
-                                if (bas == true)
+                                if (_bas == true)
                                 {
-                                    YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y - UniteDeDistance[1], 0);
-                                    if (YeuxBalle.transform.position.y > coin1.transform.position.y)
+                                    _YeuxBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x, _IntelliBalle.transform.position.y - _UniteDeDistance[1], 0);
+                                    if (_YeuxBalle.transform.position.y >_coin1.transform.position.y)
                                     {
-                                        RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
-                                        RaycastHit2D hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
-                                        RaycastHit2D hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
-                                        RaycastHit2D hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+                                        RaycastHit2D hitup = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.up, _UniteDeDistance[3]);
+                                        RaycastHit2D hitdown = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.down, _UniteDeDistance[3]);
+                                        RaycastHit2D hitleft = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.left, _UniteDeDistance[2]);
+                                        RaycastHit2D hitright = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.right, _UniteDeDistance[2]);
 
                                         if (hitup == true && hitdown == true && hitleft == true && hitright == true)
                                         {
-                                            RaycastHit2D hit = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                            RaycastHit2D hit = Physics2D.Raycast(_IntelliBalle.transform.position, Vector2.down, _UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
                                             Destroy(hit.collider.gameObject);
 
-                                            IntelliBalle.transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
-                                            MemoireALongTerme.Add(2);
-                                            nbCasesExplorés++;
-                                            confirmationDirection = true;
+                                            _IntelliBalle.transform.position = new Vector3(_YeuxBalle.transform.position.x, _YeuxBalle.transform.position.y, 0);
+                                            _MemoireALongTerme.Add(2);
+                                            _nbCasesExplorés++;
+                                            _confirmationDirection = true;
                                         }
                                         else
                                         {
-                                            bas = false;
+                                            _bas = false;
                                         }
                                     }
                                     else
                                     {
-                                        bas = false;
+                                        _bas = false;
                                     }
 
                                 }
@@ -400,72 +444,72 @@ public class CréationLabyrinte : MonoBehaviour
 
 
                             case 3:
-                                if (gauche == true)
+                                if (_gauche == true)
                                 {
-                                    YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x - UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
-                                    if (YeuxBalle.transform.position.x > coin1.transform.position.x)
+                                    _YeuxBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x - _UniteDeDistance[0], _IntelliBalle.transform.position.y, 0);
+                                    if (_YeuxBalle.transform.position.x > _coin1.transform.position.x)
                                     {
-                                        RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
-                                        RaycastHit2D hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
-                                        RaycastHit2D hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
-                                        RaycastHit2D hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+                                        RaycastHit2D hitup = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.up, _UniteDeDistance[3]);
+                                        RaycastHit2D hitdown = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.down,_UniteDeDistance[3]);
+                                        RaycastHit2D hitleft = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.left, _UniteDeDistance[2]);
+                                        RaycastHit2D hitright = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.right, _UniteDeDistance[2]);
 
                                         if (hitup == true && hitdown == true && hitleft == true && hitright == true)
                                         {
 
-                                            RaycastHit2D hit = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                                            RaycastHit2D hit = Physics2D.Raycast(_IntelliBalle.transform.position, Vector2.left, _UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
                                             Destroy(hit.collider.gameObject);
 
 
-                                            IntelliBalle.transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
-                                            MemoireALongTerme.Add(3);
-                                            nbCasesExplorés++;
-                                            confirmationDirection = true;
+                                            _IntelliBalle.transform.position = new Vector3(_YeuxBalle.transform.position.x, _YeuxBalle.transform.position.y, 0);
+                                            _MemoireALongTerme.Add(3);
+                                            _nbCasesExplorés++;
+                                            _confirmationDirection = true;
                                         }
                                         else
                                         {
 
-                                            gauche = false;
+                                            _gauche = false;
                                         }
                                     }
                                     else
                                     {
-                                        gauche = false;
+                                        _gauche = false;
                                     }
                                 }
                                 break;
 
 
                             case 4:
-                                if (droite == true)
+                                if (_droite == true)
                                 {
-                                    YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x + UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
-                                    if (YeuxBalle.transform.position.x < coin2.transform.position.x)
+                                    _YeuxBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x + _UniteDeDistance[0],_IntelliBalle.transform.position.y, 0);
+                                    if (_YeuxBalle.transform.position.x < _coin2.transform.position.x)
                                     {
-                                        RaycastHit2D hitup = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3]);
-                                        RaycastHit2D hitdown = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3]);
-                                        RaycastHit2D hitleft = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2]);
-                                        RaycastHit2D hitright = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2]);
+                                        RaycastHit2D hitup = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.up, _UniteDeDistance[3]);
+                                        RaycastHit2D hitdown = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.down, _UniteDeDistance[3]);
+                                        RaycastHit2D hitleft = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.left, _UniteDeDistance[2]);
+                                        RaycastHit2D hitright = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.right, _UniteDeDistance[2]);
 
                                         if (hitup == true && hitdown == true && hitleft == true && hitright == true)
                                         {
-                                            RaycastHit2D hit = Physics2D.Raycast(IntelliBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                                            RaycastHit2D hit = Physics2D.Raycast(_IntelliBalle.transform.position, Vector2.right, _UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
                                             Destroy(hit.collider.gameObject);
 
 
-                                            IntelliBalle.transform.position = new Vector3(YeuxBalle.transform.position.x, YeuxBalle.transform.position.y, 0);
-                                            MemoireALongTerme.Add(4);
-                                            nbCasesExplorés++;
-                                            confirmationDirection = true;
+                                            _IntelliBalle.transform.position = new Vector3(_YeuxBalle.transform.position.x, _YeuxBalle.transform.position.y, 0);
+                                            _MemoireALongTerme.Add(4);
+                                            _nbCasesExplorés++;
+                                            _confirmationDirection = true;
                                         }
                                         else
                                         {
-                                            droite = false;
+                                            _droite = false;
                                         }
                                     }
                                     else
                                     {
-                                        droite = false;
+                                        _droite = false;
                                     }
                                 }
                                 break;
@@ -478,154 +522,153 @@ public class CréationLabyrinte : MonoBehaviour
 
 
                     //recul
-                    else if (haut == false && bas == false && droite == false && gauche == false)
+                    else if (_haut == false && _bas == false && _droite == false && _gauche == false)
                     {
 
                         do
                         {
-                            CurseurMemoire = (MemoireALongTerme.Count) - 1;
+                            _CurseurMemoire = (_MemoireALongTerme.Count) - 1;
 
-                            switch (MemoireALongTerme[CurseurMemoire])
+                            switch (_MemoireALongTerme[_CurseurMemoire])
                             {
                                 case 1:
-                                    IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y - UniteDeDistance[1], 0);
+                                    _IntelliBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x, _IntelliBalle.transform.position.y - _UniteDeDistance[1], 0);
 
-                                    MemoireALongTerme.RemoveAt(CurseurMemoire);
+                                    _MemoireALongTerme.RemoveAt(_CurseurMemoire);
                                     break;
 
                                 case 2:
-                                    IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y + UniteDeDistance[1], 0);
+                                    _IntelliBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x, _IntelliBalle.transform.position.y + _UniteDeDistance[1], 0);
 
-                                    MemoireALongTerme.RemoveAt(CurseurMemoire);
+                                    _MemoireALongTerme.RemoveAt(_CurseurMemoire);
                                     break;
 
                                 case 3:
-                                    IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x + UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
+                                    _IntelliBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x +_UniteDeDistance[0], _IntelliBalle.transform.position.y, 0);
 
-                                    MemoireALongTerme.RemoveAt(CurseurMemoire);
+                                    _MemoireALongTerme.RemoveAt(_CurseurMemoire);
                                     break;
 
                                 case 4:
-                                    IntelliBalle.transform.position = new Vector3(IntelliBalle.transform.position.x - UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
+                                    _IntelliBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x - _UniteDeDistance[0], _IntelliBalle.transform.position.y, 0);
 
-                                    MemoireALongTerme.RemoveAt(CurseurMemoire);
+                                   _MemoireALongTerme.RemoveAt(_CurseurMemoire);
                                     break;
                             }
 
-                            YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y + UniteDeDistance[1], 0);
-                            verifBackHaut[0] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                            verifBackHaut[1] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                            verifBackHaut[2] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-                            verifBackHaut[3] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                            _YeuxBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x, _IntelliBalle.transform.position.y + _UniteDeDistance[1], 0);
+                            _verifBackHaut[0] = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.up, _UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                            _verifBackHaut[1] = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.down, _UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                            _verifBackHaut[2] = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.left, _UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                            _verifBackHaut[3] = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.right, _UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
 
 
-                            YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x, IntelliBalle.transform.position.y - UniteDeDistance[1], 0);
-                            verifBackBas[0] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                            verifBackBas[1] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                            verifBackBas[2] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-                            verifBackBas[3] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                            _YeuxBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x, _IntelliBalle.transform.position.y - _UniteDeDistance[1], 0);
+                            _verifBackBas[0] = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.up, _UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                            _verifBackBas[1] = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.down, _UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                            _verifBackBas[2] = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.left, _UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                            _verifBackBas[3] = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.right, _UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
-                            YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x - UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
-                            verifBackGauche[0] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                            verifBackGauche[1] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                            verifBackGauche[2] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-                            verifBackGauche[3] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                            _YeuxBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x - _UniteDeDistance[0], _IntelliBalle.transform.position.y, 0);
+                            _verifBackGauche[0] = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.up, _UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                            _verifBackGauche[1] = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.down, _UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                            _verifBackGauche[2] = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.left, _UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                            _verifBackGauche[3] = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.right, _UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
-                            YeuxBalle.transform.position = new Vector3(IntelliBalle.transform.position.x + UniteDeDistance[0], IntelliBalle.transform.position.y, 0);
-                            verifBackDroite[0] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.up, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                            verifBackDroite[1] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.down, UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
-                            verifBackDroite[2] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.left, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
-                            verifBackDroite[3] = Physics2D.Raycast(YeuxBalle.transform.position, Vector2.right, UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                            _YeuxBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x + _UniteDeDistance[0], _IntelliBalle.transform.position.y, 0);
+                            _verifBackDroite[0] = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.up, _UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                            _verifBackDroite[1] = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.down, _UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                            _verifBackDroite[2] = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.left, _UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                            _verifBackDroite[3] = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.right, _UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
 
-                            if (IsAllTrue(verifBackHaut) == true || IsAllTrue(verifBackBas) == true || IsAllTrue(verifBackGauche) == true || IsAllTrue(verifBackDroite) == true)
+                            if (IsAllTrue(_verifBackHaut) == true || IsAllTrue(_verifBackBas) == true || IsAllTrue(_verifBackGauche) == true || IsAllTrue(_verifBackDroite) == true)
                             {
 
                                 do
                                 {
 
-                                    rand = Random.Range(0, 4);
+                                    _rand = Random.Range(0, 4);
 
-                                    switch (rand)
+                                    switch (_rand)
                                     {
                                         case 0:
-                                            if (IsAllTrue(verifBackHaut) == true)
+                                            if (IsAllTrue(_verifBackHaut) == true)
                                             {
-                                                haut = true;
-                                                confirmationRecul = true;
-                                                confirmationNEWdir = true;
+                                                _haut = true;
+                                                _confirmationRecul = true;
+                                                _confirmationNEWdir = true;
                                             }
                                             else
                                             {
-                                                confirmationNEWdir = false;
+                                                _confirmationNEWdir = false;
                                             }
                                             break;
 
                                         case 1:
 
-                                            if (IsAllTrue(verifBackBas) == true)
+                                            if (IsAllTrue(_verifBackBas) == true)
                                             {
-                                                bas = true;
-                                                confirmationRecul = true;
-                                                confirmationNEWdir = true;
+                                                _bas = true;
+                                                _confirmationRecul = true;
+                                                _confirmationNEWdir = true;
                                             }
                                             else
                                             {
-                                                confirmationNEWdir = false;
+                                                _confirmationNEWdir = false;
                                             }
                                             break;
 
                                         case 2:
-                                            if (IsAllTrue(verifBackGauche) == true)
+                                            if (IsAllTrue(_verifBackGauche) == true)
                                             {
-                                                gauche = true;
-                                                confirmationRecul = true;
-                                                confirmationNEWdir = true;
+                                                _gauche = true;
+                                                _confirmationRecul = true;
+                                                _confirmationNEWdir = true;
                                             }
                                             else
                                             {
-                                                confirmationNEWdir = false;
+                                                _confirmationNEWdir = false;
                                             }
                                             break;
 
                                         case 3:
-                                            if (IsAllTrue(verifBackDroite) == true)
+                                            if (IsAllTrue(_verifBackDroite) == true)
                                             {
-                                                droite = true;
-                                                confirmationRecul = true;
-                                                confirmationNEWdir = true;
+                                                _droite = true;
+                                                _confirmationRecul = true;
+                                                _confirmationNEWdir = true;
                                             }
                                             else
                                             {
-                                                confirmationNEWdir = false;
+                                                _confirmationNEWdir = false;
                                             }
                                             break;
                                     }
 
-                                } while (confirmationNEWdir != true);
+                                } while (_confirmationNEWdir != true);
 
                             }
 
                             else
                             {
-                                confirmationRecul = false;
+                                _confirmationRecul = false;
                             }
 
 
 
 
-                        } while (confirmationRecul != true);
+                        } while (_confirmationRecul != true);
 
                     }
 
 
 
 
-                } while (confirmationDirection != true);
-            } while (nbCasesExplorés != nbCasestotales);
-            Destroy(YeuxBalle);
-            Destroy(IntelliBalle);
+                } while (_confirmationDirection != true);
+            } while (_nbCasesExplorés != _nbCasestotales);
+          
         
         }
     

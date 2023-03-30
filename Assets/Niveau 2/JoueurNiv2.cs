@@ -8,7 +8,8 @@ public class JoueurNiv2 : MonoBehaviour
     [SerializeField] private float _rotationSpeed = 700f;
     private Rigidbody2D _rb;
     private Vector2 _direction;
-    bool _jeuDebute = false;
+  
+    //bool _jeuDebute = false;
 
     void Start()
     {
@@ -17,11 +18,11 @@ public class JoueurNiv2 : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (_jeuDebute) //Quand le niveau aura commencé
-        {
+        //if (_jeuDebute) //Quand le niveau aura commencé
+        //{
             MouvementsJoueurs();
             RotateInDirectionOfInput();
-        }
+        //}
     }
 
     /*
@@ -55,9 +56,10 @@ public class JoueurNiv2 : MonoBehaviour
             if (_direction != Vector2.zero) //Si le joueur se déplace
             {
                 _rb.freezeRotation = false; //On permet la rotation
+                
                 Quaternion targetRotation = Quaternion.LookRotation(transform.forward, _direction); //On détermine dans quelle direction effectuer la rotation
                 Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime); //On crée quaternion de déplacement
-
+               
                 _rb.MoveRotation(rotation); //On effectue la rotation
             }
             else //Si le joueur ne se déplace pas
@@ -74,7 +76,7 @@ public class JoueurNiv2 : MonoBehaviour
      */
     public void DebuterJeu()
     {
-        _jeuDebute = true;
+        //_jeuDebute = true;
     }
 
 
