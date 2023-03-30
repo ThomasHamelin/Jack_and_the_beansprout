@@ -13,6 +13,7 @@ public class GestionUINiv2 : MonoBehaviour
 
     private JoueurNiv2 _joueur1;
     private JoueurNiv2 _joueur2;
+    private GestionScenes _gestionScene;
 
 
     void Start()
@@ -28,7 +29,9 @@ public class GestionUINiv2 : MonoBehaviour
         _joueur1 = GameObject.FindWithTag("Player1").GetComponent<JoueurNiv2>();
         _joueur2 = GameObject.FindWithTag("Player2").GetComponent<JoueurNiv2>();
 
-        StartCoroutine(DonnerDepart()); 
+        StartCoroutine(DonnerDepart());
+
+        _gestionScene = FindObjectOfType<GestionScenes>().GetComponent<GestionScenes>(); //Trouve l'objet avec le script permettant de changer de niveau
     }
 
     void Update()
@@ -68,5 +71,23 @@ public class GestionUINiv2 : MonoBehaviour
         //Indiquer au script des joueurs que le jeu commence
         _joueur1.DebuterJeu();
         _joueur2.DebuterJeu();
+    }
+
+    public IEnumerator FinNiveau2()
+    {
+
+        _joueur1.FinNiveau();
+        _joueur2.FinNiveau();
+
+        //Activer la caméra qui montre l'ensemble du labyrinthe
+        _camJ1.enabled = false;
+        _camJ2.enabled = false;
+        _camEnsemble.enabled = true;
+
+        _splitBorder.SetActive(false); //Enlever la barre qui sépare le split screen
+
+        yield return new WaitForSeconds(3f);
+
+        StartCoroutine(_gestionScene.ChangerScene());
     }
 }
