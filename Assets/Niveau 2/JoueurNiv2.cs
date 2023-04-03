@@ -79,5 +79,8 @@ public class JoueurNiv2 : MonoBehaviour
         //_jeuDebute = true;
     }
 
+    public void FinNiveau()
+    {
 
+    }
 }
