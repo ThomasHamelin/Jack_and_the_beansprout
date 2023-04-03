@@ -45,7 +45,7 @@ public class JoueurNiv2 : MonoBehaviour
         }
 
         _rb.velocity = _direction; //Déplace le joueur dans la direction voulue
-    }
+    } 
 
     /*
      * Rôle : Faire tourner le joueur dans la direction de son déplacement

@@ -606,7 +606,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Joueur1: {fileID: 1705768171137462757, guid: 283ebc35c490687479046c2e25c669f7, type: 3}
   _Joueur2: {fileID: 5893061854638520788, guid: c8e653cdde76cce4db23c7884d19a79d, type: 3}
-  _Geant: {fileID: 3226181276852311941, guid: 36abe68e1f2cde548af12c1bf7aa0307, type: 3}
+  _Geant: {fileID: 3226181276852311941, guid: 0c09bee2afc06174ab73a98064f60736, type: 3}
   _Tresor: {fileID: 6280954013187001740, guid: 6e485c80557479e429301413ef4b92d7, type: 3}
   _probabiliteTresor: 25
   _IntelliBalle: {fileID: 1997190869}
@@ -620,14 +620,14 @@ MonoBehaviour:
   _ContainerMur: {fileID: 2867968276703615945}
   _ContainerCoins: {fileID: 7986170191507040868}
   _ContainerTresors: {fileID: 438726792}
-  _longueur: 120
-  _largeur: 120
+  _longueur: 150
+  _largeur: 150
   _CoordonneDepartX: 0
   _CoordonneDepartY: 0
-  _CoordonneSalleSpecialeX: 50
-  _CoordonneSalleSpecialeY: 95
+  _CoordonneSalleX: 125
+  _CoordonneSalleY: 125
   _TailleSalleSpeciale: 3
-  _tailleGrille: 20
+  _tailleGrille: 26
 --- !u!1 &2137826734
 GameObject:
   m_ObjectHideFlags: 0

@@ -23,7 +23,7 @@ public class CréationLabyrinte : MonoBehaviour
 {
     [SerializeField] GameObject _Joueur1;
     [SerializeField] GameObject _Joueur2;
-    [SerializeField] GameObject _Geant;
+    [SerializeField] public GameObject _Geant;
 
     [SerializeField] GameObject _Tresor;
     [SerializeField] float _probabiliteTresor;
@@ -49,8 +49,8 @@ public class CréationLabyrinte : MonoBehaviour
     [SerializeField] float _CoordonneDepartX;
     [SerializeField] float _CoordonneDepartY;
 
-    [SerializeField] float _CoordonneSalleSpecialeX;
-    [SerializeField] float _CoordonneSalleSpecialeY;
+    [SerializeField] float _CoordonneSalleX;
+    [SerializeField] float _CoordonneSalleY;
 
     [SerializeField] float _TailleSalleSpeciale;
 
@@ -112,7 +112,7 @@ public class CréationLabyrinte : MonoBehaviour
 
         //génération des coins des murs
 
-      
+
 
         for (int y = 0; y <= _tailleGrille; y++)
         {
@@ -165,7 +165,7 @@ public class CréationLabyrinte : MonoBehaviour
 
         generationSalle();
         GenerationTresor();
-        _IntelliBalle.transform.position = new Vector3(0,0, 0);
+        _IntelliBalle.transform.position = new Vector3(0, 0, 0);
         _IntelliBalle.transform.position = new Vector3(_CoordonneDepartX + _UniteDeDistance[2], _CoordonneDepartY + _UniteDeDistance[3], 0);
 
         generationPrincipale();
@@ -175,7 +175,7 @@ public class CréationLabyrinte : MonoBehaviour
         Destroy(_IntelliBalle);
         Destroy(_YeuxBalle);
 
-        
+
         Vector3 positionJ1 = new Vector3((_CoordonneDepartX + _UniteDeDistance[2]) - (_UniteDeDistance[2] / 2), _CoordonneDepartY + _UniteDeDistance[3], 0);
         Vector3 positionJ2 = new Vector3((_CoordonneDepartX + _UniteDeDistance[2]) + (_UniteDeDistance[2] / 2), _CoordonneDepartY + _UniteDeDistance[3], 0);
 
@@ -184,7 +184,10 @@ public class CréationLabyrinte : MonoBehaviour
 
         GameObject Geant = Instantiate(_Geant, _coin4.transform.position, transform.rotation);
 
-        Geant.transform.position = new Vector3(_coin4.transform.position.x- _UniteDeDistance[2],_coin4.transform.position.y- _UniteDeDistance[3], 0);
+        Geant.transform.position = new Vector3(_coin4.transform.position.x - _UniteDeDistance[2], _coin4.transform.position.y - _UniteDeDistance[3], 0);
+        Geant GeantCommander = FindObjectOfType<Geant>();
+        GeantCommander.PartageDonnées(_UniteDeDistance[0], 0);
+        GeantCommander.PartageDonnées(_UniteDeDistance[1], 1);
     }
 
     private void porteSalleSpeciale()
@@ -193,16 +196,16 @@ public class CréationLabyrinte : MonoBehaviour
 
         _IntelliBalle.transform.position = new Vector3(_MemoireACourtTerme[0], _MemoireACourtTerme[1], 0);
 
-        for(int i = 1; i< _TailleSalleSpeciale; i++)
-        {
-            _IntelliBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x, _IntelliBalle.transform.position.y + _UniteDeDistance[1], 0);
-        }
+        //for (int i = 1; i < _TailleSalleSpeciale; i++)
+        //{
+        //    _IntelliBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x, _IntelliBalle.transform.position.y + _UniteDeDistance[1], 0);
+        //}
 
         for (int i = 0; i < centreSalleSP ; i++)
         {
             _IntelliBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x + _UniteDeDistance[0], _IntelliBalle.transform.position.y , 0);
         }
-        RaycastHit2D porte = Physics2D.Raycast(_IntelliBalle.transform.position, Vector2.up, _UniteDeDistance[3]);
+        RaycastHit2D porte = Physics2D.Raycast(_IntelliBalle.transform.position, Vector2.down/*Vector2.up*/, _UniteDeDistance[3]);
         Destroy(porte.collider.gameObject);
 
     }
@@ -215,7 +218,7 @@ public class CréationLabyrinte : MonoBehaviour
         {
             _IntelliBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x + _UniteDeDistance[0], _IntelliBalle.transform.position.y, 0);
 
-        } while (_IntelliBalle.transform.position.x < _CoordonneSalleSpecialeX);
+        } while (_IntelliBalle.transform.position.x < _CoordonneSalleX);
 
         
 
@@ -223,7 +226,7 @@ public class CréationLabyrinte : MonoBehaviour
         {
             _IntelliBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x, _IntelliBalle.transform.position.y + _UniteDeDistance[1], 0);
 
-        } while (_IntelliBalle.transform.position.y < _CoordonneSalleSpecialeY);
+        } while (_IntelliBalle.transform.position.y < _CoordonneSalleY);
 
         _MemoireACourtTerme.Add(_IntelliBalle.transform.position.x);
         _MemoireACourtTerme.Add(_IntelliBalle.transform.position.y);
