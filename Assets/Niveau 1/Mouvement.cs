@@ -19,7 +19,7 @@ public class Mouvement : MonoBehaviour
     private int canJump = 0;
     private Vector2 lasttouchPosition;
     private bool waiting = false;
-
+    private bool jumping = false;
     private Animator anim;
 
     private void Start()
@@ -59,37 +59,54 @@ public class Mouvement : MonoBehaviour
     {
         if (!waiting)
         {
-            
+
 
             // move
-            if (playerInput.x != 0)
+
+            if (jumping)
             {
-                
                 _rb.AddForce(playerInput * _moveSpeed * Time.fixedDeltaTime, ForceMode2D.Impulse);
-                
-                if(playerInput.x > 0)
+                if (playerInput.x > 0)
+                {
+                    //droite
+                    anim.SetBool("isjumpingG", false);
+                    anim.SetBool("isjumpingD", true);
+                }
+                else
+                {
+                    //gauche
+                    anim.SetBool("isjumpingD", false);
+                    anim.SetBool("isjumpingG", true);
+                }
+
+            }
+            else if (playerInput.x == 0)
+            {
+                anim.SetBool("iswalkingD", false);
+                anim.SetBool("iswalkingG", false);
+            }
+            else
+            {
+                _rb.AddForce(playerInput * _moveSpeed * Time.fixedDeltaTime, ForceMode2D.Impulse);
+
+                if (playerInput.x > 0)
                 {
                     //droite
                     anim.SetBool("iswalkingD", true);
                 }
                 else
-                { 
+                {
                     //gauche
                     anim.SetBool("iswalkingG", true);
                 }
-
-            }
-            else
-            {
-                anim.SetBool("iswalkingD", false);
-                anim.SetBool("iswalkingG", false);
             }
 
             // jump
             if (wantJump)
             {
-                anim.SetBool("jumping", true);
+                jumping = true;
                 _rb.AddForce(Vector2.up * _jumpSpeed, ForceMode2D.Impulse);
+
 
                 //anim jump
                 if (playerInput.x > 0)
@@ -147,15 +164,15 @@ public class Mouvement : MonoBehaviour
         {
             lasttouchPosition = other.gameObject.GetComponent<Transform>().position;
             
+            jumping = false;
+            anim.SetBool("isjumpingG", false);
+            anim.SetBool("isjumpingD", false);
+
+
             //peut sauter après contact
             canJump = 2;
 
-
-            //jump false
-            anim.SetBool("isjumpingG", false);
-            anim.SetBool("isjumpingD", false);
-            anim.SetBool("jumping",false);
-
+          
             _camera.GetComponent<FollowPlayer>().minHeight = lasttouchPosition.y;
         }
     }

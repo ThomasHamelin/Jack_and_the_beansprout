@@ -9,6 +9,7 @@ public class Harpe : MonoBehaviour
     private GestionUINiv2 _gestionUINiv2;
     private GestionUIJeu _gestionUIJeu;
 
+    // Start is called before the first frame update
     void Start()
     {
         _gestionUINiv2 = FindObjectOfType<GestionUINiv2>().GetComponent<GestionUINiv2>(); //Trouve l'objet avec le script qui génèrera une animation quand la harpe aura été trouvée
