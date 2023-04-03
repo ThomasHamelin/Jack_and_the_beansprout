@@ -352,13 +352,12 @@ public class CréationLabyrinte : MonoBehaviour
 
 
 
-                    //TODO: rajouter le bloc de mémoire et de backtracking après que Daphnée aura réussi
+                    
 
 
 
 
-
-                    //BLOC TEMPORAIRE QUI ARRÊTE LA BALLE ROUGE POUR ÉVITER UNE BOUCLE INFINIE (UNITY PLANTE SINON)
+                    
 
                     if (_haut == true || _bas == true || _droite == true || _gauche == true)
                     {
