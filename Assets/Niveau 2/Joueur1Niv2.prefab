@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1705768171137462752}
   - component: {fileID: 1705768171137462754}
   - component: {fileID: 2410947696139344510}
+  - component: {fileID: 528524102}
   m_Layer: 0
   m_Name: Joueur1Niv2
   m_TagString: Player1
@@ -99,8 +100,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2d7ba6633d7b4743816f70ab88c4632, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 500
+  _moveSpeed: 50
   _rotationSpeed: 500
+  _cam: {fileID: 0}
+  _animator: {fileID: 528524102}
 --- !u!50 &1705768171137462754
 Rigidbody2D:
   serializedVersion: 4
@@ -206,3 +209,23 @@ PolygonCollider2D:
       - {x: -0.56, y: -1.22}
       - {x: -0.25, y: -1.37}
       - {x: 0.41, y: -1.37}
+--- !u!95 &528524102
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1705768171137462757}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c11b64ccb12bb0e42995596a1f026ffe, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
