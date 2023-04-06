@@ -10,8 +10,8 @@ public class JoueurNiv2 : MonoBehaviour
 
     private Rigidbody2D _rb;
     private Vector2 _direction;
-    bool _jeuDebute = false;
-    float _posX, _posY;
+    private bool _jeuDebute = false;
+    private float _posX, _posY;
     public Animator _animator;
 
     void Start()
@@ -91,5 +91,10 @@ public class JoueurNiv2 : MonoBehaviour
     public void FinNiveau()
     {
         _jeuDebute = false;
+    }
+
+    public void Pathfinding()
+    {
+
     }
 }
