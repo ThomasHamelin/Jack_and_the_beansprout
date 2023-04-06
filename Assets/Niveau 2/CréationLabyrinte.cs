@@ -182,12 +182,19 @@ public class CréationLabyrinte : MonoBehaviour
         GameObject Joueur1 = Instantiate(_Joueur1, positionJ1, transform.rotation);
         GameObject Joueur2 = Instantiate(_Joueur2, positionJ2, transform.rotation);
 
-        GameObject Geant = Instantiate(_Geant, _coin4.transform.position, transform.rotation);
+        Vector3 positionBIGBOY = new Vector3((_coin4.transform.position.x - _UniteDeDistance[2]), _coin4.transform.position.y - _UniteDeDistance[3], 0);
+        GameObject Geant = Instantiate(_Geant, positionBIGBOY, transform.rotation);
 
-        Geant.transform.position = new Vector3(_coin4.transform.position.x - _UniteDeDistance[2], _coin4.transform.position.y - _UniteDeDistance[3], 0);
+
+        
         Geant GeantCommander = FindObjectOfType<Geant>();
         GeantCommander.PartageDonnées(_UniteDeDistance[0], 0);
         GeantCommander.PartageDonnées(_UniteDeDistance[1], 1);
+        GeantCommander.PartageDonnées(_UniteDeDistance[2], 2);
+        GeantCommander.PartageDonnées(_UniteDeDistance[3], 3);
+
+        //JoueurNiv2 joueurCommander = FindObjectOfType<JoueurNiv2>();
+        //joueurCommander.DebuterJeu();
     }
 
     private void porteSalleSpeciale()

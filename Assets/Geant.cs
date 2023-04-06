@@ -13,7 +13,7 @@ public class Geant : MonoBehaviour
     private Rigidbody2D _rb;
     private int _rand;
     private Vector3 velocity;
-    private float[] _UniteMouvement = new float[2];
+    private float[] _UniteMouvement = new float[4];
 
     // Start is called before the first frame update
     void Start()
@@ -24,64 +24,75 @@ public class Geant : MonoBehaviour
     {
         _UniteMouvement[x] = Donné;
     }
-    // Update is called once per frame
+
+    //Update is called once per frame
     void Update()
     {
         _rand = Random.Range(1, 5);
 
-        RaycastHit2D detect = Physics2D.Raycast(this.transform.position, Vector2.up, LayerMask.GetMask("DetectionMur"));
 
 
-        float distance = detect.distance;
-
-        RaycastHit2D Up = Physics2D.Raycast(this.transform.position, Vector2.up, distance);
-        RaycastHit2D Down = Physics2D.Raycast(this.transform.position, Vector2.down, distance);
-        RaycastHit2D Left = Physics2D.Raycast(this.transform.position, Vector2.left, distance);
-        RaycastHit2D Right = Physics2D.Raycast(this.transform.position, Vector2.right, distance);
+        RaycastHit2D Up = Physics2D.Raycast(this.transform.position, Vector2.up, _UniteMouvement[2], LayerMask.GetMask("DetectionMur"));
+        RaycastHit2D Down = Physics2D.Raycast(this.transform.position, Vector2.down, _UniteMouvement[2], LayerMask.GetMask("DetectionMur"));
+        RaycastHit2D Left = Physics2D.Raycast(this.transform.position, Vector2.left, _UniteMouvement[3], LayerMask.GetMask("DetectionMur"));
+        RaycastHit2D Right = Physics2D.Raycast(this.transform.position, Vector2.right, _UniteMouvement[3], LayerMask.GetMask("DetectionMur"));
 
         switch (_rand)
         {
             case 1:
-                if (Up == true)
+                if (Up != true)
                 {
-                    Quaternion targetRotation = Quaternion.LookRotation(transform.forward, Vector2.up); 
-                    Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
-                    _rb.MoveRotation(rotation);
-                    Vector3 position = new Vector3(transform.position.x, transform.position.y + _UniteMouvement[1], 0);
-                    velocity = new Vector3(0, _VitesseMarche,0);
-                    _rb.MovePosition(position + velocity * Time.deltaTime);
-                    
+                    //Quaternion targetRotation = Quaternion.LookRotation(transform.forward, Vector2.up);
+                    //Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+                    //_rb.MoveRotation(rotation);
+
+                    Vector2 direction = new Vector2(0, 1) * _VitesseMarche * Time.deltaTime;
+                    transform.position += new Vector3(direction.x, direction.y, 0);
                 }
                 break;
 
             case 2:
-                if (Down == true)
+                if (Down != true)
                 {
-                    Quaternion targetRotation = Quaternion.LookRotation(transform.forward, Vector2.down);
-                    Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
-                    _rb.MoveRotation(rotation);
+                    //Quaternion targetRotation = Quaternion.LookRotation(transform.forward, Vector2.down);
+                    //Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+                    //_rb.MoveRotation(rotation);
+
+                    Vector2 direction = new Vector2(0, -1) * _VitesseMarche * Time.deltaTime;
+                    transform.position += new Vector3(direction.x, direction.y, 0);
+
                 }
                 break;
 
             case 3:
-                if (Left == true)
+                if (Left != true)
                 {
-                    Quaternion targetRotation = Quaternion.LookRotation(transform.forward, Vector2.left);
-                    Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
-                    _rb.MoveRotation(rotation);
+                    //Quaternion targetRotation = Quaternion.LookRotation(transform.forward, Vector2.left);
+                    //Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+                    //_rb.MoveRotation(rotation);
+
+                    Vector2 direction = new Vector2(-1,0) * _VitesseMarche * Time.deltaTime;
+                    transform.position += new Vector3(direction.x, direction.y, 0);
+
                 }
-                break;                                     
+                break;
 
             case 4:
-                if (Right == true)
+                if (Right != true)
                 {
-                    Quaternion targetRotation = Quaternion.LookRotation(transform.forward, Vector2.right);
-                    Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
-                    _rb.MoveRotation(rotation);
+                    //Quaternion targetRotation = Quaternion.LookRotation(transform.forward, Vector2.right);
+                    //Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+                    //_rb.MoveRotation(rotation);
+
+                    Vector2 direction = new Vector2(1,0) * _VitesseMarche * Time.deltaTime;
+                    transform.position += new Vector3(direction.x, direction.y, 0);
+
+
                 }
                 break;
 
         }
 
     }
+
 }
