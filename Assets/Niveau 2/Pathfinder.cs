@@ -6,36 +6,41 @@
 //{
 //    [SerializeField] private CréationLabyrinte _creationLabyrinthe = default;
 
-//    private int _longueur, _hauteur, _tailleGrille, _tailleCaseX, _tailleCaseY;
+//    private float _longueur = 0;
+//    private float _hauteur = 0;
+//    private int _tailleGrille = 1;
+//    private float _tailleCaseX;
+//    private float _tailleCaseY;
+//    int _endX, _endY;
 
-//    private PathNode[][] allNodes = default;
-//    private PathNode[] openList =default;
-//    //private PathNode[] closedList=default;
+//    private List<List<PathNode>> allNodes = default;
+//    private List<PathNode> openList = default;
+//    private List<PathNode> closedList = default;
 
 //    void Start()
 //    {
 //        genererGrille();
-        
+
 //    }
 
 //    private void genererGrille()
 //    {
-//        int x = 0;
-//        int y = 0;
+//        int posX = 0;
+//        int posY = 0;
 
 //        _tailleCaseX = _longueur / _tailleGrille;
 //        _tailleCaseY = _hauteur / _tailleGrille;
 
-//        //allNodes.resize(_tailleGrille / _tailleCaseX);
-//        //allNodes[0].resize(_tailleGrille / _tailleCaseY);
+//        //ResizeList(allNodes, _tailleGrille);
+        
 
-//        while (x < _longueur)
+//        while (posX < _longueur)
 //        {
-//            while (y < _hauteur)
+//            while (posY < _hauteur)
 //            {
-//                allNodes[x / _tailleCaseX][y / _tailleCaseY] = new PathNode(x, y);
-//                x += _tailleCaseX;
-//                y += _tailleCaseY;
+//                allNodes[(int)(posX / _tailleCaseX)].Add(new PathNode((posX / _tailleCaseX), (posY / _tailleCaseY), posX, posY));
+//                posX += _tailleCaseX;
+//                posY += _tailleCaseY;
 //            }
 //        }
 //    }
@@ -47,21 +52,103 @@
 //        return distanceX + distanceY;
 //    }
 
-//    public PathNode[] FindPath(int p_startX, int p_startY)
+//    private PathNode GetLowestFCostNode(List<PathNode> p_pathNodeList)
 //    {
-//        int endX = (int)this.transform.position.x / _tailleCaseX;
-//        int endY = (int)this.transform.position.y / _tailleCaseY;
+//        PathNode lowestFCostNode = p_pathNodeList[0];
+//        foreach (PathNode currentNode in p_pathNodeList)
+//        {
+//            if (currentNode.fCost < lowestFCostNode.fCost)
+//            {
+//                lowestFCostNode = currentNode;
+//            }
+//        }
 
+//        return lowestFCostNode;
+//    }
+
+//    private List<PathNode> CalculatePath(PathNode p_endNode)
+//    {
+//        List<PathNode> path = new List<PathNode>();
+//        path.Add(p_endNode);
+//        PathNode currentNode = p_endNode;
+//        while (currentNode.cameFromNode != null)
+//        {
+//            path.Add(currentNode.cameFromNode);
+//            currentNode = currentNode.cameFromNode;
+//        }
+
+//        path.Reverse();
+//        return path;
+//    }
+
+//    private List<PathNode> GetNeighbourList(PathNode p_currentNode)
+//    {
+//        List<PathNode> neighbourList = new List<PathNode>();
+
+//        if (p_currentNode.x - 1 >= 0)
+//        {
+//            neighbourList.Add(allNodes[p_currentNode.x - 1][p_currentNode.y]);
+//        }
+//        if ((p_currentNode.x + 1) <= allNodes.Count)
+//        {
+//            neighbourList.Add(allNodes[p_currentNode.x + 1][p_currentNode.y]);
+//        }
+//        if (p_currentNode.y - 1 >= 0)
+//        {
+//            neighbourList.Add(allNodes[p_currentNode.x - 1][p_currentNode.y - 1]);
+//        }
+//        if ((p_currentNode.y + 1) < allNodes[0].Count)
+//        {
+//            neighbourList.Add(allNodes[p_currentNode.x][p_currentNode.y + 1]);
+//        }
+//        return neighbourList;
+//    }
+
+//    public List<PathNode> FindPath(int p_startX, int p_startY)
+//    {
 //        PathNode startNode = allNodes[p_startX][p_startY];
-//        PathNode endNode = allNodes[endX][endY];
+//        PathNode endNode = allNodes[_endX][_endY];
 
-//        openList = new PathNode[] { startNode };
-//        closedList = new PathNode[]();
+//        openList = new List<PathNode> { startNode };
+//        closedList = new List<PathNode>();
 
 //        startNode.gCost = 0;
 //        startNode.hCost = CalculateDistanceCost(startNode, endNode);
 //        startNode.CalculateFCost();
 
+//        while (openList.Count > 0)
+//        {
+//            PathNode currentNode = GetLowestFCostNode(openList);
+//            if (currentNode == endNode)
+//            {
+//                return CalculatePath(endNode);
+//            }
+
+//            openList.Remove(currentNode);
+//            closedList.Add(currentNode);
+
+//            foreach (PathNode neighbourNode in GetNeighbourList(currentNode))
+//            {
+//                if (closedList.Contains(neighbourNode))
+//                {
+//                    int tentativeGCost = currentNode.gCost + CalculateDistanceCost(currentNode, neighbourNode);
+//                    if (tentativeGCost < neighbourNode.gCost)
+//                    {
+//                        neighbourNode.cameFromNode = currentNode;
+//                        neighbourNode.gCost = tentativeGCost;
+//                        neighbourNode.CalculateFCost();
+//                    }
+//                }
+//                else
+//                {
+//                    openList.Add(neighbourNode);
+//                }
+
+
+//            }
+//        }
+
 //        return null;
 //    }
 //}
+
