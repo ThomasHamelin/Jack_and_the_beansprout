@@ -138,6 +138,7 @@ public class CréationLabyrinte : MonoBehaviour
 
                 Vector3 position2 = new Vector3((_UniteDeDistance[0] * (i + 1) - _UniteDeDistance[2]), _UniteDeDistance[1] * y, 0);
                 GameObject MurHorizontaux = Instantiate(_Mur, position2, transform.rotation);
+                MurHorizontaux.transform.localScale = new Vector3(1, 1, 0);
                 MurHorizontaux.transform.localScale = new Vector3(_UniteDeDistance[0], 1, 0);
                 MurHorizontaux.transform.parent = _ContainerMur.transform;
             }
@@ -154,6 +155,7 @@ public class CréationLabyrinte : MonoBehaviour
 
                 Vector3 position3 = new Vector3(_UniteDeDistance[0] * y, (_UniteDeDistance[1] * (i + 1) - _UniteDeDistance[3]), 0);
                 GameObject MurVerticaux = Instantiate(_Mur, position3, transform.rotation);
+                MurVerticaux.transform.localScale = new Vector3(1, 1 , 0);
                 MurVerticaux.transform.localScale = new Vector3(1, _UniteDeDistance[1], 0);
                 MurVerticaux.transform.parent = _ContainerMur.transform;
             }
