@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2014080331134660255}
   - component: {fileID: 7994699220992336715}
   m_Layer: 0
-  m_Name: Plateforme
+  m_Name: PlateformeD
   m_TagString: Plateforme
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

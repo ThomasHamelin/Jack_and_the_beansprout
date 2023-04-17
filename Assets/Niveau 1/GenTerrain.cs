@@ -15,7 +15,8 @@ x [-3.6 ; 3.6]
 
 public class GenTerrain : MonoBehaviour
 {
-    public GameObject plateforme;
+    public GameObject plateformeDroite;
+    public GameObject plateformeGauche;
     public float levelHeight;
     private const float minPositionX = -3.6f;
     private const float maxPositionX = 3.6f;
@@ -34,8 +35,8 @@ public class GenTerrain : MonoBehaviour
             Vector2 randomPosition2 = new Vector2(randomPosition.x + 10f, randomPosition.y);
 
 
-            Instantiate(plateforme, randomPosition1, Quaternion.identity);
-            Instantiate(plateforme, randomPosition2, Quaternion.identity);
+            Instantiate(plateformeGauche, randomPosition1, Quaternion.identity);
+            Instantiate(plateformeDroite, randomPosition2, Quaternion.identity);
 
             totalHeight = randomPosition.y;
 
