@@ -24,7 +24,7 @@ public class GestionUINiv1 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _splitBorder.SetActive(false);
+        _splitBorder.SetActive(true);
         StartCoroutine(DonnerDepart());
         _gestionScene = FindObjectOfType<GestionScenes>().GetComponent<GestionScenes>();
     }
@@ -47,7 +47,7 @@ public class GestionUINiv1 : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         _txtDonneDepart.gameObject.SetActive(false); //Enlever le texte du décompte
-        _splitBorder.SetActive(true);
+       
 
     }
         // Update is called once per frame
