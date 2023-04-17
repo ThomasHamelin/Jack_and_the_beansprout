@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54f4677fe18223645bae41db8ea3cba6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _VitesseMarche: 1
+  _VitesseMarche: 5
   _VitesseCourse: 5
   _distanceVision: 12
   _rotationSpeed: 10
