@@ -8,16 +8,19 @@ public class JoueurNiv2 : MonoBehaviour
     [SerializeField] private float _rotationSpeed = 700f;
     [SerializeField] private Camera _cam = default;
 
+    private Pathfinder _pathfinder = default;
     private Rigidbody2D _rb;
     private Vector2 _direction;
     private bool _jeuDebute = false;
     private float _posX, _posY;
+    private float _distanceX, _distanceY;
     public Animator _animator;
 
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         _cam.transform.position = new Vector3(this.gameObject.transform.position.x, (this.gameObject.transform.position.y), _cam.gameObject.transform.position.z);
+        _pathfinder = FindObjectOfType<Pathfinder>().GetComponent<Pathfinder>();
     }
 
     void FixedUpdate()
@@ -53,6 +56,8 @@ public class JoueurNiv2 : MonoBehaviour
             _cam.transform.position += new Vector3(_direction.x, _direction.y, 0); //Déplace la caméra avec le joueur
             transform.position += new Vector3(_direction.x, _direction.y, 0); //Déplace le joueur dans la direction voulue
         }
+        //_rb.constraints = RigidbodyConstraints2D.FreezePosition; //On bloque la position
+        
     }
 
     /*
@@ -61,21 +66,21 @@ public class JoueurNiv2 : MonoBehaviour
      */
     private void RotateInDirectionOfInput()
     {
-            if (_direction != Vector2.zero) //Si le joueur se déplace
-            {
-                _rb.freezeRotation = false; //On permet la rotation
-                Quaternion targetRotation = Quaternion.LookRotation(transform.forward, _direction); //On détermine dans quelle direction effectuer la rotation
-                Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime); //On crée quaternion de déplacement
-               
-                _rb.MoveRotation(rotation); //On effectue la rotation
-                _animator.SetBool("IsWalking", true); //Fait jouer l'animation du joueur qui se déplace
-            }
-            else //Si le joueur ne se déplace pas
-            {
-                _rb.freezeRotation = true; //On bloque la rotation
-                _animator.SetBool("IsWalking", false); //Arrête l'animation du joueur qui se déplace
-            }
-        
+        if (_direction != Vector2.zero) //Si le joueur se déplace
+        {
+            _rb.freezeRotation = false; //On permet la rotation
+            Quaternion targetRotation = Quaternion.LookRotation(transform.forward, _direction); //On détermine dans quelle direction effectuer la rotation
+            Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime); //On crée quaternion de déplacement
+
+            _rb.MoveRotation(rotation); //On effectue la rotation
+            _animator.SetBool("IsWalking", true); //Fait jouer l'animation du joueur qui se déplace
+        }
+        else //Si le joueur ne se déplace pas
+        {
+            _rb.freezeRotation = true; //On bloque la rotation
+            _animator.SetBool("IsWalking", false); //Arrête l'animation du joueur qui se déplace
+        }
+
     }
 
     /*
@@ -91,10 +96,51 @@ public class JoueurNiv2 : MonoBehaviour
     public void FinNiveau()
     {
         _jeuDebute = false;
+        _pathfinder.FindPath(transform.position.x, transform.position.y);
     }
 
-    public void Pathfinding()
+    public void SuivreChemin(List<PathNode> p_chemin)
     {
+        
+        foreach(PathNode pointSuivant in p_chemin)
+        {
+            do
+            {
+                _distanceX = pointSuivant.transform.position.x - transform.position.x;
+                _distanceY = pointSuivant.transform.position.y - transform.position.y;
 
+                if (_distanceX != 0f)
+                {
+                    _posY = 0f;
+
+                    if (_distanceX > 0f)
+                    {
+                        _posX = 1f;
+                    }
+                    else if (_distanceX < 0f)
+                    {
+                        _posX = -1f;
+                    }
+                }
+                else if (_distanceY != 0f)
+                {
+                    _posX = 0f;
+                    if (_distanceY > 0f)
+                    {
+                        _posY = 1f;
+                    }
+                    else if (_distanceY < 0f)
+                    {
+                        _posY = -1f;
+                    }
+                }
+                
+                _direction = new Vector2(_posX, _posY) * _moveSpeed * Time.deltaTime; //Détermine le vecteur de direction
+                transform.position += new Vector3(_direction.x, _direction.y, 0); //Déplace le joueur dans la direction voulue
+
+            } while (_distanceX != 0f && _distanceY != 0f);
+            
+            
+        }
     }
 }

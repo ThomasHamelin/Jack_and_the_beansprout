@@ -80,7 +80,7 @@ public class GestionUINiv2 : MonoBehaviour
 
         _splitBorder.SetActive(false); //Enlever la barre qui sépare le split screen
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(6f);
 
         StartCoroutine(_gestionScene.ChangerScene());
     }
