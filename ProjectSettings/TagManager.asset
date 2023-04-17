@@ -13,6 +13,8 @@ TagManager:
   - Transition
   - Player2
   - Player1
+  - Geant
+  - Harpe
   layers:
   - Default
   - TransparentFX
@@ -20,7 +22,7 @@ TagManager:
   - DetectionMur
   - Water
   - UI
-  - 
+  - Backgrounds
   - 
   - 
   - 
