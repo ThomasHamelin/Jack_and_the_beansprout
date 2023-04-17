@@ -11,7 +11,8 @@ public class Pathfinder : MonoBehaviour
     private int _tailleGrille = 1;
     private float _tailleCaseX;
     private float _tailleCaseY;
-    int _endX, _endY;
+    int _endX = 0;
+    int _endY = 0;
 
     private List<List<PathNode>> allNodes = default;
     private List<PathNode> openList = default;
@@ -30,9 +31,6 @@ public class Pathfinder : MonoBehaviour
 
         _tailleCaseX = _longueur / _tailleGrille;
         _tailleCaseY = _hauteur / _tailleGrille;
-
-        //ResizeList(allNodes, _tailleGrille);
-
 
         while (posX < _longueur)
         {
@@ -85,28 +83,46 @@ public class Pathfinder : MonoBehaviour
     {
         List<PathNode> neighbourList = new List<PathNode>();
 
-        if (p_currentNode.x - 1 >= 0)
+        if (p_currentNode.DetectWallSide(-_tailleCaseX))
         {
             neighbourList.Add(allNodes[p_currentNode.x - 1][p_currentNode.y]);
         }
-        if ((p_currentNode.x + 1) <= allNodes.Count)
+        if (p_currentNode.DetectWallSide(_tailleCaseX))
         {
             neighbourList.Add(allNodes[p_currentNode.x + 1][p_currentNode.y]);
         }
-        if (p_currentNode.y - 1 >= 0)
+        if (p_currentNode.DetectWallUp(-_tailleCaseY))
         {
             neighbourList.Add(allNodes[p_currentNode.x - 1][p_currentNode.y - 1]);
         }
-        if ((p_currentNode.y + 1) < allNodes[0].Count)
+        if (p_currentNode.DetectWallUp(_tailleCaseY))
         {
             neighbourList.Add(allNodes[p_currentNode.x][p_currentNode.y + 1]);
         }
         return neighbourList;
     }
 
-    public List<PathNode> FindPath(int p_startX, int p_startY)
+    private PathNode GetNodeAtPosition(float p_startX, float p_startY)
     {
-        PathNode startNode = allNodes[p_startX][p_startY];
+        foreach(List<PathNode> listNode in allNodes)
+        {
+            foreach(PathNode currentNode in listNode)
+            {
+                if(currentNode.transform.position.x == p_startX && currentNode.transform.position.y == p_startY)
+                {
+                    return currentNode;
+                }
+            }
+        }
+        
+
+        return null;
+    }
+
+    public List<PathNode> FindPath(float p_startX, float p_startY)
+    {
+
+        PathNode startNode = GetNodeAtPosition(p_startX, p_startY);
         PathNode endNode = allNodes[_endX][_endY];
 
         openList = new List<PathNode> { startNode };
