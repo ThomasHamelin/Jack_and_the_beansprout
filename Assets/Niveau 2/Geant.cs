@@ -139,8 +139,7 @@ public class Geant : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotationTarget, Time.deltaTime * _rotationSpeed);
 
         }
-        yield return null;
-
+        
 
     }
     void move(int MovingConfirm)
