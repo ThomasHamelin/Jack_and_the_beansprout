@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using TMPro;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEditor;
@@ -208,7 +209,7 @@ public class Geant : MonoBehaviour
     IEnumerator Rotate(float dir)
     {
         float angleT = transform.eulerAngles.z + (dir * 90);
-        angleT = angleT % 360;
+        angleT = math.modf(angleT, 360);
         Quaternion rotationTarget = new Quaternion(0, 0, angleT, 0);
 
         Quaternion rotationBase = new Quaternion(0, 0, transform.eulerAngles.z, 0);
