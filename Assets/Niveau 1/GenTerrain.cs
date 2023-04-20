@@ -36,7 +36,9 @@ public class GenTerrain : MonoBehaviour
 
 
             Instantiate(plateformeGauche, randomPosition1, Quaternion.identity);
+         
             Instantiate(plateformeDroite, randomPosition2, Quaternion.identity);
+         
 
             totalHeight = randomPosition.y;
 
