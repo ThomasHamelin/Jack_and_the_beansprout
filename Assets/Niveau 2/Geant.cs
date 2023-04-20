@@ -27,16 +27,16 @@ public class Geant : MonoBehaviour
     private float _VecteurX;
     private float _VecteurY;
 
-    private float _VecteurGaucheX;
-    private float _VecteurGaucheY;
+    private float _VecteurDroiteX;
+    private float _VecteurDroiteY;
 
-    
-    
+
+    private bool _yes = false;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-
+        _yes = true;
 
     }
     public void PartageDonnées(float Donné, int x)
@@ -47,58 +47,72 @@ public class Geant : MonoBehaviour
     //Update is called once per frame
     void Update()
     {
-        
 
-        _VecteurX = 5 * Mathf.Cos(Mathf.Deg2Rad * transform.localRotation.eulerAngles.z);
-        _VecteurY = 5 * Mathf.Sin(Mathf.Deg2Rad *transform.localRotation.eulerAngles.z);
-
-        _VecteurX += _geant.transform.position.x;
-        _VecteurY += _geant.transform.position.y;
-
-       
-        Vector3 dir = new Vector3(_VecteurX, _VecteurY , 0);
-
-
-        _VecteurGaucheX = 5 * Mathf.Cos(Mathf.Deg2Rad * (transform.localRotation.eulerAngles.z-90f));
-        _VecteurGaucheY = 5 * Mathf.Sin(Mathf.Deg2Rad * (transform.localRotation.eulerAngles.z-90f));
-
-        _VecteurGaucheX += _geant.transform.position.x;
-        _VecteurGaucheY += _geant.transform.position.y;
-
-
-        Vector3 dirGauche = new Vector3(_VecteurGaucheX, _VecteurGaucheY, 0);
-
-        RaycastHit2D hitDevant = Physics2D.Raycast(transform.position, dir, _UniteMouvement[3], LayerMask.GetMask("DetectionMur"));
-        RaycastHit2D hitGauche = Physics2D.Raycast(transform.position, dirGauche, _UniteMouvement[3], LayerMask.GetMask("DetectionMur"));
-
-        Debug.DrawLine(transform.position, dir, Color.red);
-        Debug.DrawLine(transform.position, dirGauche, Color.green);
-
-        if(hitDevant == false && hitGauche == false)
+        if (_yes == true)
         {
-            StartCoroutine(Bouge(1, 1));
-        }
-        if (hitDevant == false && hitGauche == true)
-        {
-            StartCoroutine(Bouge(0, 1));
-        }
-        if (hitDevant == true && hitGauche == false)
-        {
-            StartCoroutine(Bouge(0, -1));
-        }
-        if (hitDevant == true && hitGauche == true)
-        {
-            StartCoroutine(Bouge(0, -1));
-        }
+            _VecteurX = 5 * Mathf.Cos(Mathf.Deg2Rad * (transform.eulerAngles.z));
+            _VecteurY = 5 * Mathf.Sin(Mathf.Deg2Rad * (transform.eulerAngles.z));
 
 
+
+
+            Vector2 dir = new Vector3(_VecteurX + transform.position.x, _VecteurY + transform.position.y);
+
+
+            _VecteurDroiteX = 5 * Mathf.Cos(Mathf.Deg2Rad * (transform.eulerAngles.z-90));
+            _VecteurDroiteY = 5 * Mathf.Sin(Mathf.Deg2Rad * (transform.eulerAngles.z-90));
+
+
+
+
+
+
+            Vector2 dirDroite = new Vector3(_VecteurDroiteX + transform.position.x, _VecteurDroiteY + transform.position.y);
+
+
+            Debug.DrawLine(transform.position, dir, Color.red);
+            Debug.DrawLine(transform.position, dirDroite, Color.green);
+
+
+            RaycastHit2D hitDevant = Physics2D.Raycast(this.transform.position, transform.TransformDirection(Vector2.right), _UniteMouvement[2], LayerMask.GetMask("DetectionMur"));
+            RaycastHit2D hitDroite = Physics2D.Raycast(this.transform.position, transform.TransformDirection(Vector2.down), _UniteMouvement[3], LayerMask.GetMask("DetectionMur"));
+
+
+            
+            if (hitDevant == false && hitDroite == false)
+            {
+                //StartCoroutine(Bouge(1, -1));
+                turn(-1);
+                move(1);
+            }
+            if (hitDevant ==false && hitDroite == true)
+            {
+                //StartCoroutine(Bouge(1, 0));
+                turn(0);
+                move(1);
+            }
+            if (hitDevant == true && hitDroite == false)
+            {
+                //StartCoroutine(Bouge(0, 1));
+                turn(-1);
+                move(1);
+            }
+            if (hitDevant == true && hitDroite == true)
+            {
+                //StartCoroutine(Bouge(0, 1));
+                turn(1);
+                move(0);
+            }
+            
+            
+        }
     }
     IEnumerator Rotate(int dir)
     {
         turn(dir);
         yield return null;
     }
-    IEnumerator Bouge(int dir, int moveCondition)
+    IEnumerator Bouge(int dir, int moveCondition) 
     {
         yield return StartCoroutine(Rotate(dir));
 
@@ -112,39 +126,61 @@ public class Geant : MonoBehaviour
         
        //dir = 1: clockwise
        //dir = -1: anti-clockwise;
-        Vector3 rotationTarget = new Vector3(0, 0, transform.localRotation.z + (dir * 90f));
-       
-        
-        do
-        {
-            
-            
-           transform.Rotate(new Vector3(0,0,_rotationSpeed *dir ) * Time.deltaTime);
-           
-           
-        } while(transform.rotation.eulerAngles.z != rotationTarget.z);
-        
+        Quaternion rotationTarget = new Quaternion(0, 0, transform.localEulerAngles.z + (dir * 90f),0);
+
+
+
+
+
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotationTarget, _rotationSpeed * Time.deltaTime);
+
+
+
     }
     void move(int MovingConfirm)
     {
+
+        int angle = (int)(transform.eulerAngles.z % 360);
+
         if (MovingConfirm == 1)
         {
             int i = 0;
             int y = 0;
 
-            if (_VecteurX < 0) { i = -1; }
-            else { i = 1; }
-
-            if (_VecteurY < 0) { y = -1; }
-            else { y = 1; }
-            Vector3 target = new Vector3(transform.position.x + (_UniteMouvement[0] * i), transform.position.y + (_UniteMouvement[1] * y), 0);
-            do
+            if (angle == 180)
+            { 
+                i = -1;
+            }
+            else if(angle == 0)
             {
-                transform.Translate(Vector2.right * _VitesseMarche * Time.deltaTime, Space.Self);
+                i = 1;
+            }
+            else { 
+                i = 0; 
+            }
 
-            } while (transform.position.x != target.x && transform.position.y != target.y);
+            if (angle == 270)
+            {
+                y = -1; 
+            }
+            else if(angle == 90) 
+            {
+                y = 1; 
+            }
+            else
+            {
+                y = 0;
+            }
+            Vector3 target = new Vector3(transform.position.x + (_UniteMouvement[0] * i), transform.position.y + (_UniteMouvement[1] * y), 0);
+            //do
+            //{
+            transform.position = new Vector3(target.x, target.y, 0);
+
+            //} while (transform.position.x != target.x && transform.position.y != target.y);
         }
     }
+
 }
 
 

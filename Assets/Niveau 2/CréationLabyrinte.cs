@@ -188,13 +188,13 @@ public class CréationLabyrinte : MonoBehaviour
         GameObject Geant = Instantiate(_Geant, positionBIGBOY, transform.rotation);
 
 
-        /*
+        
         Geant GeantCommander = FindObjectOfType<Geant>();
         GeantCommander.PartageDonnées(_UniteDeDistance[0], 0);
         GeantCommander.PartageDonnées(_UniteDeDistance[1], 1);
         GeantCommander.PartageDonnées(_UniteDeDistance[2], 2);
         GeantCommander.PartageDonnées(_UniteDeDistance[3], 3);
-        */
+        
         //JoueurNiv2 joueurCommander = FindObjectOfType<JoueurNiv2>();
         //joueurCommander.DebuterJeu();
     }
