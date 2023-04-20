@@ -25,8 +25,7 @@ public class GestionUINiv1 : MonoBehaviour
     void Start()
     {
         _splitBorder.SetActive(true);
-        StartCoroutine(DonnerDepart());
-        _gestionScene = FindObjectOfType<GestionScenes>().GetComponent<GestionScenes>();
+       
     }
 
     IEnumerator DonnerDepart()
