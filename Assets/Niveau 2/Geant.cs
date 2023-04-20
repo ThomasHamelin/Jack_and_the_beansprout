@@ -129,12 +129,17 @@ public class Geant : MonoBehaviour
         Quaternion rotationTarget = new Quaternion(0, 0, transform.localEulerAngles.z + (dir * 90f),0);
 
 
+        float startRotation = transform.eulerAngles.y;
+        
+        float t = 0.0f;
+        while (t < _rotationSpeed)
+        {
+            t += Time.deltaTime;
 
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotationTarget, Time.deltaTime * _rotationSpeed);
 
-
-
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotationTarget, _rotationSpeed * Time.deltaTime);
-
+        }
+        yield return null;
 
 
     }
