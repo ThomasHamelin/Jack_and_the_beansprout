@@ -99,10 +99,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54f4677fe18223645bae41db8ea3cba6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _VitesseMarche: 1
+  _VitesseMarche: 100
   _VitesseCourse: 5
   _distanceVision: 12
-  _rotationSpeed: 10
+  _rotationSpeed: 2
   _yeux: {fileID: 7990935722499361615, guid: b8b20c8f23a23a449afd881ad14aa37e, type: 3}
   _geant: {fileID: 3226181276852311941}
 --- !u!50 &2766226543889562750
