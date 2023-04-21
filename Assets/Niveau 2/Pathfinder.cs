@@ -9,7 +9,7 @@ public class Pathfinder : MonoBehaviour
 
     private float _longueur = 100;
     private float _hauteur = 100;
-    private int _tailleGrille = 100;
+    private int _tailleGrille = 10;
     private float _coordonneDepartX = 0;
     private float _coordonneDepartY = 0;
     private float _tailleCaseX;
@@ -21,6 +21,8 @@ public class Pathfinder : MonoBehaviour
     private PathNode[,] allNodes = default;
     private List<PathNode> openList = default;
     private List<PathNode> closedList = default;
+    private PathNode _endNode = default;
+    private PathNode _startNode = default;
 
     void Start()
     {
@@ -95,7 +97,7 @@ public class Pathfinder : MonoBehaviour
     {
         List<PathNode> neighbourList = new List<PathNode>();
 
-        if (p_currentNode.DetectWallSide(-_tailleCaseX))
+        if (p_currentNode.DetectWallLeft(_tailleCaseX))
         {
             neighbourList.Add(allNodes[p_currentNode.x - 1, p_currentNode.y]);
         }
@@ -105,7 +107,7 @@ public class Pathfinder : MonoBehaviour
         }
         if (p_currentNode.DetectWallUp(-_tailleCaseY))
         {
-            neighbourList.Add(allNodes[p_currentNode.x - 1, p_currentNode.y - 1]);
+            neighbourList.Add(allNodes[p_currentNode.x, p_currentNode.y - 1]);
         }
         if (p_currentNode.DetectWallUp(_tailleCaseY))
         {
@@ -114,38 +116,43 @@ public class Pathfinder : MonoBehaviour
         return neighbourList;
     }
 
-    private PathNode GetNodeAtPosition(float p_startX, float p_startY)
+    private PathNode GetNodeAtPosition(Vector2 p_position)
     {
-        foreach (PathNode currentNode in allNodes)
+        Collider2D[] nodesAtPosition = Physics2D.OverlapCircleAll(p_position, 0.1f);
+        foreach(Collider2D node in nodesAtPosition)
         {
-            if (currentNode.transform.position.x == p_startX && currentNode.transform.position.y == p_startY)
+            node.GetComponent<SpriteRenderer>().color = Color.green;
+            if (node.tag == "PathNode")
             {
-                return currentNode;
+                return node.GetComponent<PathNode>();
             }
+            
         }
 
-
-        return null;
+        return _endNode;
     }
 
     public List<PathNode> FindPath(float p_startX, float p_startY)
-    {
-        PathNode startNode = GetNodeAtPosition(p_startX, p_startY);
-        PathNode endNode = allNodes[_endX, _endY];
+    { 
+        _endNode = allNodes[_endX, _endY];
+        _endNode.GetComponent<SpriteRenderer>().color = Color.red;
+        _startNode = GetNodeAtPosition(new Vector3(p_startX, p_startY));
+        _startNode.GetComponent<SpriteRenderer>().color = Color.green;
 
-        openList = new List<PathNode> { startNode };
+
+        openList = new List<PathNode> { _startNode };
         closedList = new List<PathNode>();
 
-        startNode.gCost = 0;
-        startNode.hCost = CalculateDistanceCost(startNode, endNode);
-        startNode.CalculateFCost();
+        _startNode.gCost = 0;
+        _startNode.hCost = CalculateDistanceCost(_startNode, _endNode);
+        _startNode.CalculateFCost();
 
         while (openList.Count > 0)
         {
             PathNode currentNode = GetLowestFCostNode(openList);
-            if (currentNode == endNode)
+            if (currentNode == _endNode)
             {
-                return CalculatePath(endNode);
+                return CalculatePath(_endNode);
             }
 
             openList.Remove(currentNode);
@@ -166,6 +173,7 @@ public class Pathfinder : MonoBehaviour
                 else
                 {
                     openList.Add(neighbourNode);
+                    neighbourNode.cameFromNode = currentNode;
                     neighbourNode.GetComponent<SpriteRenderer>().color = Color.yellow;
                 }
 

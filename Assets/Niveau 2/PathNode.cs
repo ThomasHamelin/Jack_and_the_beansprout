@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PathNode : MonoBehaviour
 {
+    [SerializeField] private float _largeurMurs = default;
+
     public int x;
     public int y;
 
@@ -17,7 +19,7 @@ public class PathNode : MonoBehaviour
     {
         x = (int)(p_posX / p_tailleCaseX);
         y = (int)(p_posY / p_tailleCaseY);
-        transform.localScale = new Vector3(p_tailleCaseX, p_tailleCaseY, 0);
+        transform.localScale = new Vector3((p_tailleCaseX - _largeurMurs), (p_tailleCaseY - _largeurMurs), 0);
     }
 
     public void CalculateFCost()
@@ -66,5 +68,22 @@ public class PathNode : MonoBehaviour
 
         return espaceLibre;
     }
+
+    public bool DetectWallLeft(float p_dist)
+    {
+        bool espaceLibre = false; //Booléen qui indique si le chemin est dégagé
+
+        //Envoie un raycast pour voir s'il y a un mur
+        RaycastHit2D hit = Physics2D.Raycast(this.transform.position, transform.TransformDirection(Vector2.left), p_dist, LayerMask.GetMask("DetectionMur"));
+
+        //Si le raycast frappe quelque chose
+        if (hit.collider == null)
+        {
+            espaceLibre = true; //On indique que le chemin ne passe pas par là
+        }
+
+        return espaceLibre;
+    }
+
 
 }
