@@ -15,6 +15,7 @@ public class GestionUINiv2 : MonoBehaviour
     private JoueurNiv2 _joueur2;
     private GestionScenes _gestionScene;
 
+
     void Start()
     {
         //Activer la caméra qui montre l'ensemble du labyrinthe

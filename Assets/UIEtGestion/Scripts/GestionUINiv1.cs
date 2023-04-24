@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class GestionUINiv1 : MonoBehaviour
@@ -16,16 +17,20 @@ public class GestionUINiv1 : MonoBehaviour
 
     private Mouvement _joueurs;
     private GestionScenes _gestionScene;
-    private int score = 0;
+    private int scoreJ1 = 0;
+    private int scoreJ2 = 0;
 
-    
 
 
     // Start is called before the first frame update
     void Start()
     {
-        _splitBorder.SetActive(true);
        
+        _splitBorder.SetActive(true);
+        StartCoroutine(DonnerDepart());
+
+        this.GetComponent<GestionUIJeu>().AjouterScore(scoreJ1,1);
+        this.GetComponent<GestionUIJeu>().AjouterScore(scoreJ2, 2);
     }
 
     IEnumerator DonnerDepart()
@@ -45,14 +50,9 @@ public class GestionUINiv1 : MonoBehaviour
         _txtDonneDepart.text = "Partez!";
         yield return new WaitForSeconds(1f);
 
-        _txtDonneDepart.gameObject.SetActive(false); //Enlever le texte du décompte
-       
+        _txtDonneDepart.gameObject.SetActive(false); 
+    }
 
-    }
-        // Update is called once per frame
-        void Update()
-    {
-        _txtPlayer1.text = "Player 1 : " + score;
-        _txtPlayer2.text = "Player 2 : " + score; 
-    }
+   
 }
+
