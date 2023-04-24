@@ -99,7 +99,7 @@ public class qteHache : MonoBehaviour
 
                 }
             }
-            if (nbrInput > _nbrInputGame2)
+            if (nbrInput >= _nbrInputGame2)
             {
                 // score bonus premier  ***
 
