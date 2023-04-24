@@ -30,23 +30,23 @@ public class Geant : MonoBehaviour
     private float[] _UniteMouvement = new float[4];
 
 
-    private float _VecteurX;
-    private float _VecteurY;
-    private float _VecteurDroiteX;
-    private float _VecteurDroiteY;
+    [SerializeField] private float _VecteurX;
+    [SerializeField] private float _VecteurY;
+    [SerializeField] private float _VecteurDroiteX;
+    [SerializeField] private float _VecteurDroiteY;
 
 
-    private int Direction, Mouvement, m,n;
+    [SerializeField] private int Direction, Mouvement, m,n;
 
-    private float increment;
+    [SerializeField] private float increment;
 
-    private bool _finiTourne = true, _finiAvance = true;
+    [SerializeField] private bool _finiTourne = true, _finiAvance = true;
 
-    private Vector3 TargetPosition;
-    private Vector3 PositionInit;
+    [SerializeField] private Vector3 TargetPosition;
+    [SerializeField] private Vector3 PositionInit;
 
-    RaycastHit2D hitDevant;
-    RaycastHit2D hitDroite;
+    [SerializeField] RaycastHit2D hitDevant;
+    [SerializeField] RaycastHit2D hitDroite;
 
     private Vector3 ROTZtarget = Vector3.zero;
     private Vector3 ROTinit;
@@ -212,7 +212,7 @@ public class Geant : MonoBehaviour
         {
             Vector3 angle  = new Vector3(0,0,this.transform.eulerAngles.z + (90 * dir));
 
-            ROTZtarget.z = mod(angle.z, 360);
+            ROTZtarget.z = Mathf.Round(mod(angle.z, 360));
             
 
             increment = (90 * dir) / _rotationSpeed;
