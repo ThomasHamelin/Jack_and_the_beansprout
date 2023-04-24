@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Data;
 using TMPro;
 using Unity.Mathematics;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
+
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.UIElements.Experimental;
 using static System.Net.WebRequestMethods;
 using static UnityEngine.GraphicsBuffer;
 
@@ -16,6 +16,7 @@ public class Geant : MonoBehaviour
 {
 
     [SerializeField] private float _VitesseMarche;
+    
     [SerializeField] private float _VitesseCourse;
     [SerializeField] private float _distanceVision;
     [SerializeField] private float _rotationSpeed;
@@ -24,22 +25,28 @@ public class Geant : MonoBehaviour
 
 
     private float[] _UniteMouvement = new float[4];
-
+    float timeElapsed;
 
     private float _VecteurX;
     private float _VecteurY;
 
     private float _VecteurDroiteX;
     private float _VecteurDroiteY;
+    private float _angleT = 1;
 
+    Vector3 _target;
+    Vector3 ROTtarget = new Vector3(0,0,180);
 
+    private bool AvanceTermmine, TourneTermine, NouvDirection;
 
+    int d, c;
+    
 
-    Coroutine _confirmMovement;
+   
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
-
+        _target= transform.position;
 
     }
     public void PartageDonnées(float Donné, int x)
@@ -53,119 +60,176 @@ public class Geant : MonoBehaviour
 
 
 
-
-        _VecteurX = 5 * Mathf.Cos(Mathf.Deg2Rad * (transform.eulerAngles.z));
-        _VecteurY = 5 * Mathf.Sin(Mathf.Deg2Rad * (transform.eulerAngles.z));
+        if (transform.eulerAngles == ROTtarget && transform.position == _target) { 
 
 
 
-
-        Vector2 dir = new Vector3(_VecteurX + transform.position.x, _VecteurY + transform.position.y);
-
-
-        _VecteurDroiteX = 5 * Mathf.Cos(Mathf.Deg2Rad * (transform.eulerAngles.z - 90));
-        _VecteurDroiteY = 5 * Mathf.Sin(Mathf.Deg2Rad * (transform.eulerAngles.z - 90));
+            _VecteurX = 5 * Mathf.Cos(Mathf.Deg2Rad * (transform.eulerAngles.z));
+            _VecteurY = 5 * Mathf.Sin(Mathf.Deg2Rad * (transform.eulerAngles.z));
 
 
 
 
+            Vector2 dir = new Vector3(_VecteurX + transform.position.x, _VecteurY + transform.position.y);
 
 
-        Vector2 dirDroite = new Vector3(_VecteurDroiteX + transform.position.x, _VecteurDroiteY + transform.position.y);
+            _VecteurDroiteX = 5 * Mathf.Cos(Mathf.Deg2Rad * (transform.eulerAngles.z - 90));
+            _VecteurDroiteY = 5 * Mathf.Sin(Mathf.Deg2Rad * (transform.eulerAngles.z - 90));
 
 
-        Debug.DrawLine(transform.position, dir, Color.red);
-        Debug.DrawLine(transform.position, dirDroite, Color.green);
 
 
-        RaycastHit2D hitDevant = Physics2D.Raycast(this.transform.position, transform.TransformDirection(Vector2.right), _UniteMouvement[2], LayerMask.GetMask("DetectionMur"));
-        RaycastHit2D hitDroite = Physics2D.Raycast(this.transform.position, transform.TransformDirection(Vector2.down), _UniteMouvement[3], LayerMask.GetMask("DetectionMur"));
 
-        StopAllCoroutines();
 
-        if (hitDevant == false && hitDroite == false)
-        {
-            //dir = -1
-            //confirm =1
-            StopAllCoroutines();
-            StartCoroutine(Bouge(-1, 1));
+            Vector2 dirDroite = new Vector3(_VecteurDroiteX + transform.position.x, _VecteurDroiteY + transform.position.y);
 
+
+            Debug.DrawLine(transform.position, dir, Color.red);
+            Debug.DrawLine(transform.position, dirDroite, Color.green);
+
+
+            RaycastHit2D hitDevant = Physics2D.Raycast(this.transform.position, transform.TransformDirection(Vector2.right), _UniteMouvement[2], LayerMask.GetMask("DetectionMur"));
+            RaycastHit2D hitDroite = Physics2D.Raycast(this.transform.position, transform.TransformDirection(Vector2.down), _UniteMouvement[3], LayerMask.GetMask("DetectionMur"));
+
+
+
+            if (hitDevant == false && hitDroite == false)
+            {
+                //dir = -1
+                //confirm =1
+
+                CalculAngle(-1);
+                CalculDirection();
+
+
+                StartCoroutine(Move(1));
+            }
+            if (hitDevant == false && hitDroite == true)
+            {
+                //dir = 0
+                //confirm =1
+
+                CalculDirection();
+                StartCoroutine(Move(1));
+            }
+            if (hitDevant == true && hitDroite == false)
+            {
+                //dir = -1
+                //confirm =1 
+
+                CalculAngle(-1);
+                CalculDirection();
+                StartCoroutine(Move(1));
+            }
+            if (hitDevant == true && hitDroite == true)
+            {
+                //dir = 1
+                //confirm == 0;
+                CalculAngle(1);
+                StartCoroutine(Move(0));
+            }
         }
-        if (hitDevant == false && hitDroite == true)
-        {
-            //dir = 0
-            //confirm =1
-            StopAllCoroutines();
-            StartCoroutine(Bouge(0, 1));
-        }
-        if (hitDevant == true && hitDroite == false)
-        {
-            //dir = -1
-            //confirm =1
-            StopAllCoroutines();
-            StartCoroutine(Bouge(-1, 1));
-        }
-        if (hitDevant == true && hitDroite == true)
-        {
-            //dir = 1
-            
-            StopAllCoroutines();
-            StartCoroutine(Bouge(1, 0));
-        }
-
-
-
     }
-    IEnumerator Bouge(int dir, int Confirm)
+
+
+
+
+
+
+    IEnumerator Move(int confirm)
     {
-        yield return StartCoroutine(Rotate(dir));
-
-        yield return StartCoroutine(avance(Confirm));
-
+        while (transform.eulerAngles != ROTtarget)
+        {
+            Tourne();
+            yield return null;
+        }
+        while (transform.position != _target)
+        {
+            avance(confirm);
+            yield return null;
+        }
         yield break;
     }
-    //IEnumerator Rotate(int dir)
-    //{
-
-    //    float angleT = transform.eulerAngles.z + (dir * 90);
-    //    angleT = angleT % 360; 
-    //    Quaternion rotationTarget = new Quaternion(0, 0, angleT, 0);
-
-    //    Quaternion rotationBase = new Quaternion(0, 0, transform.eulerAngles.z, 0);
-
-    
-    //    if (dir == 0)
-    //    {
-    //        yield break;
-    //    }
-    //    do
-    //    {
-    //        transform.rotation = Quaternion.Slerp(transform.rotation, rotationTarget, _rotationSpeed * Time.deltaTime);
-
-    //        if (transform.rotation.z == rotationBase.z)
-    //        {
-    //            yield break;
-    //        }
-
-
-
-    //    } while (transform.eulerAngles.z != rotationBase.z);
 
 
 
 
-    //}
 
-    IEnumerator avance(int moveCondition)
+
+
+
+
+
+
+
+
+
+    void Tourne()
     {
-        
-        int angle = (int)(transform.eulerAngles.z % 360);
-        int i = 0;
-        int y = 0;
 
-        if (moveCondition == 1)
+
+
+
+
+
+        if (transform.eulerAngles.z > ROTtarget.z+1)
         {
 
+
+            transform.eulerAngles = Vector3.Lerp(transform.rotation.eulerAngles, ROTtarget, Time.deltaTime * _rotationSpeed);
+
+        }
+        else
+        {
+            transform.eulerAngles = ROTtarget;
+        }
+
+
+
+
+
+
+
+    }
+
+    void avance(int moveCondition)
+    {
+        if(moveCondition == 1) { 
+            if (transform.position.x > _target.x && transform.position.y > _target.y)
+            {
+
+
+                transform.position = Vector3.Lerp(transform.position, _target, Time.deltaTime * _VitesseMarche);
+
+            }
+            else
+            {
+                transform.position = _target;
+            }
+        }
+    }
+    float mod(float x, float m)
+    {
+        return (x % m + m) % m;
+    }
+    
+    void CalculAngle(int dir)
+    {
+        _angleT = transform.eulerAngles.z + (dir* 90);
+        _angleT = mod(_angleT, 360);
+
+
+        Vector3 rotationTarget = new Vector3(0, 0, _angleT);
+        ROTtarget = rotationTarget;
+             
+    }
+    void CalculDirection()
+    {
+        
+            int angle = (int)mod(this.transform.eulerAngles.z, 360);
+
+            int i = 0;
+            int y = 0;
 
             if (angle == 180)
             {
@@ -192,36 +256,10 @@ public class Geant : MonoBehaviour
             {
                 y = 0;
             }
-        }
-        Vector3 target = new Vector3(transform.position.x + (_UniteMouvement[0] * i), transform.position.y + (_UniteMouvement[1] * y), 0);
 
-        while (this.transform.rotation.z != target.z)
-        {
-            this.transform.position = Vector3.Lerp(this.transform.position, target, _VitesseMarche * Time.deltaTime);
-            yield return null;
-        }
-        this.transform.position = target;
-        yield return null;
-
-
-    }
-
-    IEnumerator Rotate(float dir)
-    {
-        float angleT = transform.eulerAngles.z + (dir * 90);
-        angleT = math.modf(angleT, 360);
-        Quaternion rotationTarget = new Quaternion(0, 0, angleT, 0);
-
-        Quaternion rotationBase = new Quaternion(0, 0, transform.eulerAngles.z, 0);
-        while (this.transform.rotation.z != rotationTarget.z)
-        {
-            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, rotationTarget, 3f * Time.deltaTime);
-            yield return null;
-        }
-        this.transform.rotation = Quaternion.Euler(0f, 0f, angleT);
-        yield return null;
-
-
+            Vector3 target = new Vector3(transform.position.x + (_UniteMouvement[0] * i), transform.position.y + (_UniteMouvement[1] * y), 0);
+            _target = target;
+            
 
     }
 }
