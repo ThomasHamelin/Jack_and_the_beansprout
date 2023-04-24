@@ -7,10 +7,16 @@ using TMPro;
 
 public class GestionUIJeu : MonoBehaviour
 {
+    //public static GestionUIJeu instance;
     [SerializeField] private TextMeshProUGUI _txtScoreJ1 = default;
     [SerializeField] private TextMeshProUGUI _txtScoreJ2 = default;
 
     int _scoreJ1, _scoreJ2;
+
+    //private void Awake()
+    //{
+    //    instance = this;
+    //}
 
     void Start()
     {
