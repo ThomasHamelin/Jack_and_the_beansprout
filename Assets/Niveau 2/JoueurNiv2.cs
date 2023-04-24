@@ -8,19 +8,19 @@ public class JoueurNiv2 : MonoBehaviour
     [SerializeField] private float _rotationSpeed = 700f;
     [SerializeField] private Camera _cam = default;
 
-   // private Pathfinder _pathfinder = default;
+    private Pathfinder _pathfinder = default;
     private Rigidbody2D _rb;
     private Vector2 _direction = Vector2.zero;
     private bool _jeuDebute = false;
     private float _posX, _posY;
-    private float _distanceX, _distanceY;
+    private int _distanceX, _distanceY;
     public Animator _animator;
 
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         _cam.transform.position = new Vector3(this.gameObject.transform.position.x, (this.gameObject.transform.position.y), _cam.gameObject.transform.position.z);
-       // _pathfinder = FindObjectOfType<Pathfinder>().GetComponent<Pathfinder>();
+       _pathfinder = FindObjectOfType<Pathfinder>().GetComponent<Pathfinder>();
     }
 
     void FixedUpdate()
@@ -96,51 +96,58 @@ public class JoueurNiv2 : MonoBehaviour
     public void FinNiveau()
     {
         _jeuDebute = false;
-      //  _pathfinder.FindPath(transform.position.x, transform.position.y);
+        List<PathNode> chemin = _pathfinder.FindPath(this.transform.position.x, this.transform.position.y);
+        StartCoroutine(SuivreChemin(chemin));
     }
 
-    //public void SuivreChemin(List<PathNode> p_chemin)
-    //{
+    IEnumerator SuivreChemin(List<PathNode> p_chemin)
+    {
+        yield return new WaitForSeconds(1f);
+        foreach (PathNode pointSuivant in p_chemin)
+        {
+            pointSuivant.GetComponent<SpriteRenderer>().color = Color.yellow;
+            _posX = 0f;
+            _posY = 0f;
+            do
+            {
+                yield return new WaitForSeconds(.01f);
+                _distanceX = (int)(pointSuivant.transform.position.x - this.transform.position.x);
+                _distanceY = (int)(pointSuivant.transform.position.y - this.transform.position.y);
 
-    //    foreach (PathNode pointSuivant in p_chemin)
-    //    {
-    //        do
-    //        {
-    //            _distanceX = pointSuivant.transform.position.x - transform.position.x;
-    //            _distanceY = pointSuivant.transform.position.y - transform.position.y;
+                if (_distanceX != 0)
+                {
+                    _posY = 0f;
 
-    //            if (_distanceX != 0f)
-    //            {
-    //                _posY = 0f;
+                    if (_distanceX > 0)
+                    {
+                        _posX = .01f;
+                    }
+                    else if (_distanceX < 0)
+                    {
+                        _posX = -0.01f;
+                    }
+                }
+                else if (_distanceY != 0)
+                {
+                    _posX = 0f;
 
-    //                if (_distanceX > 0f)
-    //                {
-    //                    _posX = 1f;
-    //                }
-    //                else if (_distanceX < 0f)
-    //                {
-    //                    _posX = -1f;
-    //                }
-    //            }
-    //            else if (_distanceY != 0f)
-    //            {
-    //                _posX = 0f;
-    //                if (_distanceY > 0f)
-    //                {
-    //                    _posY = 1f;
-    //                }
-    //                else if (_distanceY < 0f)
-    //                {
-    //                    _posY = -1f;
-    //                }
-    //            }
+                    if (_distanceY > 0)
+                    {
+                        _posY = 0.01f;
+                    }
+                    else if (_distanceY < 0)
+                    {
+                        _posY = -0.01f;
+                    }
+                }
 
-    //            _direction = new Vector2(_posX, _posY) * _moveSpeed * Time.deltaTime; //Détermine le vecteur de direction
-    //            transform.position += new Vector3(_direction.x, _direction.y, 0); //Déplace le joueur dans la direction voulue
+                _direction = new Vector2(_posX, _posY); //Détermine le vecteur de direction
+                transform.position += new Vector3(_direction.x, _direction.y, 0); //Déplace le joueur dans la direction voulue
+                RotateInDirectionOfInput();
 
-    //        } while (_distanceX != 0f && _distanceY != 0f);
+            } while (_distanceX != 0 && _distanceY != 0);
 
 
-    //    }
-    //}
+        }
+    }
 }
