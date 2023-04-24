@@ -168,6 +168,7 @@ public class Mouvement : MonoBehaviour
             anim.SetBool("isjumpingG", false);
             anim.SetBool("isjumpingD", false);
 
+            //GestionUIJeu.instance.AjouterScore();
 
             //peut sauter après contact
             canJump = 2;

@@ -29,8 +29,13 @@ public class GestionUINiv1 : MonoBehaviour
         _splitBorder.SetActive(true);
         StartCoroutine(DonnerDepart());
 
+
+        scoreJ1 = 0;
+        scoreJ2 = 0;
+
+        
         this.GetComponent<GestionUIJeu>().AjouterScore(scoreJ1,1);
-        this.GetComponent<GestionUIJeu>().AjouterScore(scoreJ2, 2);
+        this.GetComponent<GestionUIJeu>().AjouterScore(scoreJ2, 0);
     }
 
     IEnumerator DonnerDepart()
