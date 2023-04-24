@@ -22,6 +22,27 @@ public class PathNode : MonoBehaviour
         transform.localScale = new Vector3((p_tailleCaseX - _largeurMurs), (p_tailleCaseY - _largeurMurs), 0);
     }
 
+    public int getX() { return x; }
+    public int getY() { return y; }
+    public int getGCost(){ return gCost; }
+    public int getFCost(){ return fCost; }
+    public PathNode getCameFromNode() { return cameFromNode; }
+    
+    public void setGCost(int p_gCost)
+    {
+        gCost= p_gCost;
+    }
+    
+    public void setHCost(int p_hCost)
+    {
+        hCost= p_hCost;
+    }
+
+    public void setCameFromNode(PathNode p_cameFromNode)
+    {
+        cameFromNode= p_cameFromNode;
+    }
+
     public void CalculateFCost()
     {
         fCost = gCost + hCost;

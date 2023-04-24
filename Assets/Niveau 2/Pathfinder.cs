@@ -59,17 +59,19 @@ public class Pathfinder : MonoBehaviour
 
     private int CalculateDistanceCost(PathNode p_a, PathNode p_b)
     {
-        int distanceX = Mathf.Abs(p_a.x - p_b.x);
-        int distanceY = Mathf.Abs(p_a.y - p_b.y);
+        int distanceX = Mathf.Abs(p_a.getX() - p_b.getX());
+        int distanceY = Mathf.Abs(p_a.getY() - p_b.getY());
+        Debug.Log(distanceX + " + " + distanceY);
         return distanceX + distanceY;
     }
 
-    private PathNode GetLowestFCostNode(List<PathNode> p_pathNodeList)
+    private PathNode GetLowestFCostNode()
     {
-        PathNode lowestFCostNode = p_pathNodeList[0];
-        foreach (PathNode currentNode in p_pathNodeList)
+        PathNode lowestFCostNode = openList[0];
+        foreach (PathNode currentNode in openList)
         {
-            if (currentNode.fCost < lowestFCostNode.fCost)
+            currentNode.GetComponent<SpriteRenderer>().color = Color.yellow;
+            if (currentNode.getFCost() < lowestFCostNode.getFCost())
             {
                 lowestFCostNode = currentNode;
             }
@@ -83,10 +85,10 @@ public class Pathfinder : MonoBehaviour
         List<PathNode> path = new List<PathNode>();
         path.Add(p_endNode);
         PathNode currentNode = p_endNode;
-        while (currentNode.cameFromNode != null)
+        while (currentNode.getCameFromNode() != null)
         {
-            path.Add(currentNode.cameFromNode);
-            currentNode = currentNode.cameFromNode;
+            path.Add(currentNode.getCameFromNode());
+            currentNode = currentNode.getCameFromNode();
         }
 
         path.Reverse();
@@ -99,29 +101,28 @@ public class Pathfinder : MonoBehaviour
 
         if (p_currentNode.DetectWallLeft(_tailleCaseX))
         {
-            neighbourList.Add(allNodes[p_currentNode.x - 1, p_currentNode.y]);
+            neighbourList.Add(allNodes[p_currentNode.getX() - 1, p_currentNode.getY()]);
         }
         if (p_currentNode.DetectWallSide(_tailleCaseX))
         {
-            neighbourList.Add(allNodes[p_currentNode.x + 1, p_currentNode.y]);
+            neighbourList.Add(allNodes[p_currentNode.getX() + 1, p_currentNode.getY()]);
         }
         if (p_currentNode.DetectWallUp(-_tailleCaseY))
         {
-            neighbourList.Add(allNodes[p_currentNode.x, p_currentNode.y - 1]);
+            neighbourList.Add(allNodes[p_currentNode.getX(), p_currentNode.getY() - 1]);
         }
         if (p_currentNode.DetectWallUp(_tailleCaseY))
         {
-            neighbourList.Add(allNodes[p_currentNode.x, p_currentNode.y + 1]);
+            neighbourList.Add(allNodes[p_currentNode.getX(), p_currentNode.getY() + 1]);
         }
         return neighbourList;
     }
 
     private PathNode GetNodeAtPosition(Vector2 p_position)
     {
-        Collider2D[] nodesAtPosition = Physics2D.OverlapCircleAll(p_position, 0.1f);
+        Collider2D[] nodesAtPosition = Physics2D.OverlapCircleAll(p_position, 0.5f);
         foreach(Collider2D node in nodesAtPosition)
         {
-            node.GetComponent<SpriteRenderer>().color = Color.green;
             if (node.tag == "PathNode")
             {
                 return node.GetComponent<PathNode>();
@@ -149,21 +150,23 @@ public class Pathfinder : MonoBehaviour
 
         while (openList.Count > 0)
         {
-            PathNode currentNode = GetLowestFCostNode(openList);
+            PathNode currentNode = GetLowestFCostNode();
+            currentNode.GetComponent<SpriteRenderer>().color = Color.yellow;
             if (currentNode == _endNode)
             {
                 return CalculatePath(_endNode);
             }
 
-            openList.Remove(currentNode);
-            closedList.Add(currentNode);
+            List<PathNode> neighbourList = GetNeighbourList(currentNode);
 
-            foreach (PathNode neighbourNode in GetNeighbourList(currentNode))
+            foreach (PathNode neighbourNode in neighbourList)
             {
+                neighbourNode.GetComponent<SpriteRenderer>().color = Color.yellow;
+                int tentativeGCost = currentNode.getGCost() + CalculateDistanceCost(currentNode, neighbourNode);
+
                 if (closedList.Contains(neighbourNode))
                 {
-                    int tentativeGCost = currentNode.gCost + CalculateDistanceCost(currentNode, neighbourNode);
-                    if (tentativeGCost < neighbourNode.gCost)
+                    if (tentativeGCost < neighbourNode.getGCost())
                     {
                         neighbourNode.cameFromNode = currentNode;
                         neighbourNode.gCost = tentativeGCost;
@@ -173,9 +176,15 @@ public class Pathfinder : MonoBehaviour
                 else
                 {
                     openList.Add(neighbourNode);
-                    neighbourNode.cameFromNode = currentNode;
-                    neighbourNode.GetComponent<SpriteRenderer>().color = Color.yellow;
+                    neighbourNode.gCost = tentativeGCost;
+                    neighbourNode.hCost = CalculateDistanceCost(neighbourNode, _endNode);
+                    neighbourNode.CalculateFCost();
+                    neighbourNode.setCameFromNode(currentNode);
+                    
                 }
+
+                openList.Remove(currentNode);
+                closedList.Add(currentNode);
 
 
             }
