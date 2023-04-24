@@ -13,16 +13,7 @@ using UnityEngine.UIElements;
 using static System.Net.WebRequestMethods;
 using static UnityEngine.GraphicsBuffer;
 
-using System.Data;
-using TMPro;
-using Unity.Mathematics;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.UIElements;
-using static System.Net.WebRequestMethods;
-using static UnityEngine.GraphicsBuffer;
+
 
 
 public class Geant : MonoBehaviour
@@ -39,18 +30,42 @@ public class Geant : MonoBehaviour
     private float[] _UniteMouvement = new float[4];
 
 
-    private float _VecteurX;
-    private float _VecteurY;
-    private float _VecteurDroiteX;
-    private float _VecteurDroiteY;
+    [SerializeField] private float _VecteurX;
+    [SerializeField] private float _VecteurY;
+    [SerializeField] private float _VecteurDroiteX;
+    [SerializeField] private float _VecteurDroiteY;
 
 
-    private bool _finiTourne, _finiAvance;
+    [SerializeField] private int Direction, Mouvement, m,n;
 
+    [SerializeField] private float increment;
 
+    [SerializeField] private bool _finiTourne = true, _finiAvance = true;
 
-    void Awake()
+    [SerializeField] private Vector3 TargetPosition;
+    [SerializeField] private Vector3 PositionInit;
+
+    [SerializeField] RaycastHit2D hitDevant;
+    [SerializeField] RaycastHit2D hitDroite;
+
+    private Vector3 ROTZtarget = Vector3.zero;
+    private Vector3 ROTinit;
+
+    void Update()
     {
+        if (_finiTourne == true && _finiAvance == true)
+        {
+            analyse();
+        }
+        if (_finiTourne == false)
+        {
+            Rotate(Direction);
+        }
+        if(_finiTourne == true && _finiAvance == false)
+        {
+            avance(Mouvement);
+        }
+
     }
 
 
@@ -84,35 +99,46 @@ public class Geant : MonoBehaviour
         Debug.DrawLine(transform.position, dir, Color.red);
         Debug.DrawLine(transform.position, dirDroite, Color.green);
 
-        RaycastHit2D hitDevant = Physics2D.Raycast(this.transform.position, transform.TransformDirection(Vector2.right), _UniteMouvement[2], LayerMask.GetMask("DetectionMur"));
-        RaycastHit2D hitDroite = Physics2D.Raycast(this.transform.position, transform.TransformDirection(Vector2.down), _UniteMouvement[3], LayerMask.GetMask("DetectionMur"));
+        hitDevant = Physics2D.Raycast(this.transform.position, transform.TransformDirection(Vector2.right), _UniteMouvement[2], LayerMask.GetMask("DetectionMur"));
+        hitDroite = Physics2D.Raycast(this.transform.position, transform.TransformDirection(Vector2.down), _UniteMouvement[3], LayerMask.GetMask("DetectionMur"));
 
-        StopAllCoroutines();
+        PositionInit = new Vector3(this.transform.position.x, this.transform.position.y, 0);
+        ROTinit = new Vector3(0, 0, this.transform.eulerAngles.z);
+        m = 1;
+        n = 1;
+        _finiAvance = false;
+        _finiTourne = false;
 
-        if (hitDevant == false && hitDroite == false)
+        if (hitDevant == false && hitDroite == false)//yes
         {
             //dir = -1
             //confirm =1
-           
+
+            Direction = -1;
+            Mouvement = 1;
 
         }
-        if (hitDevant == false && hitDroite == true)
+        if (hitDevant == false && hitDroite == true)//yes
         {
             //dir = 0
             //confirm =1
-           
+
+            Direction = 0;
+            Mouvement = 1;
         }
-        if (hitDevant == true && hitDroite == false)
+        if (hitDevant == true && hitDroite == false)//yes
         {
             //dir = -1
             //confirm =1
-            
+            Direction = -1;
+            Mouvement = 1;
         }
-        if (hitDevant == true && hitDroite == true)
+        if (hitDevant == true && hitDroite == true)//yes
         {
             //dir = 1
             //confirm == 0;
-        
+            Direction = 1;
+            Mouvement = 0;
         }
 
     }
@@ -124,13 +150,13 @@ public class Geant : MonoBehaviour
     void avance(int moveCondition)
     {
 
-        int angle = (int)(transform.eulerAngles.z % 360);
-        int i = 0;
-        int y = 0;
 
-        if (moveCondition == 1)
+
+        if (moveCondition == 1 && m == 1)
         {
-
+            int angle = (int)(transform.eulerAngles.z % 360);
+            int i = 0;
+            int y = 0;
 
             if (angle == 180)
             {
@@ -157,39 +183,63 @@ public class Geant : MonoBehaviour
             {
                 y = 0;
             }
+            m = 0;
+            TargetPosition = new Vector3(transform.position.x + (_UniteMouvement[0] * i), transform.position.y + (_UniteMouvement[1] * y), 0);
         }
-        Vector3 target = new Vector3(transform.position.x + (_UniteMouvement[0] * i), transform.position.y + (_UniteMouvement[1] * y), 0);
-
-        while (this.transform.rotation.z != target.z)
+        else if (moveCondition == 0)
         {
-            this.transform.position = Vector3.Lerp(this.transform.position, target, _VitesseMarche * Time.deltaTime);
-            
+            _finiAvance = true;
         }
-        this.transform.position = target;
+
        
 
 
+        transform.position = Vector3.MoveTowards(transform.position, TargetPosition, _VitesseMarche*Time.deltaTime);
+
+        if (transform.position == TargetPosition)
+        {
+            _finiAvance = true;
+        }
+        else
+        {
+            _finiAvance = false;
+        }
     }
 
     void Rotate(float dir)
     {
-        float angleT = transform.eulerAngles.z + (dir * 90);
-        angleT = mod(angleT, 360);
-        Quaternion rotationTarget = new Quaternion(0, 0, angleT, 0);
-
-        Quaternion rotationBase = new Quaternion(0, 0, transform.eulerAngles.z, 0);
-        while (this.transform.rotation.z != rotationTarget.z)
+        if(n == 1)
         {
-            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, rotationTarget, 3f * Time.deltaTime);
+            Vector3 angle  = new Vector3(0,0,this.transform.eulerAngles.z + (90 * dir));
+
+            ROTZtarget.z = Mathf.Round(mod(angle.z, 360));
             
+
+            increment = (90 * dir) / _rotationSpeed;
+            n = 0;
         }
-        this.transform.rotation = Quaternion.Euler(0f, 0f, angleT);
-      
+
+        if (dir != 0)
+        {
+
+            float posMoment = Mathf.Round(mod(transform.eulerAngles.z, 360));
 
 
 
-
-
+            if (posMoment == ROTZtarget.z)
+            {
+                _finiTourne = true;
+            }
+            else
+            {
+                transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z + increment);
+                _finiTourne = false;
+            }
+        }
+        else
+        {
+            _finiTourne = true;
+        }
     }
 
     float mod(float x, float y)
