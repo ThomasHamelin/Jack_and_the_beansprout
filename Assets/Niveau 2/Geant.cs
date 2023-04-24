@@ -45,9 +45,9 @@ public class Geant : MonoBehaviour
     private float _VecteurDroiteY;
 
 
+    private bool _finiTourne, _finiAvance;
 
 
-    Coroutine _confirmMovement;
 
     void Awake()
     {
@@ -58,7 +58,7 @@ public class Geant : MonoBehaviour
     public void PartageDonnées(float Donné, int x)
     {
 
-
+        _UniteMouvement[x] = Donné;
 
     }
 
@@ -93,46 +93,35 @@ public class Geant : MonoBehaviour
         {
             //dir = -1
             //confirm =1
-            StopAllCoroutines();
-            StartCoroutine(Bouge(-1, 1));
+           
 
         }
         if (hitDevant == false && hitDroite == true)
         {
             //dir = 0
             //confirm =1
-            StopAllCoroutines();
-            StartCoroutine(Bouge(0, 1));
+           
         }
         if (hitDevant == true && hitDroite == false)
         {
             //dir = -1
             //confirm =1
-            StopAllCoroutines();
-            StartCoroutine(Bouge(-1, 1));
+            
         }
         if (hitDevant == true && hitDroite == true)
         {
             //dir = 1
             //confirm == 0;
-            StopAllCoroutines();
-            StartCoroutine(Bouge(1, 0));
+        
         }
 
     }
 
 
-    IEnumerator Bouge(int dir, int Confirm)
-    {
-        yield return StartCoroutine(Rotate(dir));
-
-        yield return StartCoroutine(avance(Confirm));
-
-        yield break;
-    }
+  
 
 
-    IEnumerator avance(int moveCondition)
+    void avance(int moveCondition)
     {
 
         int angle = (int)(transform.eulerAngles.z % 360);
@@ -174,28 +163,28 @@ public class Geant : MonoBehaviour
         while (this.transform.rotation.z != target.z)
         {
             this.transform.position = Vector3.Lerp(this.transform.position, target, _VitesseMarche * Time.deltaTime);
-            yield return null;
+            
         }
         this.transform.position = target;
-        yield return null;
+       
 
 
     }
 
-    IEnumerator Rotate(float dir)
+    void Rotate(float dir)
     {
         float angleT = transform.eulerAngles.z + (dir * 90);
-        //angleT = math.modf(angleT, 360);
+        angleT = mod(angleT, 360);
         Quaternion rotationTarget = new Quaternion(0, 0, angleT, 0);
 
         Quaternion rotationBase = new Quaternion(0, 0, transform.eulerAngles.z, 0);
         while (this.transform.rotation.z != rotationTarget.z)
         {
             this.transform.rotation = Quaternion.Slerp(this.transform.rotation, rotationTarget, 3f * Time.deltaTime);
-            yield return null;
+            
         }
         this.transform.rotation = Quaternion.Euler(0f, 0f, angleT);
-        yield return null;
+      
 
 
 
@@ -203,5 +192,9 @@ public class Geant : MonoBehaviour
 
     }
 
+    float mod(float x, float y)
+    {
+        return (x % y + y) % y;
+    }
 }
 
