@@ -7,8 +7,8 @@ public class JoueurNiv2 : MonoBehaviour
     [SerializeField] private float _moveSpeed = 600f;
     [SerializeField] private float _rotationSpeed = 700f;
     [SerializeField] private Camera _cam = default;
+    [SerializeField] private Pathfinder _pathfinder = default;
 
-    private Pathfinder _pathfinder = default;
     private Rigidbody2D _rb;
     private Vector2 _direction = Vector2.zero;
     private bool _jeuDebute = false;
@@ -20,7 +20,6 @@ public class JoueurNiv2 : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody2D>();
         _cam.transform.position = new Vector3(this.gameObject.transform.position.x, (this.gameObject.transform.position.y), _cam.gameObject.transform.position.z);
-       _pathfinder = FindObjectOfType<Pathfinder>().GetComponent<Pathfinder>();
     }
 
     void FixedUpdate()
@@ -105,47 +104,55 @@ public class JoueurNiv2 : MonoBehaviour
         yield return new WaitForSeconds(1f);
         foreach (PathNode pointSuivant in p_chemin)
         {
-            pointSuivant.GetComponent<SpriteRenderer>().color = Color.yellow;
+            pointSuivant.GetComponent<SpriteRenderer>().color = Color.red;
             _posX = 0f;
             _posY = 0f;
             do
             {
                 yield return new WaitForSeconds(.01f);
-                _distanceX = (int)(pointSuivant.transform.position.x - this.transform.position.x);
-                _distanceY = (int)(pointSuivant.transform.position.y - this.transform.position.y);
+                _distanceX = (int)pointSuivant.transform.position.x - (int)this.transform.position.x;
 
-                if (_distanceX != 0)
+                if (_distanceX > 1)
                 {
-                    _posY = 0f;
-
-                    if (_distanceX > 0)
-                    {
-                        _posX = .01f;
-                    }
-                    else if (_distanceX < 0)
-                    {
-                        _posX = -0.01f;
-                    }
+                    _posX = .01f;
                 }
-                else if (_distanceY != 0)
+                else if (_distanceX < -1)
                 {
-                    _posX = 0f;
-
-                    if (_distanceY > 0)
-                    {
-                        _posY = 0.01f;
-                    }
-                    else if (_distanceY < 0)
-                    {
-                        _posY = -0.01f;
-                    }
+                    _posX = -0.01f;
+                }
+                else
+                {
+                    _posX = 0;
                 }
 
-                _direction = new Vector2(_posX, _posY); //Détermine le vecteur de direction
-                transform.position += new Vector3(_direction.x, _direction.y, 0); //Déplace le joueur dans la direction voulue
+                Vector3 direction3D = new Vector3(_direction.x, 0f, 0f);
+                _rb.MovePosition(transform.position + direction3D); //Déplace le joueur dans la direction voulue
                 RotateInDirectionOfInput();
 
-            } while (_distanceX != 0 && _distanceY != 0);
+            } while (_posX != 0);
+
+            do
+            {
+                _distanceY = (int)pointSuivant.transform.position.y - (int)this.transform.position.y;
+
+                if (_distanceY > 1)
+                {
+                    _posY = 0.01f;
+                }
+                else if (_distanceY < -1)
+                {
+                    _posY = -0.01f;
+                }
+                else
+                {
+                    _posY = 0;
+                }
+
+                Vector3 direction3D = new Vector3(0f, _direction.y, 0f);
+                _rb.MovePosition(transform.position + direction3D); //Déplace le joueur dans la direction voulue
+                RotateInDirectionOfInput();
+
+            } while (_posY != 0);
 
 
         }
