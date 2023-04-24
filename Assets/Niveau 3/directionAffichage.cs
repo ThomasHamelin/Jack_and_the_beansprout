@@ -20,7 +20,6 @@ public class directionAffichage : MonoBehaviour
 
     public void blinkAllDirection(bool on)
     {
-        directions[lastDirection].SetActive(false);
         if (on)
         {
             foreach(GameObject x in directions)
@@ -32,7 +31,7 @@ public class directionAffichage : MonoBehaviour
         {
             foreach(GameObject x in directions)
             {
-                x.SetActive(true);
+                x.SetActive(false);
             }
         }
     }

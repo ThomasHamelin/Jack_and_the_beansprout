@@ -296,13 +296,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52a88d47e9eca964c972b9d90deb7aa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nbrInputGame1: 30
+  _nbrInputGame1: 10
   _nbrInputGame2: 30
   _rb: {fileID: 231654478}
   _directionsAffichage: {fileID: 616389056}
-  _character: {fileID: 231654473}
+  _otherCharacter: {fileID: 1741313700}
   minInput: 0
   maxInput: 0.5
+  _tree: {fileID: 1791182128}
 --- !u!1001 &414518723
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -819,13 +820,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52a88d47e9eca964c972b9d90deb7aa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nbrInputGame1: 30
+  _nbrInputGame1: 10
   _nbrInputGame2: 30
   _rb: {fileID: 1741313704}
   _directionsAffichage: {fileID: 84017929}
-  _character: {fileID: 1741313700}
+  _otherCharacter: {fileID: 231654473}
   minInput: 0
   maxInput: 0.5
+  _tree: {fileID: 1791182128}
 --- !u!61 &1741313706
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -864,6 +866,7 @@ GameObject:
   - component: {fileID: 1791182129}
   - component: {fileID: 1791182132}
   - component: {fileID: 1791182131}
+  - component: {fileID: 1791182133}
   m_Layer: 0
   m_Name: Vigne(placeholder)
   m_TagString: Untagged
@@ -931,7 +934,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1791182128}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -4.27, z: 0}
+  m_LocalPosition: {x: 0, y: -5, z: 0}
   m_LocalScale: {x: 1.0707119, y: 31.6187, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -946,19 +949,19 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1791182128}
-  m_BodyType: 2
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0.1
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 1
 --- !u!61 &1791182132
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -985,6 +988,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.5, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &1791182133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1791182128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 844fa20d6d675ed4a8eec283120aa8a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  finishedFallingHeight: -35
 --- !u!1 &1822644450
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,15 +8,16 @@ public class qteHache : MonoBehaviour
     public Rigidbody2D _rb;
 
     public GameObject _directionsAffichage;
-    public GameObject _character;
+    public GameObject _otherCharacter;
     public float minInput = 0.5f, maxInput = 0.5f;
+    public GameObject _tree;
 
     private bool play = false, needNull = false;
 
     private int nbrInput = 0;
     private Vector2 playerInput;
     private string input = "Null", directionNeeded = "Waiting";
-
+    
 
     // Start is called before the first frame update
     void Start()
@@ -63,7 +64,7 @@ public class qteHache : MonoBehaviour
             }
 
             //game1 : précision
-            if (input == directionNeeded && nbrInput <= _nbrInputGame1)
+            if (input == directionNeeded && nbrInput < _nbrInputGame1)
             {
                 if (directionNeeded == "Null")
                 {
@@ -72,13 +73,15 @@ public class qteHache : MonoBehaviour
                 else
                 {
                     nbrInput++;
+                    // score += 1
+
                     _directionsAffichage.GetComponent<directionAffichage>().changeDirection(5);
                     directionNeeded = "Null";
                 }
             }
 
             //game2 : button mash
-            if (nbrInput > _nbrInputGame1 && nbrInput <= _nbrInputGame2)
+            if (nbrInput >= _nbrInputGame1 && nbrInput < _nbrInputGame2)
             {
 
                 if (needNull && input == "Null")
@@ -86,20 +89,27 @@ public class qteHache : MonoBehaviour
                     _directionsAffichage.GetComponent<directionAffichage>().blinkAllDirection(true);
                     needNull = false;
                 }
-                else
+                else if(!needNull && input != "Null")
                 {
                     nbrInput++;
+                    // score += 1
+
                     _directionsAffichage.GetComponent<directionAffichage>().blinkAllDirection(false);
                     needNull = true;
 
                 }
+            }
+            if (nbrInput > _nbrInputGame2)
+            {
+                // score bonus premier  ***
 
+                _otherCharacter.GetComponent<qteHache>().end();
+                end();
             }
 
+
+
         }
-
-
-
     }
 
     IEnumerator animationDepart()
@@ -144,6 +154,16 @@ public class qteHache : MonoBehaviour
         }
         return "Null";
     }
+
+    void end()
+    {
+        play = false;
+        _directionsAffichage.GetComponent<directionAffichage>().blinkAllDirection(false);
+        _directionsAffichage.SetActive(false);
+        _tree.GetComponent<fallingTree>().fall();
+
+    }
+
 
 
 }
