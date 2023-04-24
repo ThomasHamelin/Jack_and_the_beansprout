@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml;
 using Unity.Burst.CompilerServices;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.TextCore.Text;
 using UnityEditor.UIElements;
@@ -184,8 +185,7 @@ public class CréationLabyrinte : MonoBehaviour
         GameObject Joueur2 = Instantiate(_Joueur2, positionJ2, transform.rotation);
 
         Vector3 positionBIGBOY = new Vector3((_coin4.transform.position.x - _UniteDeDistance[2]), _coin4.transform.position.y - _UniteDeDistance[3], 0);
-        quaternion rotBIG = new quaternion(0,0,180,0);  
-        GameObject Geant = Instantiate(_Geant, positionBIGBOY, rotBIG) ;
+        GameObject Geant = Instantiate(_Geant, positionBIGBOY, transform.rotation);
 
 
         
