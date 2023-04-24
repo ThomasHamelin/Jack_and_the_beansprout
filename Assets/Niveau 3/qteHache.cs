@@ -4,45 +4,103 @@ using UnityEngine;
 
 public class qteHache : MonoBehaviour
 {
-
-    public GameObject _character;
+    public int _nbrInputGame1 = 20,_nbrInputGame2 = 20;
     public Rigidbody2D _rb;
-    public GameObject[] listeInputs;
 
-    private bool play = false;
-    private bool waiting = false;
+    public GameObject _directionsAffichage;
+    public GameObject _character;
+    public float minInput = 0.5f, maxInput = 0.5f;
 
-    private int score1 = 0, score2 = 0;
-    private int input1=0,input2=0, input3 = 0, input4 = 0;
+    private bool play = false, needNull = false;
+
+    private int nbrInput = 0;
+    private Vector2 playerInput;
+    private string input = "Null", directionNeeded = "Waiting";
 
 
     // Start is called before the first frame update
     void Start()
     {
+        _nbrInputGame2 += _nbrInputGame1;
         StartCoroutine(animationDepart());
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(play)
+        if (play)
         {
-            input1 = Random.Range(0, listeInputs.Length);
-            input2 = Random.Range(0, listeInputs.Length);
+            // Prendre l'input selon le joueur
+            if (this.CompareTag("Player1"))
+            {
+                playerInput = new Vector2(Input.GetAxis("Horizontal_P1"), Input.GetAxis("Vertical_P1"));
+            }
+            if (this.CompareTag("Player2"))
+            {
+                playerInput = new Vector2(Input.GetAxis("Horizontal_P2"), Input.GetAxis("Vertical_P2"));
+            }
 
-            // 2 inputs
-            StartCoroutine(waiter(30));
-            do
+            // Transformer l'input en 4 directions ( et aucune)
+            if (playerInput.x > minInput && playerInput.y < maxInput && playerInput.y > -maxInput)
+            {
+                input = "Right";
+            }
+            else if (playerInput.x < -minInput && playerInput.y < maxInput && playerInput.y > -maxInput)
+            {
+                input = "Left";
+            }
+            else if (playerInput.y > minInput && playerInput.x < maxInput && playerInput.x > -maxInput)
+            {
+                input = "Up";
+            }
+            else if (playerInput.y < -minInput && playerInput.x < maxInput && playerInput.x > -maxInput)
+            {
+                input = "Down";
+            }
+            else
+            {
+                input = "Null";
+            }
+
+            //game1 : précision
+            if (input == directionNeeded && nbrInput <= _nbrInputGame1)
+            {
+                if (directionNeeded == "Null")
+                {
+                    directionNeeded = CreateInput();
+                }
+                else
+                {
+                    nbrInput++;
+                    _directionsAffichage.GetComponent<directionAffichage>().changeDirection(5);
+                    directionNeeded = "Null";
+                }
+            }
+
+            //game2 : button mash
+            if (nbrInput > _nbrInputGame1 && nbrInput <= _nbrInputGame2)
             {
 
+                if (needNull && input == "Null")
+                {
+                    _directionsAffichage.GetComponent<directionAffichage>().blinkAllDirection(true);
+                    needNull = false;
+                }
+                else
+                {
+                    nbrInput++;
+                    _directionsAffichage.GetComponent<directionAffichage>().blinkAllDirection(false);
+                    needNull = true;
 
+                }
 
+            }
 
-
-            }while( waiting );
         }
+
+
+
     }
-    
 
     IEnumerator animationDepart()
     {
@@ -64,15 +122,27 @@ public class qteHache : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(0.5f);
 
+        _directionsAffichage.SetActive(true);
+        directionNeeded = CreateInput();
         play = true;
     }
 
-    IEnumerator waiter(float delay)
+    string CreateInput()
     {
-        waiting = true;
-        yield return new WaitForSecondsRealtime(delay);
-        waiting = false;
-
+        int randomChoice = Random.Range(0, 3);
+        _directionsAffichage.GetComponent<directionAffichage>().changeDirection(randomChoice);
+        switch (randomChoice)
+        {
+            case 0:
+                return "Up";
+            case 1:
+                return "Down";
+            case 2:
+                return "Left";
+            case 3:
+                return "Right";
+        }
+        return "Null";
     }
 
 
