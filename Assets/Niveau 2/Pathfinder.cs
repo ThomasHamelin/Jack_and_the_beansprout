@@ -61,7 +61,6 @@ public class Pathfinder : MonoBehaviour
     {
         int distanceX = Mathf.Abs(p_a.getX() - p_b.getX());
         int distanceY = Mathf.Abs(p_a.getY() - p_b.getY());
-        Debug.Log(distanceX + " + " + distanceY);
         return distanceX + distanceY;
     }
 
@@ -70,7 +69,6 @@ public class Pathfinder : MonoBehaviour
         PathNode lowestFCostNode = openList[0];
         foreach (PathNode currentNode in openList)
         {
-            currentNode.GetComponent<SpriteRenderer>().color = Color.yellow;
             if (currentNode.getFCost() < lowestFCostNode.getFCost())
             {
                 lowestFCostNode = currentNode;
@@ -118,12 +116,12 @@ public class Pathfinder : MonoBehaviour
         return neighbourList;
     }
 
-    private PathNode GetNodeAtPosition(Vector2 p_position)
+    private PathNode GetNodeAtPosition(Vector2 p_position, int p_playerNumber)
     {
         Collider2D[] nodesAtPosition = Physics2D.OverlapCircleAll(p_position, 0.5f);
         foreach(Collider2D node in nodesAtPosition)
         {
-            if (node.tag == "PathNode")
+            if (node.tag == $"PathNodeJ{p_playerNumber}")
             {
                 return node.GetComponent<PathNode>();
             }
@@ -133,12 +131,11 @@ public class Pathfinder : MonoBehaviour
         return _endNode;
     }
 
-    public List<PathNode> FindPath(float p_startX, float p_startY)
+    public List<PathNode> FindPath(float p_startX, float p_startY, int p_playerNumber)
     { 
         _endNode = allNodes[_endX, _endY];
         _endNode.GetComponent<SpriteRenderer>().color = Color.red;
-        _startNode = GetNodeAtPosition(new Vector3(p_startX, p_startY));
-        _startNode.GetComponent<SpriteRenderer>().color = Color.green;
+        _startNode = GetNodeAtPosition(new Vector3(p_startX, p_startY), p_playerNumber);
 
 
         openList = new List<PathNode> { _startNode };
@@ -151,7 +148,6 @@ public class Pathfinder : MonoBehaviour
         while (openList.Count > 0)
         {
             PathNode currentNode = GetLowestFCostNode();
-            currentNode.GetComponent<SpriteRenderer>().color = Color.yellow;
             if (currentNode == _endNode)
             {
                 return CalculatePath(_endNode);
@@ -161,7 +157,6 @@ public class Pathfinder : MonoBehaviour
 
             foreach (PathNode neighbourNode in neighbourList)
             {
-                neighbourNode.GetComponent<SpriteRenderer>().color = Color.yellow;
                 int tentativeGCost = currentNode.getGCost() + CalculateDistanceCost(currentNode, neighbourNode);
 
                 if (closedList.Contains(neighbourNode))

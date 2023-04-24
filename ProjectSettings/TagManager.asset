@@ -15,7 +15,8 @@ TagManager:
   - Player1
   - Geant
   - Harpe
-  - PathNode
+  - PathNodeJ1
+  - PathNodeJ2
   layers:
   - Default
   - TransparentFX
