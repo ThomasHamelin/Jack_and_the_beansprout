@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class JoueurNiv2 : MonoBehaviour
 {
-    [SerializeField] private float _moveSpeed = 600f;
+    [SerializeField] private float _moveSpeed = 50f;
+    [SerializeField] private float _runSpeed = 50f;
     [SerializeField] private float _rotationSpeed = 700f;
     [SerializeField] private Camera _cam = default;
     [SerializeField] private Pathfinder _pathfinder = default;
 
     private Rigidbody2D _rb;
     private Vector2 _direction = Vector2.zero;
-    private bool _jeuDebute = false;
+    public bool _jeuDebute = false;
+    private bool _suivreChemin = false;
     private float _posX, _posY;
     private int _distanceX, _distanceY;
+    private List<PathNode> _chemin;
+
     public Animator _animator;
 
     void Start()
@@ -29,6 +33,11 @@ public class JoueurNiv2 : MonoBehaviour
             MouvementsJoueurs();
             RotateInDirectionOfInput();
         }
+        else if (_suivreChemin)
+        {
+            SuivreChemin();
+            RotateInDirectionOfInput();
+        }
     }
 
     /*
@@ -39,7 +48,6 @@ public class JoueurNiv2 : MonoBehaviour
     {
         if (_direction != Vector2.zero) //Si le joueur se déplace
         {
-            _rb.constraints = RigidbodyConstraints2D.None;
             Vector3 direction3D = new Vector3(_direction.x, _direction.y, 0f);
             _rb.MovePosition(transform.position + direction3D); //Déplace le joueur dans la direction voulue
             _cam.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -10); //Déplace la caméra avec le joueur
@@ -66,6 +74,7 @@ public class JoueurNiv2 : MonoBehaviour
     {
         if (_direction != Vector2.zero) //Si le joueur se déplace
         {
+            _rb.constraints = RigidbodyConstraints2D.None;
             _rb.freezeRotation = false; //On permet la rotation
             Quaternion targetRotation = Quaternion.LookRotation(transform.forward, _direction); //On détermine dans quelle direction effectuer la rotation
             Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime); //On crée quaternion de déplacement
@@ -94,67 +103,61 @@ public class JoueurNiv2 : MonoBehaviour
 
     public void FinNiveau()
     {
-        _jeuDebute = false;
-        List<PathNode> chemin = _pathfinder.FindPath(this.transform.position.x, this.transform.position.y);
-        StartCoroutine(SuivreChemin(chemin));
+        _chemin = _pathfinder.FindPath(this.transform.position.x, this.transform.position.y);
+
+        _suivreChemin = true;
+        
     }
 
-    IEnumerator SuivreChemin(List<PathNode> p_chemin)
+    private void SuivreChemin()
     {
-        yield return new WaitForSeconds(1f);
-        foreach (PathNode pointSuivant in p_chemin)
+        if (_chemin.Count > 0)
         {
-            pointSuivant.GetComponent<SpriteRenderer>().color = Color.red;
-            _posX = 0f;
-            _posY = 0f;
-            do
+            float distance = (_chemin[0].transform.position - transform.position).magnitude; 
+            _direction = (_chemin[0].transform.position - transform.position)  / distance;
+            if(distance < 0.2f)
             {
-                yield return new WaitForSeconds(.01f);
-                _distanceX = (int)pointSuivant.transform.position.x - (int)this.transform.position.x;
-
-                if (_distanceX > 1)
-                {
-                    _posX = .01f;
-                }
-                else if (_distanceX < -1)
-                {
-                    _posX = -0.01f;
-                }
-                else
-                {
-                    _posX = 0;
-                }
-
-                Vector3 direction3D = new Vector3(_direction.x, 0f, 0f);
-                _rb.MovePosition(transform.position + direction3D); //Déplace le joueur dans la direction voulue
-                RotateInDirectionOfInput();
-
-            } while (_posX != 0);
-
-            do
+                _chemin.Remove(_chemin[0]);
+            }
+            else
             {
-                _distanceY = (int)pointSuivant.transform.position.y - (int)this.transform.position.y;
+                Vector3 direction3D = new Vector3(_direction.x, _direction.y, 0f);
+                transform.position = Vector3.MoveTowards(transform.position, _chemin[0].transform.position, _moveSpeed * Time.deltaTime);
+                //_rb.MovePosition(transform.position + direction3D); //Déplace le joueur dans la direction voulue
+            }
+            //var step = _moveSpeed * Time.deltaTime; // calculate distance to move
+            //
 
-                if (_distanceY > 1)
-                {
-                    _posY = 0.01f;
-                }
-                else if (_distanceY < -1)
-                {
-                    _posY = -0.01f;
-                }
-                else
-                {
-                    _posY = 0;
-                }
+            //// Check if the position of the cube and sphere are approximately equal.
+            //if (Vector3.Distance(transform.position, _chemin[0].transform.position) < 0.001f)
+            //{
+            //    _chemin.Remove(_chemin[0]);
 
-                Vector3 direction3D = new Vector3(0f, _direction.y, 0f);
-                _rb.MovePosition(transform.position + direction3D); //Déplace le joueur dans la direction voulue
-                RotateInDirectionOfInput();
-
-            } while (_posY != 0);
-
+            //}
+            //else if((transform.position.x - _chemin[0].transform.position) > 0.001f)
+            //{
+            //    _posX = -1f;
+            //}
+            //else if((transform.position.x - _chemin[0].transform.position) < 0.001f)
+            //{
+            //    _posX = 1f;
+            //}
 
         }
+        else
+        {
+            _suivreChemin = false;
+            _rb.constraints = RigidbodyConstraints2D.FreezePosition; //On bloque la position
+            _rb.freezeRotation = true; //On bloque la rotation
+            _animator.SetBool("IsWalking", false); //Arrête l'animation du joueur qui se déplace
+
+            if (this.CompareTag("Player1")) //Si c'est le joueur 1
+            {
+                _pathfinder.ResetAllNodes();
+            }
+
+        }
+        
+
     }
 }

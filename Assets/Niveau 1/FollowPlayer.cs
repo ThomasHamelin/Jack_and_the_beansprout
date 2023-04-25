@@ -9,7 +9,6 @@ public class FollowPlayer : MonoBehaviour
     public float minHeight = 0;
 
     private float height;
-    // Update is called once per frame
 
 
     void Update()
@@ -22,7 +21,7 @@ public class FollowPlayer : MonoBehaviour
         {
             height = player.transform.position.y;
         }
-        transform.position = new Vector3(transform.position.x, height+2.5f, transform.position.z);
+        transform.position = new Vector3(transform.position.x, height, transform.position.z);
     }
 
 }

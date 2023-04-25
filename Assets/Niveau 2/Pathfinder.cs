@@ -61,7 +61,6 @@ public class Pathfinder : MonoBehaviour
     {
         int distanceX = Mathf.Abs(p_a.getX() - p_b.getX());
         int distanceY = Mathf.Abs(p_a.getY() - p_b.getY());
-        Debug.Log(distanceX + " + " + distanceY);
         return distanceX + distanceY;
     }
 
@@ -70,7 +69,6 @@ public class Pathfinder : MonoBehaviour
         PathNode lowestFCostNode = openList[0];
         foreach (PathNode currentNode in openList)
         {
-            currentNode.GetComponent<SpriteRenderer>().color = Color.yellow;
             if (currentNode.getFCost() < lowestFCostNode.getFCost())
             {
                 lowestFCostNode = currentNode;
@@ -138,7 +136,6 @@ public class Pathfinder : MonoBehaviour
         _endNode = allNodes[_endX, _endY];
         _endNode.GetComponent<SpriteRenderer>().color = Color.red;
         _startNode = GetNodeAtPosition(new Vector3(p_startX, p_startY));
-        _startNode.GetComponent<SpriteRenderer>().color = Color.green;
 
 
         openList = new List<PathNode> { _startNode };
@@ -151,7 +148,6 @@ public class Pathfinder : MonoBehaviour
         while (openList.Count > 0)
         {
             PathNode currentNode = GetLowestFCostNode();
-            currentNode.GetComponent<SpriteRenderer>().color = Color.yellow;
             if (currentNode == _endNode)
             {
                 return CalculatePath(_endNode);
@@ -161,7 +157,6 @@ public class Pathfinder : MonoBehaviour
 
             foreach (PathNode neighbourNode in neighbourList)
             {
-                neighbourNode.GetComponent<SpriteRenderer>().color = Color.yellow;
                 int tentativeGCost = currentNode.getGCost() + CalculateDistanceCost(currentNode, neighbourNode);
 
                 if (closedList.Contains(neighbourNode))
@@ -191,6 +186,21 @@ public class Pathfinder : MonoBehaviour
         }
 
         return null;
+    }
+
+    public void ResetAllNodes()
+    {
+        foreach(PathNode node in allNodes)
+        {
+            node.gCost = 0;
+            node.hCost = 0;
+            node.fCost = 0;
+            node.cameFromNode = null;
+        }
+        openList.Clear();
+        closedList.Clear();
+
+        GameObject.FindWithTag("Player2").GetComponent<JoueurNiv2>().FinNiveau();
     }
 }
 

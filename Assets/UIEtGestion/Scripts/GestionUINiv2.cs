@@ -15,6 +15,7 @@ public class GestionUINiv2 : MonoBehaviour
     private JoueurNiv2 _joueur2;
     private GestionScenes _gestionScene;
 
+
     void Start()
     {
         //Activer la caméra qui montre l'ensemble du labyrinthe
@@ -71,7 +72,8 @@ public class GestionUINiv2 : MonoBehaviour
     {
 
         _joueur1.FinNiveau();
-        _joueur2.FinNiveau();
+        _joueur1._jeuDebute = false;
+        _joueur2._jeuDebute = false;
 
         //Activer la caméra qui montre l'ensemble du labyrinthe
         _camJ1.enabled = false;
@@ -80,7 +82,7 @@ public class GestionUINiv2 : MonoBehaviour
 
         _splitBorder.SetActive(false); //Enlever la barre qui sépare le split screen
 
-        yield return new WaitForSeconds(20f);
+        yield return new WaitForSeconds(30f);
 
         StartCoroutine(_gestionScene.ChangerScene());
     }

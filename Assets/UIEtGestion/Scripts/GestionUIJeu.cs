@@ -7,16 +7,22 @@ using TMPro;
 
 public class GestionUIJeu : MonoBehaviour
 {
+    //public static GestionUIJeu instance;
     [SerializeField] private TextMeshProUGUI _txtScoreJ1 = default;
     [SerializeField] private TextMeshProUGUI _txtScoreJ2 = default;
 
     int _scoreJ1, _scoreJ2;
 
+    //private void Awake()
+    //{
+    //    instance = this;
+    //}
+
     void Start()
     {
-        _scoreJ1 = 1;
+        _scoreJ1 = 0;
         _scoreJ2 = 0;
-        AjouterScore(1, 1);
+        AjouterScore(0, 1);
         AjouterScore(0, 2);
         DontDestroyOnLoad(this.gameObject); //Fait en sorte que les points s'accumulent d'une scène à l'autre
     }
