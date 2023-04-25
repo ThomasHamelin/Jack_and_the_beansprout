@@ -72,7 +72,8 @@ public class GestionUINiv2 : MonoBehaviour
     {
 
         _joueur1.FinNiveau();
-        _joueur2.FinNiveau();
+        _joueur1._jeuDebute = false;
+        _joueur2._jeuDebute = false;
 
         //Activer la caméra qui montre l'ensemble du labyrinthe
         _camJ1.enabled = false;

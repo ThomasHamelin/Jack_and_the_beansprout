@@ -116,12 +116,12 @@ public class Pathfinder : MonoBehaviour
         return neighbourList;
     }
 
-    private PathNode GetNodeAtPosition(Vector2 p_position, int p_playerNumber)
+    private PathNode GetNodeAtPosition(Vector2 p_position)
     {
         Collider2D[] nodesAtPosition = Physics2D.OverlapCircleAll(p_position, 0.5f);
         foreach(Collider2D node in nodesAtPosition)
         {
-            if (node.tag == $"PathNodeJ{p_playerNumber}")
+            if (node.tag == "PathNode")
             {
                 return node.GetComponent<PathNode>();
             }
@@ -131,11 +131,11 @@ public class Pathfinder : MonoBehaviour
         return _endNode;
     }
 
-    public List<PathNode> FindPath(float p_startX, float p_startY, int p_playerNumber)
+    public List<PathNode> FindPath(float p_startX, float p_startY)
     { 
         _endNode = allNodes[_endX, _endY];
         _endNode.GetComponent<SpriteRenderer>().color = Color.red;
-        _startNode = GetNodeAtPosition(new Vector3(p_startX, p_startY), p_playerNumber);
+        _startNode = GetNodeAtPosition(new Vector3(p_startX, p_startY));
 
 
         openList = new List<PathNode> { _startNode };
@@ -186,6 +186,21 @@ public class Pathfinder : MonoBehaviour
         }
 
         return null;
+    }
+
+    public void ResetAllNodes()
+    {
+        foreach(PathNode node in allNodes)
+        {
+            node.gCost = 0;
+            node.hCost = 0;
+            node.fCost = 0;
+            node.cameFromNode = null;
+        }
+        openList.Clear();
+        closedList.Clear();
+
+        GameObject.FindWithTag("Player2").GetComponent<JoueurNiv2>().FinNiveau();
     }
 }
 
