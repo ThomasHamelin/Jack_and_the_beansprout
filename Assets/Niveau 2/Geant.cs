@@ -30,29 +30,35 @@ public class Geant : MonoBehaviour
     private float[] _UniteMouvement = new float[4];
 
 
-    [SerializeField] private float _VecteurX;
-    [SerializeField] private float _VecteurY;
-    [SerializeField] private float _VecteurDroiteX;
-    [SerializeField] private float _VecteurDroiteY;
+    private float _VecteurX;
+    private float _VecteurY;
+    private float _VecteurDroiteX;
+    private float _VecteurDroiteY;
 
 
-    [SerializeField] private int Direction, Mouvement, m,n;
+    private int Direction, Mouvement, m,n;
 
-    [SerializeField] private float increment;
+    private float increment;
 
-    [SerializeField] private bool _finiTourne = true, _finiAvance = true;
+    private bool _finiTourne = true, _finiAvance = true;
 
-    [SerializeField] private Vector3 TargetPosition;
-    [SerializeField] private Vector3 PositionInit;
+    private Vector3 TargetPosition;
+    private Vector3 PositionInit;
 
-    [SerializeField] RaycastHit2D hitDevant;
-    [SerializeField] RaycastHit2D hitDroite;
+   
+
+    RaycastHit2D hitDevant;
+    RaycastHit2D hitDroite;
 
     private Vector3 ROTZtarget = Vector3.zero;
     private Vector3 ROTinit;
 
+   
+    
     void Update()
     {
+
+
         if (_finiTourne == true && _finiAvance == true)
         {
             analyse();
@@ -96,8 +102,7 @@ public class Geant : MonoBehaviour
         Vector2 dirDroite = new Vector3(_VecteurDroiteX + transform.position.x, _VecteurDroiteY + transform.position.y);
 
 
-        Debug.DrawLine(transform.position, dir, Color.red);
-        Debug.DrawLine(transform.position, dirDroite, Color.green);
+      
 
         hitDevant = Physics2D.Raycast(this.transform.position, transform.TransformDirection(Vector2.right), _UniteMouvement[2], LayerMask.GetMask("DetectionMur"));
         hitDroite = Physics2D.Raycast(this.transform.position, transform.TransformDirection(Vector2.down), _UniteMouvement[3], LayerMask.GetMask("DetectionMur"));
