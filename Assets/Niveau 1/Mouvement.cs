@@ -12,6 +12,10 @@ public class Mouvement : MonoBehaviour
     public Rigidbody2D _rb;
     public float respawn_interval;
     public GameObject _camera;
+    public GameObject _otherPlayer;
+    
+    public bool play = false;
+
 
     private Vector2 playerInput;
     private bool jumpPressed = false;
@@ -21,6 +25,7 @@ public class Mouvement : MonoBehaviour
     private bool waiting = false;
     private bool jumping = false;
     private Animator anim;
+    
 
     private void Start()
     {
@@ -31,27 +36,30 @@ public class Mouvement : MonoBehaviour
 
     private void Update()
     {
+        if(play)
+        {   
+            if(this.CompareTag("Player1"))
+            {
+                playerInput = new Vector2(Input.GetAxis("Horizontal_P1"), 0f);
+                jumpPressed = Input.GetKeyDown(KeyCode.W);
+            }
 
-        if(this.CompareTag("Player1"))
-        {
-            playerInput = new Vector2(Input.GetAxis("Horizontal_P1"), 0f);
-            jumpPressed = Input.GetKeyDown(KeyCode.W);
+            if (this.CompareTag("Player2"))
+            {
+                playerInput = new Vector2(Input.GetAxis("Horizontal_P2"), 0f);
+                jumpPressed = Input.GetKeyDown(KeyCode.UpArrow);
+            }
+
+
+
+            if (canJump > 0 && jumpPressed)
+            {
+                jumpPressed = false;
+                canJump--;
+                wantJump = true;
+            }
         }
-
-        if (this.CompareTag("Player2"))
-        {
-            playerInput = new Vector2(Input.GetAxis("Horizontal_P2"), 0f);
-            jumpPressed = Input.GetKeyDown(KeyCode.UpArrow);
-        }
-
-
-
-        if (canJump > 0 && jumpPressed)
-        {
-            jumpPressed = false;
-            canJump--;
-            wantJump = true;
-        }
+    
     }
 
     //même vitesse que toute la physique
@@ -133,8 +141,6 @@ public class Mouvement : MonoBehaviour
                 
             }
         }
-        
-
     }
 
     IEnumerator respawn()
@@ -159,6 +165,14 @@ public class Mouvement : MonoBehaviour
     */
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.gameObject.tag.Equals("PlateformeFinale"))
+        {
+            // score += 3
+            _otherPlayer.GetComponent<Mouvement>().end();
+            end();
+
+        }
+
 
         if (other.gameObject.tag.Equals("Plateforme") && other.gameObject.GetComponent<Transform>().position.y >= lasttouchPosition.y - 2f)
         {
@@ -191,5 +205,11 @@ public class Mouvement : MonoBehaviour
         }
     } 
 
+    public void end()
+    {
+        play = false;
+        waiting = true;
+
+    }
 }
 

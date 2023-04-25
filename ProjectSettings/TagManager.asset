@@ -17,6 +17,7 @@ TagManager:
   - Harpe
   - PathNodeJ1
   - PathNodeJ2
+  - PlateformeFinale
   layers:
   - Default
   - TransparentFX

@@ -14,8 +14,8 @@ public class GestionUINiv1 : MonoBehaviour
     [SerializeField] private GameObject _splitBorder = default;
     [SerializeField] private Camera _camJ1 = default;
     [SerializeField] private Camera _camJ2 = default;
+    [SerializeField] private GameObject joueur1, joueur2;
 
-    private Mouvement _joueurs;
     private GestionScenes _gestionScene;
     private int scoreJ1 = 0;
     private int scoreJ2 = 0;
@@ -45,16 +45,19 @@ public class GestionUINiv1 : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
         //Décompte avant le départ
-        _txtDonneDepart.text = "3";
+        _txtDonneDepart.text = "      3";
         _txtDonneDepart.gameObject.SetActive(true);
         yield return new WaitForSeconds(1f);
-        _txtDonneDepart.text = "2";
+        _txtDonneDepart.text = "      2";
         yield return new WaitForSeconds(1f);
-        _txtDonneDepart.text = "1";
+        _txtDonneDepart.text = "      1";
         yield return new WaitForSeconds(1f);
         _txtDonneDepart.text = "Partez!";
-        yield return new WaitForSeconds(1f);
 
+        joueur1.GetComponent<Mouvement>().play = true;
+        joueur2.GetComponent<Mouvement>().play = true;
+
+        yield return new WaitForSeconds(1f);
         _txtDonneDepart.gameObject.SetActive(false); 
     }
 
