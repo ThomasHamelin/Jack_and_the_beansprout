@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class GestionScenes : MonoBehaviour
 {
 
+
     public Animator fonduAuNoir;
 
     /*
@@ -29,7 +30,7 @@ public class GestionScenes : MonoBehaviour
     public IEnumerator ChargerSceneDepart()
     {
         fonduAuNoir.SetTrigger("Start"); //Génère l'animation pour rendre les transitions plus smooth
-        yield return new WaitForSeconds(1f); //Attends la fin de l'animation
+        yield return new WaitForSeconds(1.4f); //Attends la fin de l'animation
         SceneManager.LoadScene(1); //Charge la scène #1 (Scène des instructions du niveau 1)
     }
 
