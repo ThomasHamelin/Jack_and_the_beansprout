@@ -16,9 +16,6 @@ public class Pathfinder : MonoBehaviour
     private float _tailleCaseX;
     private float _tailleCaseY;
 
-    int _endX = 0;
-    int _endY = 0;
-
     private PathNode[,] allNodes = default;
     private List<PathNode> openList = default;
     private List<PathNode> closedList = default;
@@ -98,7 +95,7 @@ public class Pathfinder : MonoBehaviour
         List<PathNode> path = new List<PathNode>();
         path.Add(p_endNode);
         PathNode currentNode = p_endNode;
-        while (currentNode.getCameFromNode() != _startNode)
+        while (currentNode.getCameFromNode() != null)
         {
             path.Add(currentNode.getCameFromNode());
             currentNode = currentNode.getCameFromNode();
@@ -149,7 +146,7 @@ public class Pathfinder : MonoBehaviour
 
     public List<PathNode> FindPath(float p_startX, float p_startY)
     { 
-        _endNode = allNodes[_endX, _endY];
+        _endNode = allNodes[0, 0];
         _startNode = GetNodeAtPosition(new Vector3(p_startX, p_startY));
 
 

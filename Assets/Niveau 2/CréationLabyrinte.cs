@@ -23,10 +23,10 @@ public class CréationLabyrinte : MonoBehaviour
 {
     [SerializeField] GameObject _Joueur1;
     [SerializeField] GameObject _Joueur2;
-    [SerializeField] public GameObject _Geant;
-    [SerializeField] public Harpe _Harpe;
+    [SerializeField] private GameObject _Geant;
+    [SerializeField] private Harpe _Harpe;
 
-    [SerializeField] TresorNiv2 _Tresor;
+    [SerializeField] public TresorNiv2 _Tresor;
     [SerializeField] float _probabiliteTresor;
 
     [SerializeField] GameObject _IntelliBalle;
@@ -215,7 +215,7 @@ public class CréationLabyrinte : MonoBehaviour
         {
             _IntelliBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x + _UniteDeDistance[0], _IntelliBalle.transform.position.y , 0);
         }
-        RaycastHit2D porte = Physics2D.Raycast(_IntelliBalle.transform.position, Vector2.down/*Vector2.up*/, _UniteDeDistance[3]);
+        RaycastHit2D porte = Physics2D.Raycast(_IntelliBalle.transform.position, Vector2.down/*Vector2.up*/, _UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
         Destroy(porte.collider.gameObject);
 
     }
@@ -224,7 +224,7 @@ public class CréationLabyrinte : MonoBehaviour
     {
         //Détermine que la position de la harpe est au centre de la salle spéciale
         int posXHarpe = (int)(_TailleSalleSpeciale / 2);
-        int posYHarpe = posXHarpe;
+        int posYHarpe = posXHarpe + 1;
 
         Vector3 anciennePosition;
         do
@@ -393,10 +393,10 @@ public class CréationLabyrinte : MonoBehaviour
                                     if (_YeuxBalle.transform.position.y < _coin3.transform.position.y)
                                     {
                                         //on déploie un raycast dans toute les direction pour voir si la case ne fait pas partie du chemin
-                                        RaycastHit2D hitup = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.up, _UniteDeDistance[3]);
-                                        RaycastHit2D hitdown = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.down, _UniteDeDistance[3]);
-                                        RaycastHit2D hitleft = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.left, _UniteDeDistance[2]);
-                                        RaycastHit2D hitright = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.right, _UniteDeDistance[2]);
+                                        RaycastHit2D hitup = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.up, _UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                        RaycastHit2D hitdown = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.down, _UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                        RaycastHit2D hitleft = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.left, _UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                                        RaycastHit2D hitright = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.right, _UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
                                         //si les raycasts confirment la présence des murs, alors continue
                                         if (hitup == true && hitdown == true && hitleft == true && hitright == true)
@@ -434,10 +434,10 @@ public class CréationLabyrinte : MonoBehaviour
                                     _YeuxBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x, _IntelliBalle.transform.position.y - _UniteDeDistance[1], 0);
                                     if (_YeuxBalle.transform.position.y >_coin1.transform.position.y)
                                     {
-                                        RaycastHit2D hitup = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.up, _UniteDeDistance[3]);
-                                        RaycastHit2D hitdown = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.down, _UniteDeDistance[3]);
-                                        RaycastHit2D hitleft = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.left, _UniteDeDistance[2]);
-                                        RaycastHit2D hitright = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.right, _UniteDeDistance[2]);
+                                        RaycastHit2D hitup = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.up, _UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                        RaycastHit2D hitdown = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.down, _UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                        RaycastHit2D hitleft = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.left, _UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                                        RaycastHit2D hitright = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.right, _UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
                                         if (hitup == true && hitdown == true && hitleft == true && hitright == true)
                                         {
@@ -469,10 +469,10 @@ public class CréationLabyrinte : MonoBehaviour
                                     _YeuxBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x - _UniteDeDistance[0], _IntelliBalle.transform.position.y, 0);
                                     if (_YeuxBalle.transform.position.x > _coin1.transform.position.x)
                                     {
-                                        RaycastHit2D hitup = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.up, _UniteDeDistance[3]);
-                                        RaycastHit2D hitdown = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.down,_UniteDeDistance[3]);
-                                        RaycastHit2D hitleft = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.left, _UniteDeDistance[2]);
-                                        RaycastHit2D hitright = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.right, _UniteDeDistance[2]);
+                                        RaycastHit2D hitup = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.up, _UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                        RaycastHit2D hitdown = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.down,_UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                        RaycastHit2D hitleft = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.left, _UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                                        RaycastHit2D hitright = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.right, _UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
                                         if (hitup == true && hitdown == true && hitleft == true && hitright == true)
                                         {
@@ -506,10 +506,10 @@ public class CréationLabyrinte : MonoBehaviour
                                     _YeuxBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x + _UniteDeDistance[0],_IntelliBalle.transform.position.y, 0);
                                     if (_YeuxBalle.transform.position.x < _coin2.transform.position.x)
                                     {
-                                        RaycastHit2D hitup = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.up, _UniteDeDistance[3]);
-                                        RaycastHit2D hitdown = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.down, _UniteDeDistance[3]);
-                                        RaycastHit2D hitleft = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.left, _UniteDeDistance[2]);
-                                        RaycastHit2D hitright = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.right, _UniteDeDistance[2]);
+                                        RaycastHit2D hitup = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.up, _UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                        RaycastHit2D hitdown = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.down, _UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+                                        RaycastHit2D hitleft = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.left, _UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
+                                        RaycastHit2D hitright = Physics2D.Raycast(_YeuxBalle.transform.position, Vector2.right, _UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
                                         if (hitup == true && hitdown == true && hitleft == true && hitright == true)
                                         {

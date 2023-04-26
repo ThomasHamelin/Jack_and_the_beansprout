@@ -6,7 +6,7 @@ public class TresorNiv2 : MonoBehaviour
 {
     [SerializeField] int _pointsTresors;
 
-    private void OnTriggerEnter2D(Collider2D other)
+    public void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag.Equals("Player1"))
         {
