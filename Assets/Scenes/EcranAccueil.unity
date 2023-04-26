@@ -243,7 +243,7 @@ RectTransform:
   - {fileID: 748477758}
   - {fileID: 411524405}
   m_Father: {fileID: 1544773665}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -569,7 +569,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1544773665}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &551347620
 MonoBehaviour:
@@ -799,9 +799,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 283144303}
   - {fileID: 558237358620452297}
   - {fileID: 551347619}
+  - {fileID: 283144303}
   - {fileID: 326957206}
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -819,7 +819,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8817447382456043248, guid: 2fc6afb2489c4f248923a14969786336, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8817447382456043248, guid: 2fc6afb2489c4f248923a14969786336, type: 3}
       propertyPath: m_LocalPosition.x
@@ -960,9 +960,65 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 934608768270883195, guid: dc4c854456904ee479437ef3ee084a02, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 934608768270883195, guid: dc4c854456904ee479437ef3ee084a02, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278190080
+      objectReference: {fileID: 0}
     - target: {fileID: 1902935598971489385, guid: dc4c854456904ee479437ef3ee084a02, type: 3}
       propertyPath: m_Name
       value: CanvasJeu
+      objectReference: {fileID: 0}
+    - target: {fileID: 5457045142195079125, guid: dc4c854456904ee479437ef3ee084a02, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5457045142195079125, guid: dc4c854456904ee479437ef3ee084a02, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5457045142195079125, guid: dc4c854456904ee479437ef3ee084a02, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5457045142195079125, guid: dc4c854456904ee479437ef3ee084a02, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278190080
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242359785024912415, guid: dc4c854456904ee479437ef3ee084a02, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242359785024912415, guid: dc4c854456904ee479437ef3ee084a02, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242359785024912415, guid: dc4c854456904ee479437ef3ee084a02, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242359785024912415, guid: dc4c854456904ee479437ef3ee084a02, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278190080
+      objectReference: {fileID: 0}
+    - target: {fileID: 7885325596564691286, guid: dc4c854456904ee479437ef3ee084a02, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7885325596564691286, guid: dc4c854456904ee479437ef3ee084a02, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7885325596564691286, guid: dc4c854456904ee479437ef3ee084a02, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7885325596564691286, guid: dc4c854456904ee479437ef3ee084a02, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278190080
       objectReference: {fileID: 0}
     - target: {fileID: 8611876560703308560, guid: dc4c854456904ee479437ef3ee084a02, type: 3}
       propertyPath: m_UiScaleMode

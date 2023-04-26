@@ -5,18 +5,15 @@ using UnityEngine;
 public class Mouvement : MonoBehaviour
 {
 
-    
-    public float _moveSpeed = 3.25f;
-    public float _jumpSpeed;
-    public GameObject _character;
-    public Rigidbody2D _rb;
-    public float respawn_interval;
-    public GameObject _camera;
-    public GameObject _otherPlayer;
-    
-    public bool play = false;
+
+    [SerializeField] private GameObject _character;
+    [SerializeField] private Rigidbody2D _rb;
+    [SerializeField] private GameObject _camera;
+    [SerializeField] private GameObject _otherPlayer;
 
 
+    [HideInInspector] public bool play = false;
+    private int n_joueur;
     private Vector2 playerInput;
     private bool jumpPressed = false;
     private bool wantJump = false;
@@ -25,10 +22,35 @@ public class Mouvement : MonoBehaviour
     private bool waiting = false;
     private bool jumping = false;
     private Animator anim;
-    
+
+
+    private GestionScenes _gestionScene;
+    private GameObject _canvasScore;
+
+    private const int pointParPlateforme = 100;
+    private const int pointBonusFin = 300;
+    private const int heightMilestone = 10;
+    private int heightMilestoneAchieved = 5;
+    private const float respawn_interval = 1f;
+    private const float _moveSpeed = 40f;
+    private const float _jumpSpeed = 15f;
+
 
     private void Start()
     {
+        if (this.CompareTag("Player1"))
+        {
+            n_joueur = 1;
+        }
+        else if (this.CompareTag("Player2"))
+        {
+            n_joueur = 2;
+        }
+
+        _gestionScene = FindObjectOfType<GestionScenes>().GetComponent<GestionScenes>(); //Trouve l'objet avec le script permettant de changer de niveau
+        _canvasScore = GameObject.Find("CanvasJeu");
+
+
         anim = GetComponent<Animator>();
         lasttouchPosition = this.GetComponent<Transform>().position;
     }
@@ -38,13 +60,13 @@ public class Mouvement : MonoBehaviour
     {
         if(play)
         {   
-            if(this.CompareTag("Player1"))
+            if(n_joueur == 1)
             {
                 playerInput = new Vector2(Input.GetAxis("Horizontal_P1"), 0f);
                 jumpPressed = Input.GetKeyDown(KeyCode.W);
             }
 
-            if (this.CompareTag("Player2"))
+            if (n_joueur == 2)
             {
                 playerInput = new Vector2(Input.GetAxis("Horizontal_P2"), 0f);
                 jumpPressed = Input.GetKeyDown(KeyCode.UpArrow);
@@ -58,6 +80,12 @@ public class Mouvement : MonoBehaviour
                 canJump--;
                 wantJump = true;
             }
+
+            
+
+
+
+
         }
     
     }
@@ -165,30 +193,40 @@ public class Mouvement : MonoBehaviour
     */
     void OnTriggerEnter2D(Collider2D other)
     {
+
+        // Fin atteint
         if (other.gameObject.tag.Equals("PlateformeFinale"))
         {
-            // score += 3
-            _otherPlayer.GetComponent<Mouvement>().end();
-            end();
+            // bonus fin
+            _canvasScore.GetComponent<GestionUIJeu>().AjouterScore(pointBonusFin, n_joueur);
+
+            StartCoroutine(_gestionScene.ChangerScene()); ;
+            //_otherPlayer.GetComponent<Mouvement>().end();
+            //end();
 
         }
 
-
+        // toucher une plateforme -> toucher
         if (other.gameObject.tag.Equals("Plateforme") && other.gameObject.GetComponent<Transform>().position.y >= lasttouchPosition.y - 2f)
         {
+            //Changer la plateforme de réaparition
             lasttouchPosition = other.gameObject.GetComponent<Transform>().position;
-            
+            _camera.GetComponent<FollowPlayer>().minHeight = lasttouchPosition.y;
+
+            //ajouter score
+            if(heightMilestoneAchieved <= other.GetComponent<Transform>().position.y)
+            {
+                _canvasScore.GetComponent<GestionUIJeu>().AjouterScore(pointParPlateforme, n_joueur);
+                heightMilestoneAchieved += heightMilestone;
+            }
+
+            //reseter les sauts
             jumping = false;
             anim.SetBool("isjumpingG", false);
             anim.SetBool("isjumpingD", false);
-
-            //GestionUIJeu.instance.AjouterScore();
-
-            //peut sauter après contact
             canJump = 2;
 
-          
-            _camera.GetComponent<FollowPlayer>().minHeight = lasttouchPosition.y;
+            
         }
     }
 
@@ -209,7 +247,6 @@ public class Mouvement : MonoBehaviour
     {
         play = false;
         waiting = true;
-
     }
 }
 
