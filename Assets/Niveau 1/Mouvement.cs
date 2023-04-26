@@ -13,10 +13,13 @@ public class Mouvement : MonoBehaviour
     public float respawn_interval;
     public GameObject _camera;
     public GameObject _otherPlayer;
-    
+    public GameObject _canvasScore;
+
+    //_canvasScore.GetComponent<GestionUIJeu>().AjouterScore(point, n_joueur );
+
     public bool play = false;
 
-
+    private int n_joueur;
     private Vector2 playerInput;
     private bool jumpPressed = false;
     private bool wantJump = false;
@@ -25,10 +28,25 @@ public class Mouvement : MonoBehaviour
     private bool waiting = false;
     private bool jumping = false;
     private Animator anim;
-    
+
+
+    private const int pointParPlateforme = 100;
+    private const int pointBonusFin = 300;
+    private int heightMilestone = 10;
+    private int heightMilestoneAchieved = 5;
 
     private void Start()
     {
+        if (this.CompareTag("Player1"))
+        {
+            n_joueur = 1;
+        }
+        else if (this.CompareTag("Player2"))
+        {
+            n_joueur = 2;
+        }
+
+
         anim = GetComponent<Animator>();
         lasttouchPosition = this.GetComponent<Transform>().position;
     }
@@ -38,13 +56,13 @@ public class Mouvement : MonoBehaviour
     {
         if(play)
         {   
-            if(this.CompareTag("Player1"))
+            if(n_joueur == 1)
             {
                 playerInput = new Vector2(Input.GetAxis("Horizontal_P1"), 0f);
                 jumpPressed = Input.GetKeyDown(KeyCode.W);
             }
 
-            if (this.CompareTag("Player2"))
+            if (n_joueur == 2)
             {
                 playerInput = new Vector2(Input.GetAxis("Horizontal_P2"), 0f);
                 jumpPressed = Input.GetKeyDown(KeyCode.UpArrow);
@@ -58,6 +76,12 @@ public class Mouvement : MonoBehaviour
                 canJump--;
                 wantJump = true;
             }
+
+            
+
+
+
+
         }
     
     }
@@ -167,7 +191,9 @@ public class Mouvement : MonoBehaviour
     {
         if (other.gameObject.tag.Equals("PlateformeFinale"))
         {
-            // score += 3
+            // bonus fin
+            _canvasScore.GetComponent<GestionUIJeu>().AjouterScore(pointBonusFin, n_joueur);
+
             _otherPlayer.GetComponent<Mouvement>().end();
             end();
 
@@ -177,17 +203,22 @@ public class Mouvement : MonoBehaviour
         if (other.gameObject.tag.Equals("Plateforme") && other.gameObject.GetComponent<Transform>().position.y >= lasttouchPosition.y - 2f)
         {
             lasttouchPosition = other.gameObject.GetComponent<Transform>().position;
-            
+
+            //ajouter score
+            if(heightMilestoneAchieved <= other.GetComponent<Transform>().position.y)
+            {
+                _canvasScore.GetComponent<GestionUIJeu>().AjouterScore(pointParPlateforme, n_joueur);
+                heightMilestoneAchieved += heightMilestone;
+            }
+
             jumping = false;
             anim.SetBool("isjumpingG", false);
             anim.SetBool("isjumpingD", false);
 
-            //GestionUIJeu.instance.AjouterScore();
 
             //peut sauter après contact
             canJump = 2;
 
-          
             _camera.GetComponent<FollowPlayer>().minHeight = lasttouchPosition.y;
         }
     }
@@ -209,7 +240,6 @@ public class Mouvement : MonoBehaviour
     {
         play = false;
         waiting = true;
-
     }
 }
 
