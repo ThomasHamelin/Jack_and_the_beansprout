@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/InstructNiv1.unity
     guid: 1683ac4c9c632a746a720eccfc949aaa
   - enabled: 1
+    path: Assets/Niveau 2/Niveau 2.unity
+    guid: 65599ee874164364885d36778886805d
+  - enabled: 1
     path: Assets/Scenes/InstructNiv2.unity
     guid: f173850ac58f86b47a8f7548a3690730
   - enabled: 1

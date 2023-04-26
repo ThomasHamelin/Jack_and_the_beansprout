@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4299141362325473014}
   - component: {fileID: 7526328236978706531}
   - component: {fileID: 1647516185091948051}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Harpe
   m_TagString: Untagged
   m_Icon: {fileID: 0}

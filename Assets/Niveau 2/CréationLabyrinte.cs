@@ -24,8 +24,9 @@ public class CréationLabyrinte : MonoBehaviour
     [SerializeField] GameObject _Joueur1;
     [SerializeField] GameObject _Joueur2;
     [SerializeField] public GameObject _Geant;
+    [SerializeField] public Harpe _Harpe;
 
-    [SerializeField] GameObject _Tresor;
+    [SerializeField] TresorNiv2 _Tresor;
     [SerializeField] float _probabiliteTresor;
 
     [SerializeField] GameObject _IntelliBalle;
@@ -43,18 +44,18 @@ public class CréationLabyrinte : MonoBehaviour
     [SerializeField] private GameObject _ContainerCoins = default;
     [SerializeField] private GameObject _ContainerTresors = default;
 
-    [SerializeField] float _longueur;
-    [SerializeField] float _largeur;
+    [SerializeField] public float _longueur;
+    [SerializeField] public float _largeur;
 
-    [SerializeField] float _CoordonneDepartX;
-    [SerializeField] float _CoordonneDepartY;
+    [SerializeField] public float _CoordonneDepartX;
+    [SerializeField] public float _CoordonneDepartY;
 
     [SerializeField] float _CoordonneSalleX;
     [SerializeField] float _CoordonneSalleY;
 
     [SerializeField] float _TailleSalleSpeciale;
 
-    [SerializeField] float _tailleGrille;
+    [SerializeField] public float _tailleGrille;
 
 
 
@@ -181,8 +182,8 @@ public class CréationLabyrinte : MonoBehaviour
         Vector3 positionJ1 = new Vector3((_CoordonneDepartX + _UniteDeDistance[2]) - (_UniteDeDistance[2] / 2), _CoordonneDepartY + _UniteDeDistance[3], 0);
         Vector3 positionJ2 = new Vector3((_CoordonneDepartX + _UniteDeDistance[2]) + (_UniteDeDistance[2] / 2), _CoordonneDepartY + _UniteDeDistance[3], 0);
 
-        GameObject Joueur1 = Instantiate(_Joueur1, positionJ1, transform.rotation);
-        GameObject Joueur2 = Instantiate(_Joueur2, positionJ2, transform.rotation);
+        _Joueur1.transform.position = positionJ1;
+        _Joueur2.transform.position = positionJ2;
 
         Vector3 positionBIGBOY = new Vector3((_coin4.transform.position.x - _UniteDeDistance[2]), _coin4.transform.position.y - _UniteDeDistance[3], 0);
         GameObject Geant = Instantiate(_Geant, positionBIGBOY, transform.rotation);
@@ -221,6 +222,9 @@ public class CréationLabyrinte : MonoBehaviour
 
     private void generationSalle()
     {
+        //Détermine que la position de la harpe est au centre de la salle spéciale
+        int posXHarpe = (int)(_TailleSalleSpeciale / 2);
+        int posYHarpe = posXHarpe;
 
         Vector3 anciennePosition;
         do
@@ -246,6 +250,11 @@ public class CréationLabyrinte : MonoBehaviour
 
             for (int i = 1; i <= _TailleSalleSpeciale; i++)
             {
+                if(posXHarpe == x && posYHarpe == i) //Si la position à laquelle on est rendu est celle de la harpe
+                {
+                    var harpe = Instantiate(_Harpe, _IntelliBalle.transform.position, transform.rotation); //On génère la harpe à cette position
+                }
+
                 if (x < _TailleSalleSpeciale)
                 {
                     RaycastHit2D hit2 = Physics2D.Raycast(_IntelliBalle.transform.position, Vector2.up, _UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
@@ -272,7 +281,7 @@ public class CréationLabyrinte : MonoBehaviour
 
                 }
                 _nbCasestotales--;
-
+                
             }
             anciennePosition.y += _UniteDeDistance[1];
             _IntelliBalle.transform.position = anciennePosition;
@@ -310,7 +319,7 @@ public class CréationLabyrinte : MonoBehaviour
 
             if (trUp == true && trDown == true && trRight == true && trLeft == true)
             {
-                GameObject newTresor = Instantiate(_Tresor, positionTresor, transform.rotation);
+                TresorNiv2 newTresor = Instantiate(_Tresor, positionTresor, transform.rotation);
                 newTresor.transform.parent = _ContainerTresors.transform;
             }
             else

@@ -41,18 +41,18 @@ public class GestionUINiv2 : MonoBehaviour
     IEnumerator DonnerDepart()
     {
         //Attendre la fin de l'animation de fondu au noir
-        //_txtDonneDepart.gameObject.SetActive(false);
-        //yield return new WaitForSeconds(3f);
+        _txtDonneDepart.gameObject.SetActive(false);
+        yield return new WaitForSeconds(3f);
 
-        ////Décompte avant le départ
-        //_txtDonneDepart.text = "3";
-        //_txtDonneDepart.gameObject.SetActive(true);
-        //yield return new WaitForSeconds(1f);
-        //_txtDonneDepart.text = "2";
-        //yield return new WaitForSeconds(1f);
-        //_txtDonneDepart.text = "1";
-        //yield return new WaitForSeconds(1f);
-        //_txtDonneDepart.text = "Partez!";
+        //Décompte avant le départ
+        _txtDonneDepart.text = "3";
+        _txtDonneDepart.gameObject.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        _txtDonneDepart.text = "2";
+        yield return new WaitForSeconds(1f);
+        _txtDonneDepart.text = "1";
+        yield return new WaitForSeconds(1f);
+        _txtDonneDepart.text = "Partez!";
         yield return new WaitForSeconds(1f);
 
         _txtDonneDepart.gameObject.SetActive(false); //Enlever le texte du décompte

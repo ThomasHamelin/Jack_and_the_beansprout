@@ -4,37 +4,24 @@ using UnityEngine;
 
 public class TresorNiv2 : MonoBehaviour
 {
-    [SerializeField] private Sprite[] _imagesTresors;
-    [SerializeField] int[] _pointsTresors;
-
-    int rand;
-    
-
-    private SpriteRenderer spriteRenderer;
-    // Start is called before the first frame update
-    void Start()
-    {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        rand= Random.Range(0,_imagesTresors.Length);
-        spriteRenderer.sprite = _imagesTresors[rand];
-
-
-        
-    }
-
+    [SerializeField] int _pointsTresors;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag.Equals("Joueur1"))
+        if (other.gameObject.tag.Equals("Player1"))
         {
             GestionUIJeu UICommand = FindObjectOfType<GestionUIJeu>();
 
-            UICommand.AjouterScore(_pointsTresors[0],1);
+            UICommand.AjouterScore(_pointsTresors,1);
+            
+            Destroy(this);
         }
-        else if (other.gameObject.tag.Equals("Joueur2"))
+        else if (other.gameObject.tag.Equals("Player2"))
         {
             GestionUIJeu UICommand = FindObjectOfType<GestionUIJeu>();
-            UICommand.AjouterScore(_pointsTresors[0],2);
+            UICommand.AjouterScore(_pointsTresors,2);
+            Destroy(this);
         }
+        
     }
 }

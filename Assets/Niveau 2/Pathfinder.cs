@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class Pathfinder : MonoBehaviour
 {
-    //[SerializeField] private CréationLabyrinte _creationLabyrinthe = default;
+    [SerializeField] private CréationLabyrinte _creationLabyrinthe = default;
     [SerializeField] private PathNode _pathNode = default;
+    [SerializeField] private GameObject _pathNodeContainer = default;
 
     private float _longueur = 100;
     private float _hauteur = 100;
-    private int _tailleGrille = 10;
+    private float _tailleGrille = 10;
     private float _coordonneDepartX = 0;
     private float _coordonneDepartY = 0;
     private float _tailleCaseX;
@@ -26,8 +27,19 @@ public class Pathfinder : MonoBehaviour
 
     void Start()
     {
+        _creationLabyrinthe = FindObjectOfType<CréationLabyrinte>().GetComponent<CréationLabyrinte>();
+        getMazeComponents();
         genererGrille();
+        
+    }
 
+    private void getMazeComponents()
+    {
+        _longueur = _creationLabyrinthe._longueur;
+        _hauteur = _creationLabyrinthe._largeur;
+        _tailleGrille = _creationLabyrinthe._tailleGrille;
+        _coordonneDepartX = _creationLabyrinthe._CoordonneDepartX;
+        _coordonneDepartY = _creationLabyrinthe._CoordonneDepartY;
     }
 
     private void genererGrille()
@@ -36,7 +48,9 @@ public class Pathfinder : MonoBehaviour
         float posY = 0;
 
         _tailleCaseX = _longueur / _tailleGrille;
+        _coordonneDepartX += _tailleCaseX / 2;
         _tailleCaseY = _hauteur / _tailleGrille;
+        _coordonneDepartY += _tailleCaseY / 2;
 
         int nbrCaseX = (int)(_longueur / _tailleCaseX);
         int nbrCaseY = (int)(_hauteur / _tailleCaseY);
@@ -50,6 +64,7 @@ public class Pathfinder : MonoBehaviour
                 PathNode newNode = Instantiate(_pathNode, position, Quaternion.identity);
                 allNodes[(int)(position.x / _tailleCaseX), (int)(position.y / _tailleCaseY)] = newNode;
                 newNode.setPosition(posX, posY, _tailleCaseX, _tailleCaseY);
+                newNode.transform.parent = _pathNodeContainer.transform;
                 posY += _tailleCaseY;
             }
             posX += _tailleCaseX;
@@ -83,13 +98,14 @@ public class Pathfinder : MonoBehaviour
         List<PathNode> path = new List<PathNode>();
         path.Add(p_endNode);
         PathNode currentNode = p_endNode;
-        while (currentNode.getCameFromNode() != null)
+        while (currentNode.getCameFromNode() != _startNode)
         {
             path.Add(currentNode.getCameFromNode());
             currentNode = currentNode.getCameFromNode();
         }
 
         path.Reverse();
+        ResetAllNodes();
         return path;
     }
 
@@ -134,7 +150,6 @@ public class Pathfinder : MonoBehaviour
     public List<PathNode> FindPath(float p_startX, float p_startY)
     { 
         _endNode = allNodes[_endX, _endY];
-        _endNode.GetComponent<SpriteRenderer>().color = Color.red;
         _startNode = GetNodeAtPosition(new Vector3(p_startX, p_startY));
 
 
@@ -199,8 +214,6 @@ public class Pathfinder : MonoBehaviour
         }
         openList.Clear();
         closedList.Clear();
-
-        GameObject.FindWithTag("Player2").GetComponent<JoueurNiv2>().FinNiveau();
     }
 }
 

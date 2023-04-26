@@ -23,7 +23,7 @@ public class JoueurNiv2 : MonoBehaviour
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
-        _cam.transform.position = new Vector3(this.gameObject.transform.position.x, (this.gameObject.transform.position.y), _cam.gameObject.transform.position.z);
+        _cam.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -10);
     }
 
     void FixedUpdate()
@@ -106,6 +106,11 @@ public class JoueurNiv2 : MonoBehaviour
         _chemin = _pathfinder.FindPath(this.transform.position.x, this.transform.position.y);
 
         _suivreChemin = true;
+
+        if(this.CompareTag("Player1"))
+        {
+            GameObject.FindWithTag("Player2").GetComponent<JoueurNiv2>().FinNiveau();
+        }
         
     }
 
@@ -123,39 +128,17 @@ public class JoueurNiv2 : MonoBehaviour
             {
                 Vector3 direction3D = new Vector3(_direction.x, _direction.y, 0f);
                 transform.position = Vector3.MoveTowards(transform.position, _chemin[0].transform.position, _moveSpeed * Time.deltaTime);
-                //_rb.MovePosition(transform.position + direction3D); //Déplace le joueur dans la direction voulue
             }
-            //var step = _moveSpeed * Time.deltaTime; // calculate distance to move
-            //
-
-            //// Check if the position of the cube and sphere are approximately equal.
-            //if (Vector3.Distance(transform.position, _chemin[0].transform.position) < 0.001f)
-            //{
-            //    _chemin.Remove(_chemin[0]);
-
-            //}
-            //else if((transform.position.x - _chemin[0].transform.position) > 0.001f)
-            //{
-            //    _posX = -1f;
-            //}
-            //else if((transform.position.x - _chemin[0].transform.position) < 0.001f)
-            //{
-            //    _posX = 1f;
-            //}
 
         }
         else
         {
-            _suivreChemin = false;
-            _rb.constraints = RigidbodyConstraints2D.FreezePosition; //On bloque la position
+            
+            _direction = new Vector2(-1, 0);
+            Vector3 direction3D = new Vector3(_direction.x, _direction.y, 0f);
+            _rb.MovePosition(transform.position + direction3D); //Déplace le joueur dans la direction voulue
             _rb.freezeRotation = true; //On bloque la rotation
-            _animator.SetBool("IsWalking", false); //Arrête l'animation du joueur qui se déplace
-
-            if (this.CompareTag("Player1")) //Si c'est le joueur 1
-            {
-                _pathfinder.ResetAllNodes();
-            }
-
+            _suivreChemin = false;
         }
         
 

@@ -21,12 +21,14 @@ public class Harpe : MonoBehaviour
         if (other.gameObject.tag.Equals("Player1"))
         {
             _gestionUIJeu.AjouterScore(_ptsVictoire, 1);
+            StartCoroutine(_gestionUINiv2.FinNiveau2());
         }
         else if (other.gameObject.tag.Equals("Player2"))
         {
             _gestionUIJeu.AjouterScore(_ptsVictoire, 2);
+            StartCoroutine(_gestionUINiv2.FinNiveau2());
         }
 
-        StartCoroutine(_gestionUINiv2.FinNiveau2());
+        
     }
 }
