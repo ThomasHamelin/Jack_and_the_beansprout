@@ -12,8 +12,8 @@ public class GestionUINiv1 : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _txtPlayer1 = default;
     [SerializeField] private TextMeshProUGUI _txtPlayer2 = default;
     [SerializeField] private GameObject _splitBorder = default;
-    [SerializeField] private Camera _camJ1 = default;
-    [SerializeField] private Camera _camJ2 = default;
+    //[SerializeField] private Camera _camJ1 = default;
+    //[SerializeField] private Camera _camJ2 = default;
     [SerializeField] private GameObject joueur1, joueur2;
 
     private GestionScenes _gestionScene;

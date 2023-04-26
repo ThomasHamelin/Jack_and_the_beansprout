@@ -219,15 +219,12 @@ public class Mouvement : MonoBehaviour
                 _canvasScore.GetComponent<GestionUIJeu>().AjouterScore(pointParPlateforme, n_joueur);
                 heightMilestoneAchieved += heightMilestone;
             }
-
-            //reseter les sauts
-            jumping = false;
-            anim.SetBool("isjumpingG", false);
-            anim.SetBool("isjumpingD", false);
-            canJump = 2;
-
-            
         }
+        //reseter les sauts
+        jumping = false;
+        anim.SetBool("isjumpingG", false);
+        anim.SetBool("isjumpingD", false);
+        canJump = 2;
     }
 
     /*

@@ -18,6 +18,9 @@ public class GenTerrain : MonoBehaviour
     public GameObject plateformeDroite;
     public GameObject plateformeGauche;
 
+    public GameObject p1;
+    public GameObject p2;
+
     public GameObject EndDroite;
     public GameObject EndGauche;
 
@@ -34,8 +37,8 @@ public class GenTerrain : MonoBehaviour
     void Start()
     {
         float totalHeight = 0;
-        float startP1 = plateformeGauche.GetComponent<Transform>().position.x;
-        float startP2 = plateformeDroite.GetComponent<Transform>().position.x;
+        float startP1 = p1.GetComponent<Transform>().position.x;
+        float startP2 = p2.GetComponent<Transform>().position.x;
 
         EndGauche.GetComponent<Transform>().position = new Vector2(startP1, levelHeight+7f);
         EndDroite.GetComponent<Transform>().position = new Vector2(startP2, levelHeight + 7f);
