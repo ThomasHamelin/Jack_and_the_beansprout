@@ -75,7 +75,7 @@ public class Geant : MonoBehaviour
         {
             
             avance(Mouvement);
-            visionJoueurs();
+           
         }
 
     }
@@ -248,7 +248,7 @@ public class Geant : MonoBehaviour
         if(n == 1)
         {
             Vector3 angle  = new Vector3(0,0,Mathf.Floor(this.transform.eulerAngles.z + (90 * dir)));
-            
+
             ROTZtarget.z = mod(angle.z, 360);
             ROTZtarget.z = Mathf.Floor(ROTZtarget.z);
 
@@ -264,9 +264,9 @@ public class Geant : MonoBehaviour
 
            
             transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z + increment);
-            float posMoment = Mathf.Floor(this.transform.eulerAngles.z);
-            posMoment = mod(posMoment, 360);
-            posMoment = Mathf.Floor(posMoment);
+            float posMoment = this.transform.eulerAngles.z;
+            posMoment = Mathf.Floor(mod(posMoment, 360));
+            
 
 
 

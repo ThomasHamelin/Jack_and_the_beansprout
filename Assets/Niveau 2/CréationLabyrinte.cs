@@ -207,8 +207,7 @@ public class CréationLabyrinte : MonoBehaviour
         GeantCommander.InfoPositionJoueur(_Joueur1.transform.position, 0);
         GeantCommander.InfoPositionJoueur(_Joueur2.transform.position, 1);
 
-        JoueurNiv2 joueurCommander = FindObjectOfType<JoueurNiv2>();
-        joueurCommander.DebuterJeu();
+
     }
 
     private void porteSalleSpeciale()

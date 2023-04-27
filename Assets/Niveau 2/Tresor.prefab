@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2505713615330505401}
   - component: {fileID: 6557089663716999088}
   - component: {fileID: 4808409089595151959}
-  - component: {fileID: -4917384182449631228}
+  - component: {fileID: -2185957549216609979}
   m_Layer: 2
   m_Name: Tresor
   m_TagString: Untagged
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pointsTresors: 0
---- !u!58 &-4917384182449631228
+--- !u!58 &-2185957549216609979
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -112,6 +112,6 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.06908131, y: -0.6355438}
+  m_Offset: {x: -0.052025795, y: -0.71968985}
   serializedVersion: 2
-  m_Radius: 1.9888
+  m_Radius: 2.1444907

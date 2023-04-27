@@ -14,13 +14,13 @@ public class TresorNiv2 : MonoBehaviour
 
             UICommand.AjouterScore(_pointsTresors,1);
             
-            Destroy(this);
+            Destroy(this.gameObject);
         }
-        else if (other.gameObject.tag.Equals("Player2"))
+        else if (other.gameObject.tag == "Player2")
         {
             GestionUIJeu UICommand = FindObjectOfType<GestionUIJeu>();
             UICommand.AjouterScore(_pointsTresors,2);
-            Destroy(this);
+            Destroy(this.gameObject);
         }
         
     }

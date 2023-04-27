@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3995409639230093601}
   - component: {fileID: 3995409639230093600}
-  - component: {fileID: -3526884903901924206}
   - component: {fileID: 8247869485515849272}
   m_Layer: 3
   m_Name: Mur
@@ -86,27 +85,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!50 &-3526884903901924206
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3995409639230093603}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 1
-  m_Constraints: 0
 --- !u!61 &8247869485515849272
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -120,7 +98,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.07831597, y: 0.15277284}
+  m_Offset: {x: -0.07831597, y: 0.14387298}
   m_SpriteTilingProperty:
     border: {x: 1.9599999, y: 0.59, z: 1.4399999, w: 1.04}
     pivot: {x: 0.55043113, y: 0.4511957}
@@ -131,5 +109,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.6336856, y: 3.3520975}
+  m_Size: {x: 1.6336856, y: 3.334299}
   m_EdgeRadius: 0
