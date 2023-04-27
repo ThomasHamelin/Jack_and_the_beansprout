@@ -81,11 +81,6 @@ public class Mouvement : MonoBehaviour
                 wantJump = true;
             }
 
-            
-
-
-
-
         }
     
     }
@@ -200,9 +195,7 @@ public class Mouvement : MonoBehaviour
             // bonus fin
             _canvasScore.GetComponent<GestionUIJeu>().AjouterScore(pointBonusFin, n_joueur);
 
-            StartCoroutine(_gestionScene.ChangerScene()); ;
-            //_otherPlayer.GetComponent<Mouvement>().end();
-            //end();
+            StartCoroutine(_gestionScene.ChangerScene());
 
         }
 
@@ -240,10 +233,5 @@ public class Mouvement : MonoBehaviour
         }
     } 
 
-    public void end()
-    {
-        play = false;
-        waiting = true;
-    }
 }
 

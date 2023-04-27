@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class qteHache : MonoBehaviour
 {
-    public int _nbrInputGame1 = 20,_nbrInputGame2 = 20;
+    
     public Rigidbody2D _rb;
 
+    private int n_joueur;
     public GameObject _directionsAffichage;
     public GameObject _otherCharacter;
     public float minInput = 0.5f, maxInput = 0.5f;
@@ -17,12 +18,29 @@ public class qteHache : MonoBehaviour
     private int nbrInput = 0;
     private Vector2 playerInput;
     private string input = "Null", directionNeeded = "Waiting";
-    private Animator anim; 
+    private Animator anim;
 
+
+    private int _nbrInputGame1 = 20,_nbrInputGame2 = 30;
+    private const int pointParCoupPrecis = 50;
+    private const int pointParCoupMash = 50;
+    private const int pointBonusFin = 300;
+
+    private GameObject _canvasScore;
 
     // Start is called before the first frame update
     void Start()
     {
+        if (this.CompareTag("Player1"))
+        {
+            n_joueur = 1;
+        }
+        else if (this.CompareTag("Player2"))
+        {
+            n_joueur = 2;
+        }
+
+        _canvasScore = GameObject.Find("CanvasJeu");
         anim = GetComponent<Animator>();
         _nbrInputGame2 += _nbrInputGame1;
         StartCoroutine(animationDepart());
@@ -36,12 +54,12 @@ public class qteHache : MonoBehaviour
         {
             
             // Prendre l'input selon le joueur
-            if (this.CompareTag("Player1"))
+            if (n_joueur == 1)
             {
                 playerInput = new Vector2(Input.GetAxis("Horizontal_P1"), Input.GetAxis("Vertical_P1"));
               
             }
-            if (this.CompareTag("Player2"))
+            if (n_joueur == 2)
             {
                 playerInput = new Vector2(Input.GetAxis("Horizontal_P2"), Input.GetAxis("Vertical_P2"));
               
@@ -84,7 +102,9 @@ public class qteHache : MonoBehaviour
                 else
                 {
                     nbrInput++;
-                    // score += 1
+
+                    //points ++
+                    _canvasScore.GetComponent<GestionUIJeu>().AjouterScore(pointParCoupPrecis, n_joueur);
 
                     _directionsAffichage.GetComponent<directionAffichage>().changeDirection(5);
                     directionNeeded = "Null";
@@ -99,12 +119,14 @@ public class qteHache : MonoBehaviour
                 {
                     _directionsAffichage.GetComponent<directionAffichage>().blinkAllDirection(true);
                     needNull = false;
-                    //
+                    
                 }
                 else if(!needNull && input != "Null")
                 {
                     nbrInput++;
-                    // score += 1
+
+                    //points ++
+                    _canvasScore.GetComponent<GestionUIJeu>().AjouterScore(pointParCoupMash, n_joueur);
 
                     _directionsAffichage.GetComponent<directionAffichage>().blinkAllDirection(false);
                     needNull = true;
@@ -114,7 +136,7 @@ public class qteHache : MonoBehaviour
             }
             if (nbrInput >= _nbrInputGame2)
             {
-                // score bonus premier  ***
+                _canvasScore.GetComponent<GestionUIJeu>().AjouterScore(pointBonusFin, n_joueur);
 
                 end();
                 _otherCharacter.GetComponent<qteHache>().end();

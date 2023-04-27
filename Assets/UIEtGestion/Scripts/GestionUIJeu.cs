@@ -13,10 +13,6 @@ public class GestionUIJeu : MonoBehaviour
 
     int _scoreJ1, _scoreJ2;
 
-    //private void Awake()
-    //{
-    //    instance = this;
-    //}
 
     void Start()
     {
@@ -25,12 +21,6 @@ public class GestionUIJeu : MonoBehaviour
         AjouterScore(0, 1);
         AjouterScore(0, 2);
         DontDestroyOnLoad(this.gameObject); //Fait en sorte que les points s'accumulent d'une scène à l'autre
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     /*
