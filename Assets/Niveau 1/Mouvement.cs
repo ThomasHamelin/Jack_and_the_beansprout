@@ -23,12 +23,9 @@ public class Mouvement : MonoBehaviour
     private bool jumping = false;
     private Animator anim;
 
-
-    private GestionScenes _gestionScene;
     private GameObject _canvasScore;
 
     private const int pointParPlateforme = 100;
-    private const int pointBonusFin = 300;
     private const int heightMilestone = 10;
     private int heightMilestoneAchieved = 5;
     private const float respawn_interval = 1f;
@@ -47,7 +44,7 @@ public class Mouvement : MonoBehaviour
             n_joueur = 2;
         }
 
-        _gestionScene = FindObjectOfType<GestionScenes>().GetComponent<GestionScenes>(); //Trouve l'objet avec le script permettant de changer de niveau
+       
         _canvasScore = GameObject.Find("CanvasJeu");
 
 
@@ -188,16 +185,6 @@ public class Mouvement : MonoBehaviour
     */
     void OnTriggerEnter2D(Collider2D other)
     {
-
-        // Fin atteint
-        if (other.gameObject.tag.Equals("PlateformeFinale"))
-        {
-            // bonus fin
-            _canvasScore.GetComponent<GestionUIJeu>().AjouterScore(pointBonusFin, n_joueur);
-
-            StartCoroutine(_gestionScene.ChangerScene());
-
-        }
 
         // toucher une plateforme -> toucher
         if (other.gameObject.tag.Equals("Plateforme") && other.gameObject.GetComponent<Transform>().position.y >= lasttouchPosition.y - 2f)
