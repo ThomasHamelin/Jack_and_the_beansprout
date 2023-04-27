@@ -24,7 +24,7 @@ public class CréationLabyrinte : MonoBehaviour
     [SerializeField] GameObject _Joueur1;
     [SerializeField] GameObject _Joueur2;
     [SerializeField] private GameObject _Geant;
-    [SerializeField] private Harpe _Harpe;
+    
 
     [SerializeField] public TresorNiv2 _Tresor;
     [SerializeField] float _probabiliteTresor;
@@ -204,8 +204,8 @@ public class CréationLabyrinte : MonoBehaviour
         GeantCommander.PartageDonnées(_UniteDeDistance[2], 2);
         GeantCommander.PartageDonnées(_UniteDeDistance[3], 3);
 
-        GeantCommander.InfoPositionJoueur(Joueur1.transform.position, 0);
-        GeantCommander.InfoPositionJoueur(Joueur2.transform.position, 1);
+        GeantCommander.InfoPositionJoueur(_Joueur1.transform.position, 0);
+        GeantCommander.InfoPositionJoueur(_Joueur2.transform.position, 1);
 
         JoueurNiv2 joueurCommander = FindObjectOfType<JoueurNiv2>();
         joueurCommander.DebuterJeu();
@@ -265,10 +265,7 @@ public class CréationLabyrinte : MonoBehaviour
 
             for (int i = 1; i <= _TailleSalleSpeciale; i++)
             {
-                if(posXHarpe == x && posYHarpe == i) //Si la position à laquelle on est rendu est celle de la harpe
-                {
-                    var harpe = Instantiate(_Harpe, _IntelliBalle.transform.position, transform.rotation); //On génère la harpe à cette position
-                }
+              
 
                 if (x < _TailleSalleSpeciale)
                 {

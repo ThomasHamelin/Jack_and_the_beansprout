@@ -1461,9 +1461,9 @@ MonoBehaviour:
   _Joueur1: {fileID: 942725455}
   _Joueur2: {fileID: 1986445175}
   _Geant: {fileID: 3226181276852311941, guid: 0c09bee2afc06174ab73a98064f60736, type: 3}
-  _Harpe: {fileID: 4299141362325473014, guid: efaf232c2392ede40895ed7012998b09, type: 3}
   _Tresor: {fileID: 4808409089595151959, guid: 6e485c80557479e429301413ef4b92d7, type: 3}
   _probabiliteTresor: 25
+  _Harpe: {fileID: 4299141362325473015, guid: efaf232c2392ede40895ed7012998b09, type: 3}
   _IntelliBalle: {fileID: 1997190869}
   _YeuxBalle: {fileID: 1678620337}
   _coin1: {fileID: 2137826734}
@@ -1482,7 +1482,7 @@ MonoBehaviour:
   _CoordonneSalleX: 50
   _CoordonneSalleY: 50
   _TailleSalleSpeciale: 3
-  _tailleGrille: 10
+  _tailleGrille: 20
 --- !u!1 &2137826734
 GameObject:
   m_ObjectHideFlags: 0
