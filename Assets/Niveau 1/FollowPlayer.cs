@@ -21,7 +21,7 @@ public class FollowPlayer : MonoBehaviour
         {
             height = player.transform.position.y;
         }
-        transform.position = new Vector3(transform.position.x, height, transform.position.z);
+        transform.position = new Vector3(transform.position.x, height+2f, transform.position.z);
     }
 
 }
