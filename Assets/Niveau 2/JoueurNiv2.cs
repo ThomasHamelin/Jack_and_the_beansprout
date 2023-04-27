@@ -38,6 +38,7 @@ public class JoueurNiv2 : MonoBehaviour
             SuivreChemin();
             RotateInDirectionOfInput();
         }
+        _cam.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -10); //Déplace la caméra avec le joueur
     }
 
     /*
@@ -50,7 +51,6 @@ public class JoueurNiv2 : MonoBehaviour
         {
             Vector3 direction3D = new Vector3(_direction.x, _direction.y, 0f);
             _rb.MovePosition(transform.position + direction3D); //Déplace le joueur dans la direction voulue
-            _cam.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -10); //Déplace la caméra avec le joueur
         }
         if (this.CompareTag("Player1")) //Si c'est le joueur 1
         {
