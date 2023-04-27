@@ -36,17 +36,19 @@ public class GenTerrain : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        float totalHeight = 0;
+        const float minHeight = 5;
         float startP1 = p1.GetComponent<Transform>().position.x;
         float startP2 = p2.GetComponent<Transform>().position.x;
 
-        EndGauche.GetComponent<Transform>().position = new Vector2(startP1, levelHeight+7f);
-        EndDroite.GetComponent<Transform>().position = new Vector2(startP2, levelHeight + 7f);
+        EndGauche.GetComponent<Transform>().position = new Vector2(startP1, levelHeight);
+        EndDroite.GetComponent<Transform>().position = new Vector2(startP2, levelHeight);
 
 
         do
         {
-            Vector2 randomPosition = new Vector2(Random.Range(minPositionX, maxPositionX), Random.Range(minPositionY, maxPositionY)+totalHeight);
+            levelHeight -= Random.Range(minPositionY, maxPositionY);
+
+            Vector2 randomPosition = new Vector2(Random.Range(minPositionX, maxPositionX), levelHeight);
 
             Vector2 randomPosition1 = new Vector2(randomPosition.x + startP1, randomPosition.y);
             Vector2 randomPosition2 = new Vector2(randomPosition.x + startP2, randomPosition.y);
@@ -55,11 +57,9 @@ public class GenTerrain : MonoBehaviour
             Instantiate(plateformeGauche, randomPosition1, Quaternion.identity);
          
             Instantiate(plateformeDroite, randomPosition2, Quaternion.identity);
-         
 
-            totalHeight = randomPosition.y;
 
-        } while (totalHeight < levelHeight);
+        } while (minHeight < levelHeight);
 
     }
 }
