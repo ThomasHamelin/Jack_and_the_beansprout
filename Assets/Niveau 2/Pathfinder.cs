@@ -16,20 +16,24 @@ public class Pathfinder : MonoBehaviour
     private float _tailleCaseX;
     private float _tailleCaseY;
 
-    private PathNode[,] allNodes = default;
-    private List<PathNode> openList = default;
-    private List<PathNode> closedList = default;
-    private PathNode _endNode = default;
-    private PathNode _startNode = default;
+    private PathNode[,] allNodes = default; //Array qui contient tous les noeuds
+    private List<PathNode> openList = default; //Liste des noeuds à analyser
+    private List<PathNode> closedList = default; //Liste des noeuds qui ont été analysés
+    private PathNode _endNode = default; //Noeud à la fin du chemin
+    private PathNode _startNode = default; //Noeud au début du chemin
 
     void Start()
     {
-        _creationLabyrinthe = FindObjectOfType<CréationLabyrinte>().GetComponent<CréationLabyrinte>();
         getMazeComponents();
         genererGrille();
         
     }
 
+    /*
+     * Rôle : Copier les composantes qui ont servies à créer le labyrinthe
+     * Entrée : Aucune
+     * Sortie : Aucune
+     */
     private void getMazeComponents()
     {
         _longueur = _creationLabyrinthe._longueur;
@@ -39,33 +43,48 @@ public class Pathfinder : MonoBehaviour
         _coordonneDepartY = _creationLabyrinthe._CoordonneDepartY;
     }
 
+    /*
+     * Rôle : Générer la grille de noeud
+     * Entrée : Aucune
+     * Sortie : Aucune
+     */
     private void genererGrille()
     {
         float posX = 0;
         float posY = 0;
 
-        _tailleCaseX = _longueur / _tailleGrille;
-        _coordonneDepartX += _tailleCaseX / 2;
+        //On détermine la taille d'un noeud
+        _tailleCaseX = _longueur / _tailleGrille; 
         _tailleCaseY = _hauteur / _tailleGrille;
+
+        //On ajuste les valeurs des coordonnées de départ, car elles sont en fonction du coin du labyrinthe
+        _coordonneDepartX += _tailleCaseX / 2;
         _coordonneDepartY += _tailleCaseY / 2;
 
+        //On détermine le nombre de noeuds
         int nbrCaseX = (int)(_longueur / _tailleCaseX);
         int nbrCaseY = (int)(_hauteur / _tailleCaseY);
+        //À partir du nombre de noeuds, on ajuste la taille du tableau contenant tous les noeuds
         allNodes = new PathNode[nbrCaseX, nbrCaseY];
 
+        //Tant qu'on n'a pas dépassé la taille horizontale de la grille
         while (posX < _longueur)
         {
+            //Tant qu'on n'a pas dépassé la taille verticale de la grille
             while (posY < _hauteur)
             {
+                //On détermine la position dans la grille où on est rendu
                 Vector3 position = new Vector3(posX + _coordonneDepartX, posY + _coordonneDepartY, 0f);
-                PathNode newNode = Instantiate(_pathNode, position, Quaternion.identity);
-                allNodes[(int)(position.x / _tailleCaseX), (int)(position.y / _tailleCaseY)] = newNode;
-                newNode.setPosition(posX, posY, _tailleCaseX, _tailleCaseY);
-                newNode.transform.parent = _pathNodeContainer.transform;
-                posY += _tailleCaseY;
+
+                PathNode newNode = Instantiate(_pathNode, position, Quaternion.identity); //On crée un nouveau noeud
+                allNodes[(int)(position.x / _tailleCaseX), (int)(position.y / _tailleCaseY)] = newNode; //On ajoute ce noeud dans le tableau de tous les noeuds
+                newNode.setPosition(posX, posY, _tailleCaseX, _tailleCaseY); //On met le noeud à la position où on est rendu
+                newNode.transform.parent = _pathNodeContainer.transform; //Dans la hierarchie, on met ce noeud dans un container de noeuds
+
+                posY += _tailleCaseY;//On va à la position verticale suivante
             }
-            posX += _tailleCaseX;
-            posY = 0;
+            posX += _tailleCaseX;//On va à la position horizontale suivante
+            posY = 0;//On remet la position verticale à 0
         }
     }
 

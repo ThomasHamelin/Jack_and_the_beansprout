@@ -1310,6 +1310,10 @@ PrefabInstance:
       propertyPath: _pathfinder
       value: 
       objectReference: {fileID: 1895151034}
+    - target: {fileID: 1705768171137462753, guid: 283ebc35c490687479046c2e25c669f7, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1705768171137462757, guid: 283ebc35c490687479046c2e25c669f7, type: 3}
       propertyPath: m_Name
       value: Joueur1Niv2

@@ -12,7 +12,7 @@ public class JoueurNiv2 : MonoBehaviour
 
     private Rigidbody2D _rb;
     private Vector2 _direction = Vector2.zero;
-    public bool _jeuDebute = false;
+    private bool _jeuDebute = false;
     private bool _suivreChemin = false;
     private float _posX, _posY;
     private int _distanceX, _distanceY;
@@ -22,18 +22,19 @@ public class JoueurNiv2 : MonoBehaviour
 
     void Start()
     {
-        _rb = GetComponent<Rigidbody2D>();
-        _cam.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -10);
+        _rb = GetComponent<Rigidbody2D>(); //On accède au rigidbody du joueur
+        _jeuDebute = false;
+        _suivreChemin = false;
     }
 
     void FixedUpdate()
     {
-        if (_jeuDebute) //Quand le niveau aura commencé
+        if (_jeuDebute) //Si le jeu est en cours
         {
             MouvementsJoueurs();
             RotateInDirectionOfInput();
         }
-        else if (_suivreChemin)
+        else if (_suivreChemin) //Si le joueur soit suivre le chemin généré par l'algorithme du chemin le plus court
         {
             SuivreChemin();
             RotateInDirectionOfInput();
@@ -101,44 +102,54 @@ public class JoueurNiv2 : MonoBehaviour
         _jeuDebute = true;
     }
 
+    /*
+     * Rôle : Indique au joueur que le jeu est terminé
+     * Entrée : Aucune
+     * Sortie : Aucune
+     */
     public void FinNiveau()
     {
+        //Trouve le chemin le plus court qui permet de retourner au début du labyrinthe
         _chemin = _pathfinder.FindPath(this.transform.position.x, this.transform.position.y);
+        _jeuDebute = false; //Indique que le jeu n'est plus en cours
 
-        _suivreChemin = true;
-
+        _suivreChemin = true; //Pour que le joueur commence à suivre le chemin
+        
+        //On regarde si le joueur est le joueur 1, car seul le joueur 1 est appelé par un script extérieur pour que les deux joueurs n'utilisent pas la grille de PathNodes en même temps
         if(this.CompareTag("Player1"))
         {
-            GameObject.FindWithTag("Player2").GetComponent<JoueurNiv2>().FinNiveau();
+            GameObject.FindWithTag("Player2").GetComponent<JoueurNiv2>().FinNiveau(); //On appelle la fonction de fin de niveau du joueur 2
         }
         
     }
 
+    /*
+     * Rôle : Faire en sorte que le joueur suive le chemin le plus court vers la sortie du labyrinthe
+     * Entrée : Aucune
+     * Sortie : Aucune
+     */
     private void SuivreChemin()
     {
-        if (_chemin.Count > 0)
+        if (_chemin.Count > 0) //Si on n'a pas atteint la fin du chemin
         {
-            float distance = (_chemin[0].transform.position - transform.position).magnitude; 
-            _direction = (_chemin[0].transform.position - transform.position)  / distance;
-            if(distance < 0.2f)
+            float distance = (_chemin[0].transform.position - transform.position).magnitude; //On calcule la distance entre la position du joueur et le prochain noeud 
+            _direction = (_chemin[0].transform.position - transform.position)  / distance; //On calcule un vecteur qui indique dans quelle direction se diriger
+
+            if(distance < 0.2f) //Si le noeud est atteint
             {
-                _chemin.Remove(_chemin[0]);
+                _chemin.Remove(_chemin[0]); //On passe au prochain noeud
             }
-            else
+            else //Si le noeud n'est pas atteint
             {
+                //On déplace le joueur en direction du noeud
                 Vector3 direction3D = new Vector3(_direction.x, _direction.y, 0f);
                 transform.position = Vector3.MoveTowards(transform.position, _chemin[0].transform.position, _moveSpeed * Time.deltaTime);
             }
 
         }
-        else
+        else //Si on est à la fin du chemin
         {
-            
-            _direction = new Vector2(-1, 0);
-            Vector3 direction3D = new Vector3(_direction.x, _direction.y, 0f);
-            _rb.MovePosition(transform.position + direction3D); //Déplace le joueur dans la direction voulue
-            _rb.freezeRotation = true; //On bloque la rotation
-            _suivreChemin = false;
+            Destroy(this); //Le joueur disparaît
         }
         
 
