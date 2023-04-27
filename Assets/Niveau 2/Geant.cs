@@ -28,8 +28,8 @@ public class Geant : MonoBehaviour
 
 
     private float[] _UniteMouvement = new float[4];
-
-
+    private Vector3[] posiionJoueur = new Vector3[2];
+    private float currentSpeed;
     private float _VecteurX;
     private float _VecteurY;
     private float _VecteurDroiteX;
@@ -53,8 +53,12 @@ public class Geant : MonoBehaviour
     private Vector3 ROTZtarget = Vector3.zero;
     private Vector3 ROTinit;
 
-   
-    
+    private void Start()
+    {
+        currentSpeed = _VitesseMarche;
+    }
+
+
     void Update()
     {
 
@@ -69,7 +73,9 @@ public class Geant : MonoBehaviour
         }
         if(_finiTourne == true && _finiAvance == false)
         {
+            
             avance(Mouvement);
+            visionJoueurs();
         }
 
     }
@@ -81,6 +87,29 @@ public class Geant : MonoBehaviour
 
         _UniteMouvement[x] = Donné;
 
+    }
+    public void InfoPositionJoueur(Vector3 position, int x)
+    {
+        posiionJoueur[x]= position;
+    }
+
+    void visionJoueurs()
+    {
+
+        
+
+        //if (joueurDetect.collider.tag == "Player1" || joueurDetect.collider.tag == "Player2")
+        //{
+        //    currentSpeed = _VitesseCourse;
+        //    _finiAvance = false;
+        //}
+        //else
+        //{
+        //    currentSpeed = _VitesseMarche;
+        //}
+        
+
+        
     }
 
     void analyse()
@@ -199,7 +228,10 @@ public class Geant : MonoBehaviour
        
 
 
-        transform.position = Vector3.MoveTowards(transform.position, TargetPosition, _VitesseMarche*Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, TargetPosition, currentSpeed*Time.deltaTime);
+
+        
+
 
         if (transform.position == TargetPosition)
         {
@@ -215,31 +247,42 @@ public class Geant : MonoBehaviour
     {
         if(n == 1)
         {
-            Vector3 angle  = new Vector3(0,0,this.transform.eulerAngles.z + (90 * dir));
-
-            ROTZtarget.z = Mathf.Round(mod(angle.z, 360));
+            Vector3 angle  = new Vector3(0,0,Mathf.Floor(this.transform.eulerAngles.z + (90 * dir)));
             
+            ROTZtarget.z = mod(angle.z, 360);
+            ROTZtarget.z = Mathf.Floor(ROTZtarget.z);
 
             increment = (90 * dir) / _rotationSpeed;
+           
             n = 0;
         }
 
         if (dir != 0)
         {
 
-            float posMoment = Mathf.Round(mod(transform.eulerAngles.z, 360));
+            
+
+           
+            transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z + increment);
+            float posMoment = Mathf.Floor(this.transform.eulerAngles.z);
+            posMoment = mod(posMoment, 360);
+            posMoment = Mathf.Floor(posMoment);
+
+
 
 
 
             if (posMoment == ROTZtarget.z)
             {
+
                 _finiTourne = true;
             }
             else
             {
-                transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z + increment);
+
                 _finiTourne = false;
             }
+            
         }
         else
         {
@@ -251,5 +294,19 @@ public class Geant : MonoBehaviour
     {
         return (x % y + y) % y;
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+     
+        if(other.gameObject.tag == "Player1")
+        {
+            other.transform.position = posiionJoueur[0];
+        }
+        else if(other.gameObject.tag == "Player2")
+        {
+            other.transform.position = posiionJoueur[1];
+        }
+    }
+
 }
 

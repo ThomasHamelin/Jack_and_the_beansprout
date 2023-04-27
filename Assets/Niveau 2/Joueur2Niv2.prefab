@@ -100,9 +100,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2d7ba6633d7b4743816f70ab88c4632, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 50
+  _moveSpeed: 30
+  _runSpeed: 50
   _rotationSpeed: 500
-  _cam: {fileID: 0}
+  _cam: {fileID: 5624699126592098116, guid: 44a6b101670ac114b911ce3d7a006718, type: 3}
+  _pathfinder: {fileID: 0}
+  _jeuDebute: 0
   _animator: {fileID: 1970477845}
 --- !u!50 &5893061854638520787
 Rigidbody2D:
@@ -135,7 +138,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}

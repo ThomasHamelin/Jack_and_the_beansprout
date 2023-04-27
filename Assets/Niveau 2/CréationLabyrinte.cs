@@ -29,6 +29,10 @@ public class CréationLabyrinte : MonoBehaviour
     [SerializeField] public TresorNiv2 _Tresor;
     [SerializeField] float _probabiliteTresor;
 
+
+
+    [SerializeField] GameObject _Harpe;
+
     [SerializeField] GameObject _IntelliBalle;
     [SerializeField] GameObject _YeuxBalle;
 
@@ -85,12 +89,15 @@ public class CréationLabyrinte : MonoBehaviour
     private float _nbCasesExplorés = 1;
     private int _CurseurMemoire;
 
+    private float taillexcarre;
+    private float tailleycarre;
 
-    
 
     private int _rand;
     void Start()
     {
+        taillexcarre = 0.62494f;
+        tailleycarre = 0.2989262f;
         _MemoireALongTerme.Add(0);
         //placement des coins principaux selon la taille voulue
         _coin1.transform.position = new Vector2(_CoordonneDepartX, _CoordonneDepartY);
@@ -120,10 +127,10 @@ public class CréationLabyrinte : MonoBehaviour
 
             for (int i = 0; i <= _tailleGrille; i++)
             {
-                Vector3 position = new Vector3(_UniteDeDistance[0] * i, _UniteDeDistance[1] * y, 0);
+                Vector3 position = new Vector3((_UniteDeDistance[0] * i)- 0.05391f, (_UniteDeDistance[1] * y)- 0.04119f, 0);
                 GameObject newCoin = Instantiate(_CoinMur, position, transform.rotation);
                 newCoin.transform.parent = _ContainerCoins.transform;
-
+                newCoin.transform.localScale = new Vector3(0.1715994f, 0.1677747f, 0);
 
             }
         }
@@ -136,11 +143,12 @@ public class CréationLabyrinte : MonoBehaviour
             {
 
 
-
+                
                 Vector3 position2 = new Vector3((_UniteDeDistance[0] * (i + 1) - _UniteDeDistance[2]), _UniteDeDistance[1] * y, 0);
                 GameObject MurHorizontaux = Instantiate(_Mur, position2, transform.rotation);
                 MurHorizontaux.transform.localScale = new Vector3(1, 1, 0);
-                MurHorizontaux.transform.localScale = new Vector3(_UniteDeDistance[0], 1, 0);
+                MurHorizontaux.transform.localScale = new Vector3(taillexcarre, _UniteDeDistance[1] * tailleycarre, 0);
+                MurHorizontaux.transform.eulerAngles = new Vector3(0, 0, 90);
                 MurHorizontaux.transform.parent = _ContainerMur.transform;
             }
         }
@@ -157,7 +165,7 @@ public class CréationLabyrinte : MonoBehaviour
                 Vector3 position3 = new Vector3(_UniteDeDistance[0] * y, (_UniteDeDistance[1] * (i + 1) - _UniteDeDistance[3]), 0);
                 GameObject MurVerticaux = Instantiate(_Mur, position3, transform.rotation);
                 MurVerticaux.transform.localScale = new Vector3(1, 1 , 0);
-                MurVerticaux.transform.localScale = new Vector3(1, _UniteDeDistance[1], 0);
+                MurVerticaux.transform.localScale = new Vector3(taillexcarre, _UniteDeDistance[1]*tailleycarre, 0);
                 MurVerticaux.transform.parent = _ContainerMur.transform;
             }
         }
@@ -195,9 +203,12 @@ public class CréationLabyrinte : MonoBehaviour
         GeantCommander.PartageDonnées(_UniteDeDistance[1], 1);
         GeantCommander.PartageDonnées(_UniteDeDistance[2], 2);
         GeantCommander.PartageDonnées(_UniteDeDistance[3], 3);
-        
-        //JoueurNiv2 joueurCommander = FindObjectOfType<JoueurNiv2>();
-        //joueurCommander.DebuterJeu();
+
+        GeantCommander.InfoPositionJoueur(Joueur1.transform.position, 0);
+        GeantCommander.InfoPositionJoueur(Joueur2.transform.position, 1);
+
+        JoueurNiv2 joueurCommander = FindObjectOfType<JoueurNiv2>();
+        joueurCommander.DebuterJeu();
     }
 
     private void porteSalleSpeciale()
@@ -217,6 +228,10 @@ public class CréationLabyrinte : MonoBehaviour
         }
         RaycastHit2D porte = Physics2D.Raycast(_IntelliBalle.transform.position, Vector2.down/*Vector2.up*/, _UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
         Destroy(porte.collider.gameObject);
+
+        _IntelliBalle.transform.position = new Vector3(_IntelliBalle.transform.position.x, _IntelliBalle.transform.position.y + _UniteDeDistance[1], 0);
+        Instantiate(_Harpe, _IntelliBalle.transform.position, transform.rotation);
+
 
     }
 

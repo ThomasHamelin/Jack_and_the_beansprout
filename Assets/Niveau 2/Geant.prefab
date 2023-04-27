@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54f4677fe18223645bae41db8ea3cba6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _VitesseMarche: 20
+  _VitesseMarche: 15
   _VitesseCourse: 70
   _distanceVision: 100
   _rotationSpeed: 3
@@ -113,7 +113,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3226181276852311941}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -136,7 +136,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
