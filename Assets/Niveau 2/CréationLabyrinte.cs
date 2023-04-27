@@ -317,17 +317,17 @@ public class CréationLabyrinte : MonoBehaviour
             nbTresor = 1;
         }
 
-        for (int i = 1 ; i <= (nbTresor +1); i++)
+        for (int i = 1; i <= (nbTresor + 1); i++)
         {
             coXTresor = Random.Range(1, taille);
             coYTresor = Random.Range(1, taille);
 
             Vector3 positionTresor = new Vector3((_CoordonneDepartX + _UniteDeDistance[2]) + (_UniteDeDistance[0] * coXTresor), (_CoordonneDepartY + _UniteDeDistance[3]) + (_UniteDeDistance[1] * coYTresor), 0);
 
-            RaycastHit2D trUp= Physics2D.Raycast(positionTresor, Vector2.up, _UniteDeDistance[3]);
-            RaycastHit2D trDown = Physics2D.Raycast(positionTresor, Vector2.down, _UniteDeDistance[3]);
-            RaycastHit2D trLeft = Physics2D.Raycast(positionTresor, Vector2.left, _UniteDeDistance[2]);
-            RaycastHit2D trRight = Physics2D.Raycast(positionTresor, Vector2.right, _UniteDeDistance[2]);
+            RaycastHit2D trUp = Physics2D.Raycast(positionTresor, Vector2.up, _UniteDeDistance[3], LayerMask.GetMask("DetectionMur"));
+            RaycastHit2D trDown = Physics2D.Raycast(positionTresor, Vector2.down, _UniteDeDistance[3],LayerMask.GetMask("DetectionMur"));
+            RaycastHit2D trLeft = Physics2D.Raycast(positionTresor, Vector2.left, _UniteDeDistance[2],LayerMask.GetMask("DetectionMur"));
+            RaycastHit2D trRight = Physics2D.Raycast(positionTresor, Vector2.right, _UniteDeDistance[2], LayerMask.GetMask("DetectionMur"));
 
             if (trUp == true && trDown == true && trRight == true && trLeft == true)
             {
