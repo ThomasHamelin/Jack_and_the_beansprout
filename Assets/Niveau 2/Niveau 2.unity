@@ -444,7 +444,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5893061854638520799, guid: c8e653cdde76cce4db23c7884d19a79d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.73
+      value: 61.5
       objectReference: {fileID: 0}
     - target: {fileID: 5893061854638520799, guid: c8e653cdde76cce4db23c7884d19a79d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -478,7 +478,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: c8e653cdde76cce4db23c7884d19a79d, type: 3}
 --- !u!4 &425317463 stripped
 Transform:
@@ -1328,7 +1329,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1705768171137462766, guid: 283ebc35c490687479046c2e25c669f7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.73
+      value: 68.3
       objectReference: {fileID: 0}
     - target: {fileID: 1705768171137462766, guid: 283ebc35c490687479046c2e25c669f7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1633,8 +1634,8 @@ MonoBehaviour:
   _ContainerMur: {fileID: 2867968276703615945}
   _ContainerCoins: {fileID: 7986170191507040868}
   _ContainerTresors: {fileID: 438726792}
-  _longueur: 120
-  _largeur: 120
+  _longueur: 130
+  _largeur: 130
   _CoordonneDepartX: 0
   _CoordonneDepartY: 0
   _CoordonneSalleX: 50
