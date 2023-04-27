@@ -31,6 +31,13 @@ public class GestionScenes : MonoBehaviour
     {
         fonduAuNoir.SetTrigger("Start"); //Génère l'animation pour rendre les transitions plus smooth
         yield return new WaitForSeconds(1.4f); //Attends la fin de l'animation
+        SceneManager.LoadScene(0); //Charge la scène #1 (Scène des instructions du niveau 1)
+    }
+
+    public IEnumerator ChargerSceneInstruction1()
+    {
+        fonduAuNoir.SetTrigger("Start"); //Génère l'animation pour rendre les transitions plus smooth
+        yield return new WaitForSeconds(1.4f); //Attends la fin de l'animation
         SceneManager.LoadScene(1); //Charge la scène #1 (Scène des instructions du niveau 1)
     }
 

@@ -11,7 +11,7 @@ public class GestionFinDeJeu : MonoBehaviour
     [SerializeField] private GameObject _imagesGagnant = default;
 
 
-    private GestionUIJeu _gestionUIJeu;
+    public GameObject _canvasJeu;
     private GestionScenes _gestionScene;
     private int _gagnant, tempsRestant;
     private bool _resultAffiches;
@@ -25,17 +25,19 @@ public class GestionFinDeJeu : MonoBehaviour
 
         StartCoroutine(RevelationGagnant());
 
+
         _gestionScene = FindObjectOfType<GestionScenes>().GetComponent<GestionScenes>();
+        _canvasJeu = GameObject.Find("CanvasJeu");
 
 
-    }
+}
 
-    void Update()
+void Update()
     {
         //Une fois les résultats affichés, on retourne à la scène de départ quand un joueur appuie sur un bouton
         if (Input.anyKeyDown && _resultAffiches)
         {
-            StartCoroutine(_gestionScene.ChargerSceneDepart());
+            StartCoroutine(_gestionScene.ChargerSceneInstruction1());
         }
     }
 
@@ -48,9 +50,10 @@ public class GestionFinDeJeu : MonoBehaviour
         _txtGagnant.text = "Et le gagnant est...";
         
         //On compare les points en faisant appel au script gestionUIJeu
-        _gestionUIJeu = FindObjectOfType<GestionUIJeu>().GetComponent<GestionUIJeu>();
-        _gagnant = _gestionUIJeu.ComparerScores();
-        Destroy(_gestionUIJeu); //On détruit le UI pour ne pas qu'il soit en double si le jeu recommence
+        _gagnant = _canvasJeu.GetComponent<GestionUIJeu>().ComparerScores();
+
+
+        Destroy(_canvasJeu); //On détruit le UI pour ne pas qu'il soit en double si le jeu recommence
 
         yield return new WaitForSeconds(5.5f); //Délai pour suspense
 
@@ -95,7 +98,7 @@ public class GestionFinDeJeu : MonoBehaviour
         }
 
         //Si le temps est écoulé et qu'on n'a pas recommencer le jeu
-        _gestionScene.Quitter(); //On quitte le jeu
+        _gestionScene.ChargerSceneDepart(); //On quitte le jeu
 
     }
 
