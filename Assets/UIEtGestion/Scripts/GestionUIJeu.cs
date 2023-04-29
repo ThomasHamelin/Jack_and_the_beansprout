@@ -18,8 +18,6 @@ public class GestionUIJeu : MonoBehaviour
     {
         _scoreJ1 = 0;
         _scoreJ2 = 0;
-        AjouterScore(0, 1);
-        AjouterScore(0, 2);
         DontDestroyOnLoad(this.gameObject); //Fait en sorte que les points s'accumulent d'une scène à l'autre
     }
 

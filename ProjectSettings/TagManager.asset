@@ -17,6 +17,7 @@ TagManager:
   - Harpe
   - PlateformeFinale
   - PathNode
+  - Music
   layers:
   - Default
   - TransparentFX

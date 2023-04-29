@@ -6,8 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class GestionScenes : MonoBehaviour
 {
-
-
     public Animator fonduAuNoir;
 
     /*
@@ -16,10 +14,20 @@ public class GestionScenes : MonoBehaviour
      */
     public IEnumerator ChangerScene()
     {
+        //Trouve l'objet responsable du son
+        GestionSon _gestionSon = FindObjectOfType<GestionSon>().GetComponent<GestionSon>();
+        
+        int indexProchaineScene = SceneManager.GetActiveScene().buildIndex + 1; //Trouve le numéro de la scène en cours
+        _gestionSon.ArreterMusique(indexProchaineScene - 1); //Arrete la musique en cours
+
+
         fonduAuNoir.SetTrigger("Start"); //Génère l'animation pour rendre les transitions plus smooth
         yield return new WaitForSeconds(1.4f); //Attends la fin de l'animation
-        int indexSceneCourante = SceneManager.GetActiveScene().buildIndex; //Trouve le numéro de la scène en cours
-        SceneManager.LoadScene(indexSceneCourante + 1); //Charge la scène avec le numéro juste après celui de la scène en cours
+
+        _gestionSon.JouerMusique(indexProchaineScene); //Fait jouer la musique de la scène suivante
+        SceneManager.LoadScene(indexProchaineScene); //Charge la scène avec le numéro juste après celui de la scène en cours
+
+        
     }
 
     /*
@@ -31,13 +39,18 @@ public class GestionScenes : MonoBehaviour
     {
         fonduAuNoir.SetTrigger("Start"); //Génère l'animation pour rendre les transitions plus smooth
         yield return new WaitForSeconds(1.4f); //Attends la fin de l'animation
-        SceneManager.LoadScene(0); //Charge la scène #1 (Scène des instructions du niveau 1)
+        SceneManager.LoadScene(0); //Charge la scène #0 (Écran d'accueil)
     }
 
     public IEnumerator ChargerSceneInstruction1()
     {
+        //Trouve l'objet responsable du son
+        GestionSon _gestionSon = FindObjectOfType<GestionSon>().GetComponent<GestionSon>();
+
+        _gestionSon.ArreterMusique(_gestionSon._soundtrack.Length - 1); //Arrete la musique en cours
         fonduAuNoir.SetTrigger("Start"); //Génère l'animation pour rendre les transitions plus smooth
         yield return new WaitForSeconds(1.4f); //Attends la fin de l'animation
+        _gestionSon.JouerMusique(1); //Fait jouer la musique de la scène 1
         SceneManager.LoadScene(1); //Charge la scène #1 (Scène des instructions du niveau 1)
     }
 
