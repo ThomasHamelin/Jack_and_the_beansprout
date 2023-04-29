@@ -11,7 +11,7 @@ public class GestionFinDeJeu : MonoBehaviour
     [SerializeField] private GameObject _imagesGagnant = default;
 
 
-    public GameObject _canvasJeu;
+    public GestionUIJeu _canvasJeu;
     private GestionScenes _gestionScene;
     private int _gagnant, tempsRestant;
     private bool _resultAffiches;
@@ -27,7 +27,7 @@ public class GestionFinDeJeu : MonoBehaviour
 
 
         _gestionScene = FindObjectOfType<GestionScenes>().GetComponent<GestionScenes>();
-        _canvasJeu = GameObject.Find("CanvasJeu");
+        _canvasJeu = GameObject.FindObjectOfType<GestionUIJeu>().GetComponent<GestionUIJeu>();
 
 
 }
@@ -50,7 +50,7 @@ void Update()
         _txtGagnant.text = "Et le gagnant est...";
         
         //On compare les points en faisant appel au script gestionUIJeu
-        _gagnant = _canvasJeu.GetComponent<GestionUIJeu>().ComparerScores();
+        _gagnant = _canvasJeu.ComparerScores();
 
 
         Destroy(_canvasJeu); //On détruit le UI pour ne pas qu'il soit en double si le jeu recommence

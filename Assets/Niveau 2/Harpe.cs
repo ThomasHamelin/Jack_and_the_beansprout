@@ -18,15 +18,15 @@ public class Harpe : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag.Equals("Player1"))
+        if (other.gameObject.tag.Equals("Player1")) //Si c'est le joueur 1 qui a trouvé la harpe
         {
-            _gestionUIJeu.AjouterScore(_ptsVictoire, 1);
-            StartCoroutine(_gestionUINiv2.FinNiveau2());
+            _gestionUIJeu.AjouterScore(_ptsVictoire, 1); //On ajoute les points au joueur 1
+            StartCoroutine(_gestionUINiv2.FinNiveau2()); //On génère la coroutine de la fin du niveau 2
         }
-        else if (other.gameObject.tag.Equals("Player2"))
+        else if (other.gameObject.tag.Equals("Player2")) //Si c'est le joueur 2 qui a trouvé la harpe
         {
-            _gestionUIJeu.AjouterScore(_ptsVictoire, 2);
-            StartCoroutine(_gestionUINiv2.FinNiveau2());
+            _gestionUIJeu.AjouterScore(_ptsVictoire, 2);//On ajoute les points au joueur 2
+            StartCoroutine(_gestionUINiv2.FinNiveau2()); //On génère la coroutine de la fin du niveau 2
         }
 
         

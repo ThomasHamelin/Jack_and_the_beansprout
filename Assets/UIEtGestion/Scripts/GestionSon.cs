@@ -2,13 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SoundManager : MonoBehaviour
+public class GestionSon : MonoBehaviour
 {
-    [SerializeField] private AudioSource _soudtrack = default;
-
+    // Start is called before the first frame update
     void Start()
     {
-        _soudtrack.Play(); //Joue la musique de fond associée au game object de la scène
+        
+    }
 
+    // Update is called once per frame
+    void Update()
+    {
+        
     }
 }

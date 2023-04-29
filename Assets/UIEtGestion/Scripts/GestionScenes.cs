@@ -51,18 +51,4 @@ public class GestionScenes : MonoBehaviour
         Application.Quit();
     }
 
-    //public IEnumerator DonnerDepart()
-    //{
-    //    _jeuDebute = false;
-    //    _txtDonneDepart.gameObject.SetActive(true);
-    //    _txtDonneDepart.text = "À vos marques";
-    //    yield return new WaitForSeconds(.3f);
-    //    _txtDonneDepart.text = "Prêts?";
-    //    yield return new WaitForSeconds(.3f);
-    //    _txtDonneDepart.text = "Partez!";
-    //    _jeuDebute = true;
-    //    yield return new WaitForSeconds(.3f);
-    //}
-
-
 }

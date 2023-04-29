@@ -12,19 +12,19 @@ EditorBuildSettings:
     path: Assets/Scenes/InstructNiv1.unity
     guid: 1683ac4c9c632a746a720eccfc949aaa
   - enabled: 1
-    path: Assets/Niveau 1/Niveau_1.unity
+    path: Assets/Scenes/Niveau_1.unity
     guid: 92b6c4d49d3e27746ad0bfbd00ee648c
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/InstructNiv2.unity
     guid: f173850ac58f86b47a8f7548a3690730
-  - enabled: 0
-    path: Assets/Niveau 2/Niveau 2.unity
+  - enabled: 1
+    path: Assets/Scenes/Niveau_2.unity
     guid: 65599ee874164364885d36778886805d
   - enabled: 1
     path: Assets/Scenes/InstructNiv3.unity
     guid: 48f9e4ec99fc94549ba7f8ab5c435fa3
   - enabled: 1
-    path: Assets/Niveau 3/Niveau_3.unity
+    path: Assets/Scenes/Niveau_3.unity
     guid: f8325275f5bdb014cb525dd9e5b7fd64
   - enabled: 1
     path: Assets/Scenes/FinDuJeu.unity

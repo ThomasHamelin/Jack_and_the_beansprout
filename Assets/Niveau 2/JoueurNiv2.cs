@@ -38,7 +38,7 @@ public class JoueurNiv2 : MonoBehaviour
             SetSpeed(_walkSpeedMax);
             MouvementsJoueurs();
         }
-        else if (_suivreChemin) //Si le joueur soit suivre le chemin généré par l'algorithme du chemin le plus court
+        else if (_suivreChemin) //Si le joueur doit suivre le chemin généré par l'algorithme du chemin le plus court
         {
             SetSpeed(_runSpeedMax);
             SuivreChemin(); 
@@ -48,16 +48,22 @@ public class JoueurNiv2 : MonoBehaviour
         _cam.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -10); //Déplace la caméra avec le joueur
     }
 
+    /*
+     * Rôle : Déterminer la vitesse du joueur
+     * Entrée : 1 float qui indique la vitesse maximale du joueur
+     * Sortie : Aucune
+     */
     private void SetSpeed(float p_SpeedMax)
     {
-        _accelerationTime += Time.deltaTime;
-        _currentSpeed = _initialSpeed + _accelerationTime * _acceleration;
-        _currentSpeed = Mathf.Clamp(_currentSpeed, 0, p_SpeedMax);
+        _accelerationTime += Time.deltaTime; //Augmente le temps depuis le début de l'accélération
+        _currentSpeed = _initialSpeed + _accelerationTime * _acceleration; //Détermine la vitesse actuelle
+        _currentSpeed = Mathf.Clamp(_currentSpeed, 0, p_SpeedMax); //S'assure que la vitesse ne dépasse pas la vitesse maximale
     }
 
     /*
      * Rôle : Déplacer le joueur dans la direction voulue
      * Entrée : Aucune
+     * Sortie : Aucune
      */
     private void MouvementsJoueurs()
     {
@@ -66,6 +72,12 @@ public class JoueurNiv2 : MonoBehaviour
             Vector3 direction3D = new Vector3(_direction.x, _direction.y, 0f);
             _rb.MovePosition(transform.position + direction3D); //Déplace le joueur dans la direction voulue
         }
+        else
+        {
+            _rb.constraints = RigidbodyConstraints2D.FreezePosition; //On bloque la position
+            _accelerationTime = 0; //Le joueur perd son accélération, parce qu'il a arrêté de bouger
+        }
+
         if (this.CompareTag("Player1")) //Si c'est le joueur 1
         {
             _posX = Input.GetAxisRaw("Horizontal_P1"); //Regarde dans quelle direction horizontale le joueur veut se déplacer
@@ -98,10 +110,8 @@ public class JoueurNiv2 : MonoBehaviour
         }
         else //Si le joueur ne se déplace pas
         {
-            _rb.constraints = RigidbodyConstraints2D.FreezePosition; //On bloque la position
             _rb.freezeRotation = true; //On bloque la rotation
             _animator.SetBool("IsWalking", false); //Arrête l'animation du joueur qui se déplace
-            _accelerationTime = 0; //Le joueur perd son accélération, parce qu'il a arrêté de bouger
         }
 
     }
@@ -163,8 +173,7 @@ public class JoueurNiv2 : MonoBehaviour
         }
         else //Si on est à la fin du chemin
         {
-            this.gameObject.SetActive(false);
-            Destroy(this); //Le joueur disparaît
+            this.gameObject.SetActive(false); //Le joueur disparaît
         }
         
 

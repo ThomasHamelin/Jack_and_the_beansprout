@@ -68,12 +68,17 @@ public class GestionUINiv2 : MonoBehaviour
         _joueur2.DebuterJeu();
     }
 
+    /*
+     * Rôle : Générer une animation à la fin du niveau
+     * Entrée : Aucune
+     */
     public IEnumerator FinNiveau2()
     {
-
+        //Fait en sorte que les joueurs ne puissent pas bougés
         _joueur1._jeuDebute = false;
         _joueur2._jeuDebute = false;
         
+        //Arrête l'animation de déplacement des joueurs
         _joueur1._direction = Vector2.zero;
         _joueur2._direction = Vector2.zero;
 
@@ -84,16 +89,16 @@ public class GestionUINiv2 : MonoBehaviour
 
         _splitBorder.SetActive(false); //Enlever la barre qui sépare le split screen
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(2f); //Attend pendant que la harpe crie
 
-        FindObjectOfType<Geant>().GetComponent<Geant>().FinNiveau();
+        FindObjectOfType<Geant>().GetComponent<Geant>().FinNiveau(); //Le géant se réveille et il est en colère
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(2f); //Attend pendant l'animation du géant en colère
 
-        _joueur1.FinNiveau();
+        _joueur1.FinNiveau(); //Le joueur 1 s'enfuit du labyrinthe, le joueur 2 commencera à s'enfuir quand le joueur 1 lui dira qu'il a fini d'utiliser le pathfinder
 
-        yield return new WaitForSeconds(30f);
+        yield return new WaitForSeconds(30f); //Attend pendant que les joueurs s'enfuient
 
-        StartCoroutine(_gestionScene.ChangerScene());
+        StartCoroutine(_gestionScene.ChangerScene()); //Passe à la scène suivante
     }
 }

@@ -86,6 +86,11 @@ public class Geant : MonoBehaviour
 
     }
 
+    /*
+     * Rôle : Générer l'animation du géant à la fin du niveau
+     * Entrée : Aucune
+     * Sortie : Aucune
+     */
     public void FinNiveau()
     {
         _harpeTrouve = true;

@@ -22,27 +22,6 @@ public class PathNode : MonoBehaviour
         transform.localScale = new Vector3((p_tailleCaseX - _largeurMurs), (p_tailleCaseY - _largeurMurs), 0);
     }
 
-    public int getX() { return x; }
-    public int getY() { return y; }
-    public int getGCost(){ return gCost; }
-    public int getFCost(){ return fCost; }
-    public PathNode getCameFromNode() { return cameFromNode; }
-    
-    public void setGCost(int p_gCost)
-    {
-        gCost= p_gCost;
-    }
-    
-    public void setHCost(int p_hCost)
-    {
-        hCost= p_hCost;
-    }
-
-    public void setCameFromNode(PathNode p_cameFromNode)
-    {
-        cameFromNode= p_cameFromNode;
-    }
-
     public void CalculateFCost()
     {
         fCost = gCost + hCost;
@@ -85,22 +64,6 @@ public class PathNode : MonoBehaviour
         if (hit.collider != null)
         {
             espaceLibre = false; //On indique que le chemin ne passe pas par là
-        }
-
-        return espaceLibre;
-    }
-
-    public bool DetectWallLeft(float p_dist)
-    {
-        bool espaceLibre = false; //Booléen qui indique si le chemin est dégagé
-
-        //Envoie un raycast pour voir s'il y a un mur
-        RaycastHit2D hit = Physics2D.Raycast(this.transform.position, transform.TransformDirection(Vector2.left), p_dist, LayerMask.GetMask("DetectionMur"));
-
-        //Si le raycast frappe quelque chose
-        if (hit.collider == null)
-        {
-            espaceLibre = true; //On indique que le chemin ne passe pas par là
         }
 
         return espaceLibre;
