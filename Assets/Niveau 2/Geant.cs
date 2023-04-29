@@ -53,6 +53,8 @@ public class Geant : MonoBehaviour
     private Vector3 ROTZtarget = Vector3.zero;
     private Vector3 ROTinit;
 
+    private bool _harpeTrouve = false;
+
     private void Start()
     {
         currentSpeed = _VitesseMarche;
@@ -62,25 +64,32 @@ public class Geant : MonoBehaviour
     void Update()
     {
         
-
-        if (_finiTourne == true && _finiAvance == true)
+        if(!_harpeTrouve) //Si la harpe n'a pas encore été trouvée
         {
-            analyse();
-        }
-        if (_finiTourne == false)
-        {
-            Rotate(Direction);
-        }
-        if(_finiTourne == true && _finiAvance == false)
-        {
+            if (_finiTourne == true && _finiAvance == true)
+            {
+                analyse();
+            }
+            if (_finiTourne == false)
+            {
+                Rotate(Direction);
+            }
+            if(_finiTourne == true && _finiAvance == false)
+            {
             
-            avance(Mouvement);
-            visionJoueurs();
+                avance(Mouvement);
+                visionJoueurs();
+            }
+
         }
+        
 
     }
 
-
+    public void FinNiveau()
+    {
+        _harpeTrouve = true;
+    }
 
     public void PartageDonnées(float Donné, int x)
     {
@@ -300,11 +309,18 @@ public class Geant : MonoBehaviour
      
         if(other.gameObject.tag == "Player1")
         {
-            other.transform.position = posiionJoueur[0];
+            if(other.GetComponent<JoueurNiv2>()._jeuDebute == true)
+            {
+                other.transform.position = posiionJoueur[0];
+            }
+            
         }
         else if(other.gameObject.tag == "Player2")
         {
-            other.transform.position = posiionJoueur[1];
+            if (other.GetComponent<JoueurNiv2>()._jeuDebute == true)
+            {
+                other.transform.position = posiionJoueur[1];
+            }
         }
     }
 

@@ -4,19 +4,23 @@ using UnityEngine;
 
 public class JoueurNiv2 : MonoBehaviour
 {
-    [SerializeField] private float _moveSpeed = 50f;
-    [SerializeField] private float _runSpeed = 50f;
+    [SerializeField] private float _walkSpeedMax = 15f;
+    [SerializeField] private float _initialSpeed = 10f;
+    [SerializeField] private float _runSpeedMax = 40f;
+    [SerializeField] private float _acceleration = 1f;
     [SerializeField] private float _rotationSpeed = 700f;
     [SerializeField] private Camera _cam = default;
     [SerializeField] private Pathfinder _pathfinder = default;
 
     private Rigidbody2D _rb;
-    private Vector2 _direction = Vector2.zero;
-    private bool _jeuDebute = false;
+    public Vector2 _direction = Vector2.zero;
+    public bool _jeuDebute = false;
     private bool _suivreChemin = false;
     private float _posX, _posY;
     private int _distanceX, _distanceY;
     private List<PathNode> _chemin;
+    private float _currentSpeed = 0f;
+    private float _accelerationTime = 0f;
 
     public Animator _animator;
 
@@ -31,15 +35,24 @@ public class JoueurNiv2 : MonoBehaviour
     {
         if (_jeuDebute) //Si le jeu est en cours
         {
+            SetSpeed(_walkSpeedMax);
             MouvementsJoueurs();
-            RotateInDirectionOfInput();
         }
         else if (_suivreChemin) //Si le joueur soit suivre le chemin généré par l'algorithme du chemin le plus court
         {
-            SuivreChemin();
-            RotateInDirectionOfInput();
+            SetSpeed(_runSpeedMax);
+            SuivreChemin(); 
         }
+
+        RotateInDirectionOfInput();
         _cam.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -10); //Déplace la caméra avec le joueur
+    }
+
+    private void SetSpeed(float p_SpeedMax)
+    {
+        _accelerationTime += Time.deltaTime;
+        _currentSpeed = _initialSpeed + _accelerationTime * _acceleration;
+        _currentSpeed = Mathf.Clamp(_currentSpeed, 0, p_SpeedMax);
     }
 
     /*
@@ -57,13 +70,13 @@ public class JoueurNiv2 : MonoBehaviour
         {
             _posX = Input.GetAxisRaw("Horizontal_P1"); //Regarde dans quelle direction horizontale le joueur veut se déplacer
             _posY = Input.GetAxisRaw("Vertical_P1"); //Regarde dans quelle direction verticale le joueur veut se déplacer
-            _direction = new Vector2(_posX, _posY) * _moveSpeed * Time.deltaTime; //Détermine le vecteur de direction
+            _direction = new Vector2(_posX, _posY) * _currentSpeed * Time.deltaTime; //Détermine le vecteur de direction
         }
         else if (this.CompareTag("Player2")) //Si c'est le joueur 2
         {
             _posX = Input.GetAxis("Horizontal_P2"); //Regarde dans quelle direction horizontale le joueur veut se déplacer
             _posY = Input.GetAxis("Vertical_P2"); //Regarde dans quelle direction verticale le joueur veut se déplacer
-            _direction = new Vector2(_posX, _posY) * _moveSpeed * Time.deltaTime; //Détermine le vecteur de direction
+            _direction = new Vector2(_posX, _posY) * _currentSpeed * Time.deltaTime; //Détermine le vecteur de direction
         }
     }
 
@@ -75,7 +88,7 @@ public class JoueurNiv2 : MonoBehaviour
     {
         if (_direction != Vector2.zero) //Si le joueur se déplace
         {
-            _rb.constraints = RigidbodyConstraints2D.None;
+            _rb.constraints = RigidbodyConstraints2D.None; //On permet au joueur de se déplacer
             _rb.freezeRotation = false; //On permet la rotation
             Quaternion targetRotation = Quaternion.LookRotation(transform.forward, _direction); //On détermine dans quelle direction effectuer la rotation
             Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime); //On crée quaternion de déplacement
@@ -88,6 +101,7 @@ public class JoueurNiv2 : MonoBehaviour
             _rb.constraints = RigidbodyConstraints2D.FreezePosition; //On bloque la position
             _rb.freezeRotation = true; //On bloque la rotation
             _animator.SetBool("IsWalking", false); //Arrête l'animation du joueur qui se déplace
+            _accelerationTime = 0; //Le joueur perd son accélération, parce qu'il a arrêté de bouger
         }
 
     }
@@ -111,8 +125,8 @@ public class JoueurNiv2 : MonoBehaviour
     {
         //Trouve le chemin le plus court qui permet de retourner au début du labyrinthe
         _chemin = _pathfinder.FindPath(this.transform.position.x, this.transform.position.y);
-        _jeuDebute = false; //Indique que le jeu n'est plus en cours
 
+        _accelerationTime = 0; //Remet le temps d'accélération à 0, car le joueur part du repos
         _suivreChemin = true; //Pour que le joueur commence à suivre le chemin
         
         //On regarde si le joueur est le joueur 1, car seul le joueur 1 est appelé par un script extérieur pour que les deux joueurs n'utilisent pas la grille de PathNodes en même temps
@@ -143,12 +157,13 @@ public class JoueurNiv2 : MonoBehaviour
             {
                 //On déplace le joueur en direction du noeud
                 Vector3 direction3D = new Vector3(_direction.x, _direction.y, 0f);
-                transform.position = Vector3.MoveTowards(transform.position, _chemin[0].transform.position, _moveSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, _chemin[0].transform.position, _currentSpeed * Time.deltaTime);
             }
 
         }
         else //Si on est à la fin du chemin
         {
+            this.gameObject.SetActive(false);
             Destroy(this); //Le joueur disparaît
         }
         

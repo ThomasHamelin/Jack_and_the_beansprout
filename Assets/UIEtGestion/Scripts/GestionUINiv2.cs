@@ -71,7 +71,11 @@ public class GestionUINiv2 : MonoBehaviour
     public IEnumerator FinNiveau2()
     {
 
-        _joueur1.FinNiveau();
+        _joueur1._jeuDebute = false;
+        _joueur2._jeuDebute = false;
+        
+        _joueur1._direction = Vector2.zero;
+        _joueur2._direction = Vector2.zero;
 
         //Activer la caméra qui montre l'ensemble du labyrinthe
         _camJ1.enabled = false;
@@ -79,6 +83,14 @@ public class GestionUINiv2 : MonoBehaviour
         _camEnsemble.enabled = true;
 
         _splitBorder.SetActive(false); //Enlever la barre qui sépare le split screen
+
+        yield return new WaitForSeconds(2f);
+
+        FindObjectOfType<Geant>().GetComponent<Geant>().FinNiveau();
+
+        yield return new WaitForSeconds(2f);
+
+        _joueur1.FinNiveau();
 
         yield return new WaitForSeconds(30f);
 

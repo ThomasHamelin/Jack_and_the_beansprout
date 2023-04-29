@@ -21,6 +21,9 @@ using Random = UnityEngine.Random;
 
 public class CréationLabyrinte : MonoBehaviour
 {
+    [SerializeField] private Camera _camEnsemble = default;
+    [SerializeField] private GameObject _background = default;
+
     [SerializeField] GameObject _Joueur1;
     [SerializeField] GameObject _Joueur2;
     [SerializeField] private GameObject _Geant;
@@ -96,6 +99,8 @@ public class CréationLabyrinte : MonoBehaviour
     private int _rand;
     void Start()
     {
+        AjusterCam();
+
         taillexcarre = 0.62494f;
         tailleycarre = 0.2989262f;
         _MemoireALongTerme.Add(0);
@@ -208,6 +213,22 @@ public class CréationLabyrinte : MonoBehaviour
         GeantCommander.InfoPositionJoueur(_Joueur2.transform.position, 1);
 
      
+    }
+
+    /*
+     * Rôle : Aligner la caméra pricipale et le fond de jeu avec le labyrinthe
+     * Entrée : Aucune
+     * Sortie : Aucune
+     */
+    private void AjusterCam()
+    {
+        Vector3 centreDuLabyrinthe = new Vector3((_CoordonneDepartX + _longueur / 2), (_CoordonneDepartY + _largeur / 2), 0f); //détermine la position du centre du labyrinthe
+
+        _camEnsemble.transform.position = centreDuLabyrinthe; //Aligne la caméra au centre du labyrinthe
+        _camEnsemble.orthographicSize = _largeur / 2; //Ajuste le champ de vision de la caméra selon la taille du labyrinthe
+
+        _background.transform.position = centreDuLabyrinthe; //Aligne le fond de jeu au centre du labyrinthe
+        _background.transform.localScale = new Vector3(_longueur, _largeur, 0f); //Ajuste la taille du fond de jeu pour qu'elle soit la même que celle du labyrinthe
     }
 
     private void porteSalleSpeciale()
