@@ -34,7 +34,7 @@ public class GestionFinDeJeu : MonoBehaviour
 
 void Update()
     {
-        //Une fois les résultats affichés, on retourne à la scène de départ quand un joueur appuie sur un bouton
+        //Une fois les résultats affichés, on retourne à la scène d'instruction 1 quand un joueur appuie sur un bouton (rejouer)
         if (Input.anyKeyDown && _resultAffiches)
         {
             StartCoroutine(_gestionScene.ChargerSceneInstruction1());
@@ -97,7 +97,7 @@ void Update()
         }
 
         //Si le temps est écoulé et qu'on n'a pas recommencer le jeu
-        _gestionScene.ChargerSceneDepart(); //On quitte le jeu
+        _gestionScene.ChargerSceneDepart(); //On revient au départ
 
     }
 
