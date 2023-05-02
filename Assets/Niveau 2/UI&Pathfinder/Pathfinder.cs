@@ -80,7 +80,7 @@ public class Pathfinder : MonoBehaviour
                 Vector3 position = new Vector3(posX + _coordonneDepartX, posY + _coordonneDepartY, 0f);
 
                 PathNode newNode = Instantiate(_pathNode, position, Quaternion.identity); //On crée un nouveau noeud
-                allNodes[(int)(position.x / _tailleCaseX), (int)(position.y / _tailleCaseY)] = newNode; //On ajoute ce noeud dans le tableau de tous les noeuds
+                allNodes[(int)(posX / _tailleCaseX), (int)(posY / _tailleCaseY)] = newNode; //On ajoute ce noeud dans le tableau de tous les noeuds
                 newNode.setPosition(posX, posY, _tailleCaseX, _tailleCaseY); //On met le noeud à la position où on est rendu
                 newNode.transform.parent = _pathNodeContainer.transform; //Dans la hierarchie, on met ce noeud dans un container de noeuds
 
