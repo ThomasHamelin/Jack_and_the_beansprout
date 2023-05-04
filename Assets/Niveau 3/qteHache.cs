@@ -10,7 +10,7 @@ public class qteHache : MonoBehaviour
     private int n_joueur;
     public GameObject _directionsAffichage;
     public GameObject _otherCharacter;
-    public float minInput = 0.5f, maxInput = 0.5f;
+    public float minInput = 0.8f, maxInput = 0.1f;
     public GameObject _tree;
 
     private bool play = false, needNull = false;
@@ -52,43 +52,42 @@ public class qteHache : MonoBehaviour
     {
         if (play)
         {
-            
+
             // Prendre l'input selon le joueur
             if (n_joueur == 1)
             {
                 playerInput = new Vector2(Input.GetAxis("Horizontal_P1"), Input.GetAxis("Vertical_P1"));
-              
+
             }
             if (n_joueur == 2)
             {
                 playerInput = new Vector2(Input.GetAxis("Horizontal_P2"), Input.GetAxis("Vertical_P2"));
-              
+
             }
 
             // Transformer l'input en 4 directions ( et aucune)
-            if (playerInput.x > minInput && playerInput.y < maxInput && playerInput.y > -maxInput)
+            if (playerInput.y < maxInput && playerInput.y > -maxInput && playerInput.x < maxInput && playerInput.x > -maxInput)
+            {
+                input = "Null";
+            }
+            else if (playerInput.x > minInput && playerInput.y < maxInput && playerInput.y > -maxInput)
             {
                 input = "Right";
-               
+
             }
             else if (playerInput.x < -minInput && playerInput.y < maxInput && playerInput.y > -maxInput)
             {
                 input = "Left";
-               
+
             }
             else if (playerInput.y > minInput && playerInput.x < maxInput && playerInput.x > -maxInput)
             {
                 input = "Up";
-                
+
             }
             else if (playerInput.y < -minInput && playerInput.x < maxInput && playerInput.x > -maxInput)
             {
                 input = "Down";
-               
-            }
-            else
-            {
-                input = "Null";
             }
 
             //game1 : précision

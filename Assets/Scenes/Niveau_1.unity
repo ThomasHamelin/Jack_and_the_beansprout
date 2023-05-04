@@ -827,7 +827,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &231654480
 Animator:
-  serializedVersion: 5
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -844,7 +844,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!111 &231654486
 Animation:
   m_ObjectHideFlags: 0
@@ -2090,7 +2090,7 @@ MonoBehaviour:
   p2: {fileID: 441472167}
   EndDroite: {fileID: 7166127}
   EndGauche: {fileID: 1865879269}
-  levelHeight: 150
+  levelHeight: 20
 --- !u!4 &1271195516
 Transform:
   m_ObjectHideFlags: 0
@@ -2664,7 +2664,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &2142439217
 Animator:
-  serializedVersion: 5
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2681,7 +2681,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &6219982566231429169
 PrefabInstance:
   m_ObjectHideFlags: 0
