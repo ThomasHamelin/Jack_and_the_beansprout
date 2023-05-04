@@ -9,37 +9,41 @@ public class GestionScenes : MonoBehaviour
     public Animator fonduAuNoir;
 
     /*
-     * Rôle : Charger la scene suivante
-     * Entrée : Aucune
+     * Rï¿½le : Charger la scene suivante
+     * Entrï¿½e : Aucune
      */
     public IEnumerator ChangerScene()
     {
         //Trouve l'objet responsable du son
         GestionSon _gestionSon = FindObjectOfType<GestionSon>().GetComponent<GestionSon>();
         
-        int indexProchaineScene = SceneManager.GetActiveScene().buildIndex + 1; //Trouve le numéro de la scène en cours
+        int indexProchaineScene = SceneManager.GetActiveScene().buildIndex + 1; //Trouve le numï¿½ro de la scï¿½ne en cours
         _gestionSon.ArreterMusique(indexProchaineScene - 1); //Arrete la musique en cours
 
 
-        fonduAuNoir.SetTrigger("Start"); //Génère l'animation pour rendre les transitions plus smooth
+        fonduAuNoir.SetTrigger("Start"); //Gï¿½nï¿½re l'animation pour rendre les transitions plus smooth
         yield return new WaitForSeconds(1.4f); //Attends la fin de l'animation
 
-        _gestionSon.JouerMusique(indexProchaineScene); //Fait jouer la musique de la scène suivante
-        SceneManager.LoadScene(indexProchaineScene); //Charge la scène avec le numéro juste après celui de la scène en cours
+        _gestionSon.JouerMusique(indexProchaineScene); //Fait jouer la musique de la scï¿½ne suivante
+        SceneManager.LoadScene(indexProchaineScene); //Charge la scï¿½ne avec le numï¿½ro juste aprï¿½s celui de la scï¿½ne en cours
 
         
     }
 
     /*
-     * Rôle : Aller au premier niveau
-     * Entrée : Aucune
+     * Rï¿½le : Aller au premier niveau
+     * Entrï¿½e : Aucune
      * Sortie : Aucune
      */
     public IEnumerator ChargerSceneDepart()
     {
-        fonduAuNoir.SetTrigger("Start"); //Génère l'animation pour rendre les transitions plus smooth
+        //Trouve l'objet responsable du son
+
+        Destroy(GameObject.Find("GestionSon"));
+
+        fonduAuNoir.SetTrigger("Start"); //Gï¿½nï¿½re l'animation pour rendre les transitions plus smooth
         yield return new WaitForSeconds(1.4f); //Attends la fin de l'animation
-        SceneManager.LoadScene(0); //Charge la scène #0 (Écran d'accueil)
+        SceneManager.LoadScene(0); //Charge la scï¿½ne #1 (Scï¿½ne des instructions du niveau 1)
     }
 
     public IEnumerator ChargerSceneInstruction1()
@@ -48,15 +52,15 @@ public class GestionScenes : MonoBehaviour
         GestionSon _gestionSon = FindObjectOfType<GestionSon>().GetComponent<GestionSon>();
 
         _gestionSon.ArreterMusique(_gestionSon._soundtrack.Length - 1); //Arrete la musique en cours
-        fonduAuNoir.SetTrigger("Start"); //Génère l'animation pour rendre les transitions plus smooth
+        fonduAuNoir.SetTrigger("Start"); //Gï¿½nï¿½re l'animation pour rendre les transitions plus smooth
         yield return new WaitForSeconds(1.4f); //Attends la fin de l'animation
-        _gestionSon.JouerMusique(1); //Fait jouer la musique de la scène 1
-        SceneManager.LoadScene(1); //Charge la scène #1 (Scène des instructions du niveau 1)
+        _gestionSon.JouerMusique(1); //Fait jouer la musique de la scï¿½ne 1
+        SceneManager.LoadScene(1); //Charge la scï¿½ne #1 (Scï¿½ne des instructions du niveau 1)
     }
 
     /*
-     * Rôle : Quitter le jeu
-     * Entrée : Aucune
+     * Rï¿½le : Quitter le jeu
+     * Entrï¿½e : Aucune
      * Sortie : Aucune
      */
     public void Quitter()

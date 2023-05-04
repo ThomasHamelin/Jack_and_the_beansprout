@@ -11,7 +11,7 @@ public class GestionFinDeJeu : MonoBehaviour
     [SerializeField] private GameObject _imagesGagnant = default;
 
 
-    public GestionUIJeu _canvasJeu;
+    public GameObject _canvasJeu;
     private GestionScenes _gestionScene;
     private int _gagnant;
     private int tempsRestant;
@@ -19,22 +19,21 @@ public class GestionFinDeJeu : MonoBehaviour
 
     void Start()
     {
-        _resultAffiches = false; //Indique que les résultats ne sont pas encore affichés
+        _resultAffiches = false; //Indique que les rï¿½sultats ne sont pas encore affichï¿½s
 
-        //Désactive les éléments UI non nécessaires pour le moment
+        //Dï¿½sactive les ï¿½lï¿½ments UI non nï¿½cessaires pour le moment
         _imagesGagnant.SetActive(false);
         _txtRejouer.gameObject.SetActive(false);
         _txtTimer.gameObject.SetActive(false);
         
         _gestionScene = FindObjectOfType<GestionScenes>().GetComponent<GestionScenes>();
-        _canvasJeu = GameObject.FindObjectOfType<GestionUIJeu>().GetComponent<GestionUIJeu>();
-
+        _canvasJeu = GameObject.Find("CanvasJeu");
         StartCoroutine(RevelationGagnant());
 }
 
 void Update()
     {
-        //Une fois les résultats affichés, on retourne à la scène d'instruction 1 quand un joueur appuie sur un bouton (rejouer)
+        //Une fois les rï¿½sultats affichï¿½s, on retourne ï¿½ la scï¿½ne d'instruction 1 quand un joueur appuie sur un bouton (rejouer)
         if (Input.anyKeyDown && _resultAffiches)
         {
             StartCoroutine(_gestionScene.ChargerSceneInstruction1());
@@ -42,41 +41,41 @@ void Update()
     }
 
     /*
-     * Rôle : Créer un délai avant d'afficher le résultat
-     * Entrée : Aucune
+     * Rï¿½le : Crï¿½er un dï¿½lai avant d'afficher le rï¿½sultat
+     * Entrï¿½e : Aucune
      */
     IEnumerator RevelationGagnant()
     {
         _txtGagnant.text = "Et le gagnant est...";
         
         //On compare les points en faisant appel au script gestionUIJeu
-        _gagnant = _canvasJeu.ComparerScores();
+        _gagnant = _canvasJeu.GetComponent<GestionUIJeu>().ComparerScores();
 
-        yield return new WaitForSeconds(5.5f); //Délai pour suspense
+        yield return new WaitForSeconds(5.5f); //Dï¿½lai pour suspense
 
-        if (_gagnant != 0) //Si ce n'est pas une égalité
+        if (_gagnant != 0) //Si ce n'est pas une ï¿½galitï¿½
         {
-            _txtGagnant.text = "Joueur " + _gagnant; //Affiche le numéro du gagnant
+            _txtGagnant.text = "Joueur " + _gagnant; //Affiche le numï¿½ro du gagnant
 
         }
-        else //Si égalité
+        else //Si ï¿½galitï¿½
         {
-            _txtGagnant.text = "Egalite"; //Indique qu'il y a égalité
+            _txtGagnant.text = "Egalite"; //Indique qu'il y a ï¿½galitï¿½
         }
         
-        _imagesGagnant.SetActive(true); //Générer l'image correspondant au bon gagnant
+        _imagesGagnant.SetActive(true); //Gï¿½nï¿½rer l'image correspondant au bon gagnant
                                                   
-        yield return new WaitForSeconds(3f); //On laisse les résultats affichés pendant quelques secondes
+        yield return new WaitForSeconds(3f); //On laisse les rï¿½sultats affichï¿½s pendant quelques secondes
 
         StartCoroutine(TimerAvantQuitter()); //Commencer le timer avant de quitter
         
-        Destroy(_canvasJeu); //On détruit le UI pour ne pas qu'il soit en double si le jeu recommence
+        Destroy(_canvasJeu); //On dï¿½truit le UI pour ne pas qu'il soit en double si le jeu recommence
 
     }
 
     /*
-     * Rôle : Gérer et afficher le temps qu'il reste avant que le programme se ferme et faire clignoter le texte qui indique le temps restant
-     * Entrée : Aucune
+     * Rï¿½le : Gï¿½rer et afficher le temps qu'il reste avant que le programme se ferme et faire clignoter le texte qui indique le temps restant
+     * Entrï¿½e : Aucune
      */
     IEnumerator TimerAvantQuitter()
     {
@@ -96,8 +95,8 @@ void Update()
             tempsRestant--;
         }
 
-        //Si le temps est écoulé et qu'on n'a pas recommencer le jeu
-        _gestionScene.ChargerSceneDepart(); //On revient au départ
+        //Si le temps est ï¿½coulï¿½ et que l'on n'a pas recommencer le jeu
+         StartCoroutine(_gestionScene.ChargerSceneDepart()); //On revient au dï¿½part
 
     }
 
