@@ -97,7 +97,7 @@ public class GestionUINiv2 : MonoBehaviour
 
         _joueur1.FinNiveau(); //Le joueur 1 s'enfuit du labyrinthe, le joueur 2 commencera à s'enfuir quand le joueur 1 lui dira qu'il a fini d'utiliser le pathfinder
 
-        yield return new WaitForSeconds(22f); //Attend pendant que les joueurs s'enfuient
+        yield return new WaitForSeconds(18f); //Attend pendant que les joueurs s'enfuient
 
         StartCoroutine(_gestionScene.ChangerScene()); //Passe à la scène suivante
     }

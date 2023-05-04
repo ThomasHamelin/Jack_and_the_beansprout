@@ -31,14 +31,14 @@ public class GestionInstruct : MonoBehaviour
     void Update()
     {
         //Si le joueur 1 appuit sur son bouton
-         if (Input.GetKeyDown("space"))
+         if (Input.GetKeyDown("Horizontal_P1") || Input.GetKeyDown("Vertical_P1") || Input.GetKeyDown("space"))
          {
              joueur1Pret = true; //le joueur 1 est prêt
              _imageReadyJ1.GetComponent<Image>().color = Color.green; //Met en vert l'images accompagnant le texte "Prêt" pour indiquer que le joueur 1 est prêt
             _txtPretJ1.text = "Pret!"; //Écrit Prêt! avec un ! pour indiquer que le joueur 1 est prêt
         }
         //Si le joueur 2 appuit sur son bouton
-        if (Input.GetKeyDown("escape"))
+        if (Input.GetKeyDown("Horizontal_P2") || Input.GetKeyDown("Vertical_P2") || Input.GetKeyDown("escape"))
          {
              joueur2Pret = true; //le joueur 2 est prêt
             _imageReadyJ2.GetComponent<Image>().color = Color.green;  //Met en vert l'images accompagnant le texte "Prêt" pour indiquer que le joueur 2 est prêt
