@@ -2090,7 +2090,7 @@ MonoBehaviour:
   p2: {fileID: 441472167}
   EndDroite: {fileID: 7166127}
   EndGauche: {fileID: 1865879269}
-  levelHeight: 20
+  levelHeight: 150
 --- !u!4 &1271195516
 Transform:
   m_ObjectHideFlags: 0
