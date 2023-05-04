@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -3259647679579778807}
   - component: {fileID: 2766226543889562750}
   - component: {fileID: 8266417122685482522}
+  - component: {fileID: 4086273289979140722}
   m_Layer: 0
   m_Name: Geant
   m_TagString: Untagged
@@ -99,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54f4677fe18223645bae41db8ea3cba6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _VitesseMarche: 2
+  _VitesseMarche: 3
   _VitesseCourse: 70
   _distanceVision: 100
   _rotationSpeed: 3
@@ -224,3 +225,19 @@ PolygonCollider2D:
       - {x: -0.53, y: 0.75}
       - {x: -0.53, y: 0.79999995}
       - {x: -0.55, y: 0.82}
+--- !u!58 &4086273289979140722
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3226181276852311941}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.02105856, y: 0}
+  serializedVersion: 2
+  m_Radius: 1.510247
