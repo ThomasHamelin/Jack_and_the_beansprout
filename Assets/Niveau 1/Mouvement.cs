@@ -21,6 +21,7 @@ public class Mouvement : MonoBehaviour
     private Vector2 lasttouchPosition;
     private bool waiting = false;
     private bool jumping = false;
+    private bool axisInUse = false;
     private Animator anim;
 
     private GameObject _canvasScore;
@@ -56,17 +57,34 @@ public class Mouvement : MonoBehaviour
     private void Update()
     {
         if(play)
-        {   
-            if(n_joueur == 1)
+        {
+
+            if (n_joueur == 1)
             {
                 playerInput = new Vector2(Input.GetAxis("Horizontal_P1"), 0f);
-                jumpPressed = Input.GetKeyDown(KeyCode.W);
+                if (Input.GetAxis("Vertical_P1")> 0.5 && !axisInUse)
+                {
+                    jumpPressed = true;
+                    axisInUse = true;
+                }
+                if (Input.GetAxis("Vertical_P1") <= 0.1)
+                {
+                    axisInUse = false;
+                }
             }
 
             if (n_joueur == 2)
             {
                 playerInput = new Vector2(Input.GetAxis("Horizontal_P2"), 0f);
-                jumpPressed = Input.GetKeyDown(KeyCode.UpArrow);
+                if (Input.GetAxis("Vertical_P2") > 0.5 && !axisInUse)
+                {
+                    jumpPressed = true;
+                    axisInUse = true;
+                }
+                else if (Input.GetAxis("Vertical_P2") <= 0.1)
+                {
+                    axisInUse = false;
+                }
             }
 
 
