@@ -403,7 +403,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5893061854638520785, guid: c8e653cdde76cce4db23c7884d19a79d, type: 3}
       propertyPath: _acceleration
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5893061854638520785, guid: c8e653cdde76cce4db23c7884d19a79d, type: 3}
       propertyPath: _walkSpeedMax
@@ -1395,6 +1395,10 @@ PrefabInstance:
       propertyPath: _pathfinder
       value: 
       objectReference: {fileID: 1895151034}
+    - target: {fileID: 1705768171137462752, guid: 283ebc35c490687479046c2e25c669f7, type: 3}
+      propertyPath: _acceleration
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1705768171137462752, guid: 283ebc35c490687479046c2e25c669f7, type: 3}
       propertyPath: _walkSpeedMax
       value: 20

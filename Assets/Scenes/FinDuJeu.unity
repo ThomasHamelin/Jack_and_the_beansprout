@@ -341,6 +341,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1614929052479247014, guid: fa420fdfa9b7aad4d86583cfc1754e73, type: 3}
+      propertyPath: m_Name
+      value: ImageGagnant
+      objectReference: {fileID: 0}
     - target: {fileID: 1721549059583431069, guid: fa420fdfa9b7aad4d86583cfc1754e73, type: 3}
       propertyPath: m_LocalScale.x
       value: 3.9523
@@ -398,6 +402,14 @@ PrefabInstance:
       value: 4278190080
       objectReference: {fileID: 0}
     - target: {fileID: 4132126410002292351, guid: fa420fdfa9b7aad4d86583cfc1754e73, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4132126410002292351, guid: fa420fdfa9b7aad4d86583cfc1754e73, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4132126410002292351, guid: fa420fdfa9b7aad4d86583cfc1754e73, type: 3}
       propertyPath: m_SizeDelta.x
       value: 339.7991
       objectReference: {fileID: 0}
@@ -411,7 +423,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4132126410002292351, guid: fa420fdfa9b7aad4d86583cfc1754e73, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 42.2179
+      value: 121
       objectReference: {fileID: 0}
     - target: {fileID: 4581150273631988360, guid: fa420fdfa9b7aad4d86583cfc1754e73, type: 3}
       propertyPath: m_Pivot.x

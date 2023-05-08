@@ -243,5 +243,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45338dbb022f69347b1b9f436e8343f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ptsVictoire: 500
+  _ptsVictoire: 1000
   _cri: {fileID: 4028157207308948528}
