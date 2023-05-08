@@ -2001,6 +2001,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CanvasJeu
       objectReference: {fileID: 0}
+    - target: {fileID: 4765856002859049889, guid: dc4c854456904ee479437ef3ee084a02, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5457045142195079125, guid: dc4c854456904ee479437ef3ee084a02, type: 3}
       propertyPath: m_text
       value: 'Points : 0'

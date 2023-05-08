@@ -32,7 +32,7 @@ public class GestionInstruct : MonoBehaviour
     {
         //Si le joueur 1 appuit sur son bouton
 
-         if (Input.GetKeyDown("ojystick 2 button 0")|| Input.GetKeyDown("joystick 2 button 1") || Input.GetKeyDown("joystick 2 button 2") || Input.GetKeyDown("joystick 2 button 3") || Input.GetKeyDown("joystick 2 button 4") || Input.GetKeyDown("joystick 2 button 5"))
+         if (Input.GetKeyDown("joystick 2 button 0")|| Input.GetKeyDown("joystick 2 button 1") || Input.GetKeyDown("joystick 2 button 2") || Input.GetKeyDown("joystick 2 button 3") || Input.GetKeyDown("joystick 2 button 4") || Input.GetKeyDown("joystick 2 button 5"))
          {
              joueur1Pret = true; //le joueur 1 est prêt
              _imageReadyJ1.GetComponent<Image>().color = Color.green; //Met en vert l'images accompagnant le texte "Prêt" pour indiquer que le joueur 1 est prêt
